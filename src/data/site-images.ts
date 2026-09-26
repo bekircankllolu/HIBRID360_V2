@@ -29,11 +29,14 @@ export const siteImages = {
     },
   },
   culture: {
+    // LAB v2 (26 Eylül 2026): şefkat yerine iş birliği — set ekibinin
+    // elleri kamerayı birlikte kuruyor. Seedream 5.0 Pro, AI ile üretildi
+    // (docs/HIGGSFIELD_PROMPTS_CULTURE.md).
     standFor: {
-      src: "/images/site/culture/what-we-stand-for-cinematic.webp",
+      src: "/images/site/culture/what-we-stand-for-v2.webp",
       alt: {
-        tr: "Dayanışma içinde kenetlenmiş iki elin siyah beyaz yakın planı",
-        en: "Black-and-white close-up of two hands clasped in solidarity",
+        tr: "Karanlık bir sette birkaç ekip üyesinin elleri sinema kamerasını birlikte tripoda yerleştiriyor",
+        en: "On a dark film set, several crew members' hands work together to mount a cinema camera on a tripod",
       },
     },
   },

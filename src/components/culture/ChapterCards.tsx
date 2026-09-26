@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Reveal } from "@/components/lab/Reveal";
 import { Link } from "@/i18n/navigation";
 import { pad2 } from "./lab-text";
+import { ScrollNumber } from "@/components/lab/ScrollNumber";
 import styles from "./ChapterCards.module.css";
 
 export interface ChapterCard {
@@ -24,9 +25,9 @@ export function ChapterCards({ items, eyebrow }: { items: readonly ChapterCard[]
     <ol className={styles.grid}>
       {items.map((item, index) => (
         <Reveal as="li" key={item.href} delay={index * 80} className={styles.cell}>
-          <span className={styles.number} aria-hidden="true">
-            {pad2(index + 1)}
-          </span>
+          {/* Numara kartın üst çizgisinde kesilen bir pencerede: alt kısmı
+              kartın arkasından sızmaz; kaydırdıkça pencerede yükselip iner. */}
+          <ScrollNumber value={pad2(index + 1)} className={styles.number} />
           <Link href={item.href} className={styles.card}>
             <span className={styles.media}>
               <Image

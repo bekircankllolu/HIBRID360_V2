@@ -49,11 +49,11 @@ export async function generateMetadata({
 // Önizleme görselleri scripts ile değil elle üretildi: sitedeki/arşivdeki
 // ilgili fotoğrafın siyah->marka sarısı duotone'u, 640x800 (4:5).
 const SECTIONS = [
-  { href: "/who-we-are", key: "whoWeAre", image: "/images/site/culture/hub-who-we-are-v2.webp" },
-  { href: "/what-we-believe", key: "whatWeBelieve", image: "/images/site/culture/hub-what-we-believe-v2.webp" },
-  { href: "/think-and-thank", key: "thinkAndThank", image: "/images/site/culture/hub-think-and-thank-v2.webp" },
-  { href: "/culture/directors", key: "directors", image: "/images/site/culture/hub-directors.webp" },
-  { href: "/culture/sustainability", key: "sustainability", image: "/images/site/culture/hub-sustainability.webp" },
+  { href: "/who-we-are", key: "whoWeAre", image: "/images/site/culture/hub-who-we-are-v3.webp" },
+  { href: "/what-we-believe", key: "whatWeBelieve", image: "/images/site/culture/hub-what-we-believe-v3.webp" },
+  { href: "/think-and-thank", key: "thinkAndThank", image: "/images/site/culture/hub-think-and-thank-v3.webp" },
+  { href: "/culture/directors", key: "directors", image: "/images/site/culture/hub-directors-v3.webp" },
+  { href: "/culture/sustainability", key: "sustainability", image: "/images/site/culture/hub-sustainability-v3.webp" },
 ] as const;
 
 const STAND_FOR_COPY = {

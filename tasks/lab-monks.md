@@ -74,3 +74,9 @@ Kullanıcı: "tüm sayfaları, tüm fontları, her şeyi en baştan düzenle; ya
 - [x] site-images: `wideSrc` alanı; ServiceChapter film alanı geniş versiyonu kullanıyor; alt metinler yeni sahnelere göre
 - Doğrulama: tsc temiz, vitest 582/582, 72 rota kontrolü temiz
 - Açık: v4 dosyaları diskte duruyor (kullanılmıyor); photography kaydı v4'te
+
+## TUR 5 — Culture (26 Eylül)
+- [x] Bölüm kartı numaraları kart çizgisinde kesiliyor (çizgi hatası giderildi) + kaydırmaya bağlı yükselme
+- [x] 5 kart görseli sinematik v3 (sarı filtre kalktı), "What we stand for" el görseli v2 (ekip kamerayı birlikte kuruyor)
+- Kaynak: docs/HIGGSFIELD_PROMPTS_CULTURE.md
+- [x] Değer kartları + bölüm kartları: numara iki katman (pencere + kart), ScrollNumber ile kaydırmaya bağlı iniş/çıkış (0.1em→0.44em); "1/2" taban şeridi giderildi
