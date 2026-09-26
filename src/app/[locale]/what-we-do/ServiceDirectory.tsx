@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { type CSSProperties, type ReactNode, useEffect, useRef, useState } from "react";
 import { ScribbleArrow } from "@/components/lab/Scribble";
 import { MonaShard } from "@/components/mona/MonaShard";
+import { CardReel } from "./_lab/CardReel";
 import { Link } from "@/i18n/navigation";
 import styles from "./ServiceDirectory.module.css";
 
@@ -129,7 +130,14 @@ export function ServiceDirectory({
               />
 
               <div className={styles.media}>
-                {item.image ? (
+                {isAi && item.image ? (
+                  // LAB: AI kartında durağan kare yerine AI showreel kesitleri.
+                  <CardReel
+                    poster={item.image.src}
+                    webm="/videos/lab/ai-card-reel.webm"
+                    mp4="/videos/lab/ai-card-reel.mp4"
+                  />
+                ) : item.image ? (
                   <Image
                     className={styles.image}
                     src={item.image.src}

@@ -86,7 +86,7 @@ export default async function AiCreativeProductionPage({ params }: { params: Pro
       />
 
       {/* 1 — MONA sahnesi pembe çerçevede. Sahne ve davranışı olduğu gibi. */}
-      <div className={styles.monaFrame} data-ground="pink">
+      <div className={styles.monaFrame} data-ground="black">
         <div className={styles.monaTop}>
           <p className={`lab-rail ${lab.railWithArrow}`} lang="en">
             {RAIL_NAME}
