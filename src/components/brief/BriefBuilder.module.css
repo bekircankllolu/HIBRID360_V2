@@ -1,171 +1,312 @@
-.wrapper {
-  max-width: 44rem;
-  margin: 0 auto;
-  padding: var(--space-24) var(--space-4);
+/**
+ * Brief Builder — LAB (monks.com) sohbet dili, kağıt zemin.
+ *
+ * Balon/avatar/ilerleme parçaları `Chat.module.css`'te (Contact formuyla
+ * ortak); burada sohbetin yerleşimi, cevap alanı, özet ve rıza.
+ *
+ * Mobil önce: tek sütun sohbet. Hibrid 360 (bot) solda, avatar yalnız aktif
+ * satırda; kullanıcı sağda. Renkler yalnız `data-ground` anlamsal
+ * değişkenleri + marka tokenları; sarı/fuşya zeminde SİYAH metin (CLAUDE.md
+ * kontrast kuralı), renk literali yok (hex-guard).
+ *
+ * Hareket: balonlar yerinde belirir (opacity + transform, CLS yok).
+ * prefers-reduced-motion'da animasyon hiç çalışmaz, içerik tam görünür.
+ */
+
+.chat {
+  /* Chat.module.css avatar ölçüsüyle aynı: 4rem + boşluk, ≥768 5.5rem. */
+  --indent: calc(4rem + var(--space-3));
+  --radius: 1.25rem;
+  /* Giriş kutusu: kağıtta beyaz (monks), başka zeminde yüzey tonu. */
+  --field-bg: var(--color-brand-white);
+  --field-fg: var(--color-brand-black);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: 100%;
+  min-width: 0;
 }
 
-.intro {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-  font-size: clamp(1.125rem, 2.5vw, 1.75rem);
-  color: var(--color-brand-fuchsia);
-  margin: 0 0 var(--space-12);
+@media (min-width: 768px) {
+  .chat {
+    --indent: calc(5.5rem + var(--space-5));
+  }
 }
 
-.progress {
-  font-size: var(--font-size-label);
+/* ---------- Geçmiş ---------- */
 
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-
-  margin-bottom: var(--space-4);
+.log {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.question {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-  font-size: clamp(1.25rem, 3vw, 2rem);
-  margin: 0 0 var(--space-8);
+.turn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.active {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.greetingHello {
+  font-weight: 600;
+}
+
+/* Kullanıcı tarafı: sağa yaslı. */
+.userSide {
+  display: flex;
+  justify-content: flex-end;
+  padding-left: var(--indent);
+}
+
+/* ---------- Cevap alanı ---------- */
+
+.reply {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-3);
+  padding-left: var(--indent);
 }
 
 .options {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: var(--space-2);
-  margin-bottom: var(--space-8);
 }
 
+/* Hap seçenek: ince --ink-soft çerçeve (bileşen sınırı ≥3:1), seçili hap
+   kullanıcı balonuyla aynı renk — "bu sizin cevabınız". */
 .option {
-  text-align: left;
+  min-height: 2.75rem;
+  padding: var(--space-2) var(--space-5);
+  border: 0;
+  border-radius: 999px;
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  color: var(--color-brand-white);
-  font-family: var(--font-body);
-  font-size: 1rem;
-  padding: var(--space-3) var(--space-4);
+  box-shadow: inset 0 0 0 1px var(--ink-soft);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: var(--font-size-label);
   cursor: pointer;
+  transition:
+    background-color 240ms var(--ease-lab),
+    color 240ms var(--ease-lab),
+    box-shadow 240ms var(--ease-lab);
 }
 
 .option:hover {
-  border-color: var(--color-brand-fuchsia);
+  box-shadow: inset 0 0 0 1px var(--ink);
+  background: var(--surface);
 }
 
 .option[aria-pressed="true"] {
-  background: var(--color-brand-yellow);
-  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
-  --heading-color: var(--color-text-on-yellow);
-  border-color: var(--color-brand-yellow);
-  color: var(--color-text-on-yellow);
+  background: var(--ink);
+  color: var(--ground);
+  box-shadow: inset 0 0 0 1px var(--ink);
 }
 
+.option:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.pendingNote {
+  margin: 0;
+  max-width: 34rem;
+  font-family: var(--font-ui);
+  font-size: var(--font-size-label);
+  color: var(--ink-soft);
+  text-align: right;
+}
+
+/* monks'un beyaz, yuvarlak köşeli giriş kutusu; etiket kutunun içinde. */
 .field {
-  display: block;
-  margin-bottom: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+  max-width: 26rem;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius);
+  background: var(--field-bg);
+  color: var(--field-fg);
+  box-shadow: inset 0 0 0 1px var(--line);
+  cursor: text;
+}
+
+.field:focus-within {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
 }
 
 .fieldLabel {
-  display: block;
+  font-family: var(--font-ui);
+  font-weight: 500;
   font-size: var(--font-size-label);
-
-  margin-bottom: var(--space-2);
 }
 
 .input,
 .textarea {
   width: 100%;
+  padding: 0;
+  border: 0;
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  color: var(--color-brand-white);
+  color: inherit;
   font-family: var(--font-body);
-  font-size: 1rem;
-  padding: var(--space-3);
+  /* 16px altı iOS Safari'de odakta yakınlaştırır. */
+  font-size: max(1rem, var(--font-size-body));
+  line-height: 1.4;
 }
 
 .textarea {
-  min-height: 7rem;
+  min-height: 4.2em;
   resize: vertical;
 }
 
+/* Halka kutunun kendisinde (:focus-within) — iç alanda ikinci halka yok. */
 .input:focus,
-.textarea:focus {
-  outline: 2px solid var(--color-brand-fuchsia);
-  outline-offset: 1px;
+.input:focus-visible,
+.textarea:focus,
+.textarea:focus-visible {
+  outline: none;
 }
 
-.consent {
+/* ---------- Alt çubuk: ilerleme + geri + ileri ---------- */
+
+.nav {
   display: flex;
-  gap: var(--space-3);
-  align-items: flex-start;
-  margin: var(--space-8) 0;
-  font-size: var(--font-size-body);
-}
-
-.privacyNote {
-  font-size: var(--font-size-label);
-
-  margin-bottom: var(--space-6);
-}
-
-.actions {
-  display: flex;
-  gap: var(--space-3);
   flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-left: var(--indent);
 }
 
-.primary {
-  background: var(--color-brand-yellow);
-  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
-  --heading-color: var(--color-text-on-yellow);
-  color: var(--color-text-on-yellow);
-  border: none;
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-  padding: var(--space-3) var(--space-6);
-  cursor: pointer;
+.navActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-left: auto;
 }
 
-.primary:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.secondary {
+.back {
+  min-height: 2.75rem;
+  padding: 0 var(--space-1);
+  border: 0;
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  color: var(--color-brand-white);
-  font-family: var(--font-body);
-  padding: var(--space-3) var(--space-6);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: var(--font-size-label);
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 0.25em;
   cursor: pointer;
 }
 
+.back:hover {
+  text-decoration-color: var(--accent);
+}
+
+/* ---------- Özet ---------- */
+
+/* Özet kartı kullanıcı balonunun büyük hâli: aynı ters renk. */
 .summary {
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: var(--space-6);
-  margin: var(--space-8) 0;
+  width: 100%;
+  max-width: 30rem;
+  margin: 0;
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius);
+  border-bottom-right-radius: var(--space-1);
+  background: var(--ink);
+  color: var(--ground);
+  font-family: var(--font-ui);
+}
+
+.summaryRow + .summaryRow {
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid color-mix(in srgb, var(--ground) 22%, transparent);
 }
 
 .summary dt {
   font-size: var(--font-size-label);
-
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-
-  margin-top: var(--space-4);
+  color: color-mix(in srgb, var(--ground) 72%, var(--ink));
 }
 
 .summary dd {
   margin: var(--space-1) 0 0;
+  font-weight: 500;
+  overflow-wrap: anywhere;
 }
 
-.error {
-  border-left: 2px solid var(--color-brand-fuchsia);
-  padding-left: var(--space-4);
-  margin-bottom: var(--space-6);
-  font-size: var(--font-size-body);
-}
-
-.pendingNote {
+.consent {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  max-width: 30rem;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius);
+  box-shadow: inset 0 0 0 1px var(--ink-soft);
+  font-family: var(--font-ui);
   font-size: var(--font-size-label);
+  line-height: 1.45;
+  cursor: pointer;
+}
 
-  margin-top: var(--space-4);
+.consent input {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0.1rem 0 0;
+  accent-color: var(--ink);
+  cursor: pointer;
+}
+
+.consent:has(input:checked) {
+  box-shadow: inset 0 0 0 2px var(--ink);
+}
+
+/* ---------- Hareket ---------- */
+
+.enter {
+  animation: bubbleIn 520ms var(--ease-lab) both;
+}
+
+.enterLate {
+  animation: bubbleIn 520ms var(--ease-lab) 140ms both;
+}
+
+@keyframes bubbleIn {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enter,
+  .enterLate {
+    animation: none;
+  }
+
+  .option {
+    transition: none;
+  }
 }

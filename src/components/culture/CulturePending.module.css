@@ -1,0 +1,43 @@
+/* LAB — tema uyumlu bekleme durumu (bkz. CulturePending.tsx). */
+.pending {
+  display: grid;
+  gap: 0.75rem;
+  padding: clamp(1.5rem, 3vw, 2.25rem) 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--ink-soft);
+}
+
+.dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.message {
+  margin: 0;
+  max-width: 40ch;
+  font-family: var(--font-editorial);
+  font-size: clamp(1.4rem, 2.2vw, 2rem);
+  line-height: 1.25;
+  color: var(--ink);
+}
+
+.detail {
+  margin: 0;
+  max-width: 52ch;
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  line-height: 1.5;
+  color: var(--ink-soft);
+}

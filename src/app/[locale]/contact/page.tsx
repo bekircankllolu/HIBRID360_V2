@@ -2,8 +2,14 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
+import { BotBubble } from "@/components/brief/ChatParts";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { ContactMapLoader } from "@/components/contact/ContactMapLoader";
+import { LocalTime } from "@/components/contact/LocalTime";
+import { PageIntro } from "@/components/lab/PageIntro";
+import { Reveal } from "@/components/lab/Reveal";
+import { Scribble } from "@/components/lab/Scribble";
+import { Button } from "@/components/ui/Button";
 import {
   CONTACT,
   CONTACT_IMAGES,
@@ -19,24 +25,29 @@ import styles from "./page.module.css";
 /**
  * CON-01..08 (nihai copy deck, Ağustos 2026) — Contact.
  *
- * 29 Ağustos 2026 revizyonu — sayfa sırası müşterinin verdiği düzene
- * getirildi:
+ * LAB (monks.com Connect sayfası) — sayfa ritmi:
  *
- *   1. tam genişlik hero
- *   2. eski sitedeki İstanbul fotoğrafı (müşteri korunmasını istedi)
- *      + "Motion Office" anlatısı — fotoğrafın üzerindeki başlık bu
- *      bölümü açıyor, ikisi tek birim
- *   3. sarı iletişim bandı (yeni tasarım diline uyarlandı)
- *   4. adres · telefon · e-posta · yol tarifi
- *   5. tam genişlik harita
- *   6. iletişim formu
- *   7. footer (layout'tan gelir)
+ *   1. PageIntro, SARI tema zemini: "Sizden haber almak isteriz." dev dar
+ *      başlık (orta kelimeler serif, son kelime el çizimi halkada), giriş
+ *      cümlesi, "Merhaba deyin" e-posta butonu.
+ *   2. Doğrudan ulaşın — e-posta / telefon / sosyal satırları (1px çizgi).
+ *   3. Ofis — monks ofis listesi: İstanbul yerel saati (istemcide) + şehir,
+ *      adres, yol tarifi.
+ *   4. SİYAH: Motion Office anlatısı — İstanbul panoraması büyük kenar
+ *      boşluklu çerçevede, üç ekip dev dolu numaralarla.
+ *   5. SİYAH: tam genişlik harita (çerçeveli).
+ *   6. Kağıt: "sohbet" formu — solda yapışkan başlık, sağda Hibrid 360
+ *      avatarı + balonlar, alanlar sohbet dilinde (ContactForm theme="chat").
+ *   7. Sayfa sonu çağrısı (CtaBand, sarı — layout'tan) + footer.
+ *
+ * Metinlerin hepsi deck'ten (contact.*); yalnız bölüm etiketleri ve form
+ * yönlendirme cümlesi `lab.contact.*` altında (kısa, nötr UI metni).
  *
  * Harita: anahtar gerektirmeyen MapLibre GL JS + CARTO vektör karoları
  * (9 Eylül 2026'da Google Maps'in yerini aldı — bkz. karar #29,
  * docs/DECISIONS.md). `CONTACT_LOCATION` (lat/lng) kullanır — uydurulan
- * hiçbir veri yok. Sağlayıcı karşılaştırması ve KVKK notu
- * src/data/contact.ts içinde.
+ * hiçbir veri yok. e2e sözleşmesi: `section[aria-labelledby="contact-map"]`
+ * içinde canvas + CARTO atfı, sayfada google.com/maps/dir bağlantısı.
  *
  * CON-03 [KARAR]: "Yayına girecek e-posta adresi teyit edilmeli." Deck
  * kendi içinde contact@hibrid360.com veriyor (GEN-05'te de aynı adres) —
@@ -69,6 +80,38 @@ export async function generateMetadata({
   };
 }
 
+/**
+ * Başlığı üç sese böler: baş (sans) · orta iki kelime (serif) · son kelime
+ * (el çizimi halka). "Sizden | haber almak | isteriz." ·
+ * "We would love to | hear from | you." Kısa metinde serif kısmı kalkar.
+ */
+function IntroTitle({ text }: { text: string }) {
+  const words = text.trim().split(/\s+/);
+  const last = words.pop() ?? "";
+  const serif = words.length > 2 ? words.splice(-2) : [];
+  const head = words.join(" ");
+  return (
+    <>
+      {head}
+      {serif.length > 0 ? (
+        <>
+          {" "}
+          <span className="lab-serif">{serif.join(" ")}</span>
+        </>
+      ) : null}{" "}
+      <Scribble shape="circle" tone="ink" delay={250}>
+        {last}
+      </Scribble>
+    </>
+  );
+}
+
+/** Deck'teki "EKİP 1" büyük harf başlığı cümle düzenine (lab kuralı). */
+function sentenceCase(text: string, locale: Locale): string {
+  const lower = text.toLocaleLowerCase(locale);
+  return lower.charAt(0).toLocaleUpperCase(locale) + lower.slice(1);
+}
+
 export default async function ContactPage({
   params,
 }: {
@@ -77,12 +120,17 @@ export default async function ContactPage({
   const { locale } = await params;
   const t = await getTranslations("contact");
   const tCta = await getTranslations("cta");
+  const tNav = await getTranslations("nav");
+  const tFooter = await getTranslations("footer");
+  const tLab = await getTranslations("lab.contact");
+  const tBrief = await getTranslations("lab.brief");
   const motionBody = t.raw("motionBody") as string[];
   const teams = t.raw("teams") as Array<{ title: string; body: string }>;
   const directionsHref = directionsUrl();
+  const mailHref = `mailto:${CONTACT.email}`;
 
   return (
-    <div className={styles.page}>
+    <>
       <JsonLd
         data={breadcrumbListJsonLd(locale, [
           { name: "Home", path: "" },
@@ -90,27 +138,106 @@ export default async function ContactPage({
         ])}
       />
 
-      {/* 1 — tam genişlik hero */}
-      <header className={styles.hero}>
-        <p className={styles.heroKicker}>{t("heroLead1")}</p>
-        <h1 className={styles.heroTitle}>{t("heroTitle")}</h1>
-        <p className={styles.heroBody}>{t("heroBody")}</p>
-      </header>
+      {/* 1 — tema renkli sayfa başı (monks Connect: sarı). */}
+      <PageIntro
+        ground="yellow"
+        rail={<span lang="en">{tNav("contact")}</span>}
+        title={<IntroTitle text={t("heroLead1")} />}
+        lede={t("heroBody")}
+        actions={<Button href={mailHref}>{t("heroLead2")}</Button>}
+      />
 
-      {/* 2 — İstanbul fotoğrafı + Motion Office anlatısı */}
-      <section className={styles.motion}>
+      {/* 2 — doğrudan kanallar: satır listesi. */}
+      <section className={styles.block} data-ground="paper" aria-labelledby="contact-channels">
+        <h2 id="contact-channels" className={`lab-rail ${styles.rail}`}>
+          {tLab("channelsRail")}
+        </h2>
+        <dl className={styles.rows}>
+          <Reveal className={styles.row}>
+            <dt className="lab-meta">{t("emailLabel")}</dt>
+            <dd className={styles.value}>
+              <a href={mailHref}>{CONTACT.email}</a>
+            </dd>
+            <dd className={styles.action}>
+              <Button href={mailHref} size="sm" variant="ghost">
+                {tCta("email")}
+              </Button>
+            </dd>
+          </Reveal>
+          <Reveal className={styles.row} delay={80}>
+            <dt className="lab-meta">{t("phoneLabel")}</dt>
+            <dd className={styles.value}>
+              <a href={telUrl()}>{CONTACT.phone}</a>
+            </dd>
+            <dd className={styles.action}>
+              <Button href={whatsappUrl()} size="sm" variant="ghost" target="_blank" rel="noreferrer">
+                {tCta("whatsapp")}
+              </Button>
+            </dd>
+          </Reveal>
+          <Reveal className={styles.row} delay={160}>
+            <dt className="lab-meta">{tFooter("social.label")}</dt>
+            <dd className={`${styles.value} ${styles.social}`}>
+              {SOCIAL_LINKS.map((link) => (
+                <a key={link.name} href={link.href} target="_blank" rel="noreferrer">
+                  {link.name}
+                </a>
+              ))}
+            </dd>
+            <dd className={`lab-meta ${styles.action}`}>{t("socialInvite")}</dd>
+          </Reveal>
+        </dl>
+      </section>
+
+      {/* 3 — ofis listesi (monks): yerel saat + şehir · adres · yol tarifi. */}
+      <section
+        className={`${styles.block} ${styles.officeBlock}`}
+        data-ground="paper"
+        aria-labelledby="contact-office"
+      >
+        <h2 id="contact-office" className={`lab-rail ${styles.rail}`}>
+          {tLab("officeRail")}
+        </h2>
+        <div className={styles.office}>
+          <p className={styles.city}>
+            <span className={`lab-meta ${styles.clock}`}>
+              <span className={styles.clockDot} aria-hidden="true" />
+              <span className="srOnly">{tLab("localTime")}: </span>
+              <LocalTime timeZone="Europe/Istanbul" locale={locale} />
+            </span>
+            <span className={styles.cityName}>{tLab("city")}</span>
+          </p>
+          <div className={styles.addressCell}>
+            <p className="lab-meta">{t("addressLabel")}</p>
+            <address className={styles.address}>
+              {CONTACT.addressLines.map((line) => (
+                <span key={line}>{line}</span>
+              ))}
+            </address>
+          </div>
+          <div className={styles.officeAction}>
+            <Button href={directionsHref} size="sm" target="_blank" rel="noreferrer">
+              {t("directions")}
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* 4 — Motion Office: siyah zemin, çerçeveli panorama + anlatı. */}
+      <section className={styles.motion} data-ground="black" aria-labelledby="contact-motion">
+        <div className={styles.motionHead}>
+          <p className={`lab-rail ${styles.rail}`} lang="en">
+            {tLab("motionRail")}
+          </p>
+          <h2 id="contact-motion" className={`lab-h2 ${styles.motionTitle}`}>
+            {t("motionTitle")}
+          </h2>
+        </div>
+
         <figure className={styles.figure}>
           <picture>
-            <source
-              type="image/avif"
-              srcSet={CONTACT_IMAGES.panorama.avif}
-              sizes="100vw"
-            />
-            <source
-              type="image/webp"
-              srcSet={CONTACT_IMAGES.panorama.webp}
-              sizes="100vw"
-            />
+            <source type="image/avif" srcSet={CONTACT_IMAGES.panorama.avif} sizes="100vw" />
+            <source type="image/webp" srcSet={CONTACT_IMAGES.panorama.webp} sizes="100vw" />
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               className={styles.figureImage}
@@ -122,127 +249,81 @@ export default async function ContactPage({
               decoding="async"
             />
           </picture>
-          <figcaption className={styles.figureCaption}>
-            <h2 className={styles.figureTitle}>{t("motionTitle")}</h2>
-          </figcaption>
+          <figcaption className={`lab-meta ${styles.figureCaption}`}>{t("photoCaption")}</figcaption>
         </figure>
 
-        <div className={styles.motionBody}>
-          {motionBody.map((paragraph, index) => (
-            <p key={index}>{paragraph}</p>
-          ))}
+        <div className={styles.motionGrid}>
+          <div className={styles.motionBody}>
+            {motionBody.map((paragraph, index) => (
+              <p key={index}>{paragraph}</p>
+            ))}
+          </div>
+          <div className={styles.motionAside}>
+            <h3 className="lab-h3">{t("motionQuestion")}</h3>
+            <p>{t("motionIntro")}</p>
+          </div>
         </div>
 
-        <h3 className={styles.motionQuestion}>{t("motionQuestion")}</h3>
-        <p className={styles.motionIntro}>{t("motionIntro")}</p>
         <div className={styles.teams}>
-          {teams.map((team) => (
-            <div key={team.title}>
-              <p className={styles.teamTitle}>{team.title}</p>
+          {teams.map((team, index) => (
+            <Reveal key={team.title} className={styles.team} delay={index * 90}>
+              <span className={styles.teamNumber} aria-hidden="true">
+                {index + 1}
+              </span>
+              <h3 className={`lab-h3 ${styles.teamTitle}`}>{sentenceCase(team.title, locale)}</h3>
               <p className={styles.teamBody}>{team.body}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>
 
-      {/* 3 — sarı iletişim bandı. Marka kuralı: sarı zemin → SİYAH metin
-          (CLAUDE.md kontrast kuralı; beyaz metin AA geçmiyor). */}
-      <section className={styles.yellowBand}>
-        <p className={styles.yellowBandLead}>{t("heroLead2")}</p>
-        <p className={styles.yellowBandLabel}>EMAIL US</p>
-        <a className={styles.yellowBandEmail} href={`mailto:${CONTACT.email}`}>
-          {CONTACT.email}
-        </a>
-      </section>
-
-      {/* 4 — adres · telefon · e-posta · yol tarifi */}
-      <section className={styles.details}>
-        <div className={styles.detail}>
-          <h2 className={styles.detailLabel}>{t("addressLabel")}</h2>
-          <address className={styles.address}>
-            {CONTACT.addressLines.map((line) => (
-              <span key={line}>
-                {line}
-                <br />
-              </span>
-            ))}
-          </address>
-          <a
-            className={styles.inlineLink}
-            href={directionsHref}
-            target="_blank"
-            rel="noreferrer"
-          >
-            {t("directions")} →
-          </a>
-        </div>
-
-        <div className={styles.detail}>
-          <h2 className={styles.detailLabel}>{t("phoneLabel")}</h2>
-          <p className={styles.detailValue}>
-            <a href={telUrl()}>{CONTACT.phone}</a>
-          </p>
-          <a
-            className={styles.inlineLink}
-            href={whatsappUrl()}
-            target="_blank"
-            rel="noreferrer"
-          >
-            {tCta("whatsapp")} →
-          </a>
-        </div>
-
-        <div className={styles.detail}>
-          <h2 className={styles.detailLabel}>{t("emailLabel")}</h2>
-          <p className={styles.detailValue}>
-            <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
-          </p>
-          <p className={styles.socialInvite}>
-            {t("socialInvite")}
-          </p>
-          <nav className={styles.socialLinks} aria-label={t("socialInvite")}>
-            {SOCIAL_LINKS.map((link) => (
-              <a key={link.name} href={link.href} target="_blank" rel="noreferrer" aria-label={link.name}>
-                <span aria-hidden="true">{link.name === "LinkedIn" ? "in" : link.name.slice(0, 2).toUpperCase()}</span>
-              </a>
-            ))}
-          </nav>
-        </div>
-      </section>
-
-      {/* 5 — tam genişlik harita. 9 Eylül 2026: CARTO/MapLibre vektör
-          haritasına geçildi (bkz. src/data/contact.ts karar notu),
-          sayfayla birlikte doğrudan yüklenir. */}
-      <section className={styles.mapSection} aria-labelledby="contact-map">
-        <h2 id="contact-map" className={styles.visuallyHidden}>
+      {/* 5 — harita: siyah zeminde çerçeveli. 9 Eylül 2026: CARTO/MapLibre
+          vektör haritası (bkz. src/data/contact.ts karar notu), sayfayla
+          birlikte doğrudan yüklenir. */}
+      <section className={styles.mapSection} data-ground="black" aria-labelledby="contact-map">
+        <h2 id="contact-map" className="srOnly">
           {t("mapTitle")}
         </h2>
         <div className={styles.mapFrame}>
           <ContactMapLoader center={CONTACT_LOCATION} />
         </div>
-        <p className={styles.mapFallback}>
-          <span>{t("mapNote")}</span>{" "}
+        <p className={`lab-meta ${styles.mapFallback}`}>
+          <span>{t("mapNote")}</span>
           <a href={directionsHref} target="_blank" rel="noreferrer">
             {t("directions")} →
           </a>
         </p>
       </section>
 
-      {/* 6 — iletişim formu */}
-      <section className={styles.formSection}>
-        <div className={styles.formColumn}>
-          <ContactForm locale={locale} />
+      {/* 6 — sohbet formu (monks "Let's unlock what's possible together."). */}
+      <section className={styles.formSection} data-ground="paper" aria-labelledby="contact-form-title">
+        <div className={styles.formIntro}>
+          <p className="lab-rail">{tLab("formRail")}</p>
+          <h2 id="contact-form-title" className={`lab-h2 ${styles.formTitle}`}>
+            {t("heroTitle")}
+          </h2>
         </div>
 
-        <aside className={styles.formAside}>
-          <p className={styles.bookingLead}>{t("bookingLead")}</p>
-          <div className={styles.bookingLinks}>
-            <a href={whatsappUrl()} target="_blank" rel="noreferrer">
-              {tCta("whatsapp")}
-            </a>
+        <div className={styles.chat}>
+          <BotBubble tone="question" avatar={tBrief("avatar")}>
+            <p className={styles.hello}>{tBrief("greeting")}</p>
+            <p>{tLab("formPrompt")}</p>
+          </BotBubble>
+
+          <ContactForm locale={locale} theme="chat" />
+
+          <div className={styles.booking}>
+            <BotBubble tone="greeting">
+              <p>{t("bookingLead")}</p>
+            </BotBubble>
+            <div className={styles.bookingAction}>
+              <Button href={whatsappUrl()} size="sm" variant="ghost" target="_blank" rel="noreferrer">
+                {tCta("whatsapp")}
+              </Button>
+            </div>
           </div>
-        </aside>
+        </div>
       </section>
-    </div>
+    </>
   );
 }

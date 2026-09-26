@@ -62,3 +62,6 @@ next-env.d.ts
 
 # scripts/design-audit.mjs çekimleri (önce/sonra görüntüleri, metrics.json)
 /.design-audit/
+
+# Python önbelleği (scripts/*.py)
+__pycache__/

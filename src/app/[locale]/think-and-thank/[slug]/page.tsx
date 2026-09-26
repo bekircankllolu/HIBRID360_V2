@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
+import { EditorialImage } from "@/components/insights/EditorialImage";
+import { InsightRelated } from "@/components/insights/InsightRelated";
+import { ShareLinks } from "@/components/insights/ShareLinks";
+import { pullQuoteOf, relatedPostsOf } from "@/components/insights/article";
+import { splitInsightTitle } from "@/components/insights/split-insight-title";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { Button } from "@/components/ui/Button";
+import { getInsightVisual } from "@/data/insight-visuals";
 import { insightsPosts } from "@/data/insights";
-import { getPublishedInsights } from "@/lib/content";
-import { articleJsonLd, breadcrumbListJsonLd } from "@/lib/schema";
 import { routing, type Locale } from "@/i18n/routing";
-import { localizedAlternates } from "@/lib/site";
+import { getPublishedInsights } from "@/lib/content";
 import {
   getInsightAuthor,
   getInsightCategory,
@@ -13,17 +20,21 @@ import {
   getInsightSummary,
   getInsightTitle,
 } from "@/lib/insights";
-import { Link } from "@/i18n/navigation";
-import { getTranslations } from "next-intl/server";
+import { articleJsonLd, breadcrumbListJsonLd } from "@/lib/schema";
+import { SITE_URL, localizedAlternates } from "@/lib/site";
 import type { InsightsPost } from "@/types/content";
-import { getInsightVisual } from "@/data/insight-visuals";
-import { EditorialImage } from "@/components/insights/EditorialImage";
 import styles from "./page.module.css";
 
 export function generateStaticParams() {
   return insightsPosts
     .filter((post) => post.is_published)
     .flatMap((post) => routing.locales.map((locale) => ({ locale, slug: post.slug })));
+}
+
+/** Supabase bağlıysa oradan; değilse yerel (brief'ten içe aktarılmış) liste. */
+async function getPosts(): Promise<InsightsPost[]> {
+  const fromDb = await getPublishedInsights();
+  return fromDb.length > 0 ? fromDb : insightsPosts.filter((post) => post.is_published);
 }
 
 async function getPost(slug: string): Promise<InsightsPost | null> {
@@ -54,6 +65,21 @@ export async function generateMetadata({
   };
 }
 
+/**
+ * LAB — Think & Thank yazısı, monks.com makale diliyle.
+ *
+ *   Baş (paper)     rail: kategori çipi + okuma süresi + yazar | dev dar
+ *                   başlık (grotesk + serif ikinci ses) + özet
+ *   Kapak           tam genişlik, yazının tonunda zemin (mint/pembe/lila)
+ *   Gövde           rail: paylaş (yapışkan) | ~68ch okunaklı metin; ilk
+ *                   paragraf serif giriş, araya yazının KENDİ son cümlesi
+ *                   serif çekme alıntı olarak (ekran okuyucudan gizli —
+ *                   metin iki kez okunmasın)
+ *   Diğer yazılar   dizinle aynı satır dili
+ *
+ * e2e `think-and-thank.spec.ts`: gövde `div[class*='body'] > p` tam üç
+ * paragraf — çekme alıntı `<figure>` olduğu için sayıma girmez.
+ */
 export default async function ThinkAndThankPostPage({
   params,
 }: {
@@ -61,15 +87,20 @@ export default async function ThinkAndThankPostPage({
 }) {
   const { locale, slug } = await params;
   const t = await getTranslations({ locale, namespace: "insights" });
+  const tLab = await getTranslations({ locale, namespace: "lab.insights" });
   const post = await getPost(slug);
   if (!post) notFound();
 
   const title = getInsightTitle(post, locale);
+  const { lead, rest } = splitInsightTitle(title);
   const summary = getInsightSummary(post, locale);
   const category = getInsightCategory(post, locale);
   const author = getInsightAuthor(post, locale);
   const paragraphs = getInsightParagraphs(post, locale);
   const visual = getInsightVisual(post, locale);
+  const quote = pullQuoteOf(paragraphs);
+  const related = relatedPostsOf(await getPosts(), slug, 3);
+  const url = `${SITE_URL}/${locale}/think-and-thank/${slug}`;
 
   return (
     <article className={styles.article} data-tone={visual.tone}>
@@ -81,47 +112,97 @@ export default async function ThinkAndThankPostPage({
         ])}
       />
       <JsonLd data={articleJsonLd(locale, post)} />
-      <header className={styles.articleHeader}>
-        <div className={styles.headerCopy}>
-          <div className={styles.headerTopline}>
-            <span lang="en">Hibrid 360 Mag</span>
-            {category && <span className={styles.category}>{category}</span>}
-          </div>
-          <h1>{title}</h1>
+
+      <header className={styles.header} data-ground="paper">
+        <ul className={styles.facts} aria-label={t("articleInfo")}>
+          {category && (
+            <li className={styles.chip}>{category}</li>
+          )}
+          {post.read_time_minutes ? <li>{t("readTime", { minutes: post.read_time_minutes })}</li> : null}
+          {author && <li>{author}</li>}
+          {post.published_at && (
+            <li>
+              <time dateTime={post.published_at}>
+                {new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(
+                  new Date(post.published_at),
+                )}
+              </time>
+            </li>
+          )}
+        </ul>
+        <div className={styles.headline}>
+          <h1 className={`lab-display ${styles.title}`}>
+            {lead}
+            {rest && (
+              <>
+                {" "}
+                <span className={`lab-serif ${styles.titleRest}`}>{rest}</span>
+              </>
+            )}
+          </h1>
           {summary && <p className={styles.summary}>{summary}</p>}
         </div>
-        <div className={styles.headerVisual}>
+      </header>
+
+      <figure className={styles.cover}>
+        <div className={styles.coverFrame}>
           <EditorialImage
             src={visual.src}
             alt={visual.alt}
-            sizes="(max-width: 760px) 100vw, 50vw"
+            sizes="(max-width: 760px) 100vw, 92vw"
             priority
           />
         </div>
-      </header>
-      <div className={styles.articleContent}>
-        <aside className={styles.meta} aria-label={t("articleInfo")}>
-          {author && <span>{author}</span>}
-          {post.read_time_minutes && (
-            <span>{t("readTime", { minutes: post.read_time_minutes })}</span>
-          )}
-          {post.published_at && (
-            <time dateTime={post.published_at}>
-              {new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(
-                new Date(post.published_at),
-              )}
-            </time>
-          )}
+      </figure>
+
+      <div className={styles.reading} data-ground="paper">
+        <aside className={styles.aside}>
+          <ShareLinks url={url} title={title} heading={tLab("share")} emailLabel={tLab("shareEmail")} />
         </aside>
         <div className={styles.body}>
           {paragraphs.map((paragraph, index) => (
-            <p key={`${index}-${paragraph}`}>{paragraph}</p>
+            <FragmentWithQuote key={`${index}-${paragraph}`} showQuote={index === 0 ? quote : null}>
+              <p>{paragraph}</p>
+            </FragmentWithQuote>
           ))}
-          <Link href="/think-and-thank" className={styles.backLink}>
-            <span aria-hidden="true">←</span> {t("backToIndex")}
-          </Link>
+          <div className={styles.back}>
+            <Button href="/think-and-thank" variant="ghost" size="sm">
+              {t("backToIndex")}
+            </Button>
+          </div>
         </div>
       </div>
+
+      {related.length > 0 && (
+        <section className={styles.related} data-ground="paper" aria-labelledby="related-heading">
+          <h2 id="related-heading" className={`lab-h2 ${styles.relatedTitle}`}>
+            {tLab("related")}
+          </h2>
+          <InsightRelated posts={related} locale={locale} labelledBy="related-heading" />
+        </section>
+      )}
     </article>
+  );
+}
+
+/** Paragraf + (varsa) hemen ardından çekme alıntı; ikisi de gövdenin doğrudan çocuğu. */
+function FragmentWithQuote({
+  children,
+  showQuote,
+}: {
+  children: ReactNode;
+  showQuote: string | null;
+}) {
+  return (
+    <>
+      {children}
+      {showQuote && (
+        <figure className={styles.quote} aria-hidden="true">
+          <blockquote>
+            <p>{showQuote}</p>
+          </blockquote>
+        </figure>
+      )}
+    </>
   );
 }

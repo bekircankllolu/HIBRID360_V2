@@ -286,3 +286,165 @@
     transform: none;
   }
 }
+
+/* ======================================================================
+ * LAB (monks.com "What can we do for you?") — sola yaslı editoryal düzen.
+ * Sol sütunda küçük etiket + el çizimi ok, sağda hafif grotesk dev soru
+ * (monks bu soruyu geniş değil DAR yüzde, 500 ağırlıkla yazıyor — sayfanın
+ * geniş/kalın başlıklarıyla kontrast kuran "konuşan" ses), altında hap +
+ * daire buton. Kelimenin etrafındaki halka Scribble bileşeninden.
+ * ====================================================================== */
+.section {
+  display: grid;
+  grid-template-columns: minmax(8rem, 1fr) minmax(0, 3fr);
+  column-gap: clamp(1.5rem, 4vw, 4rem);
+  align-content: center;
+  justify-items: start;
+  text-align: left;
+}
+
+.rail {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: start;
+  margin: 1.4rem 0 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: var(--font-size-body);
+  color: var(--color-text-on-black);
+}
+
+.railArrow {
+  color: var(--color-brand-yellow);
+  transform: translateY(0.35rem) rotate(-8deg);
+}
+
+.title,
+.bodyCopy,
+.cta {
+  grid-column: 2;
+}
+
+.title {
+  font-family: var(--font-ui);
+  font-weight: 500;
+  max-width: 18ch;
+  font-size: clamp(2.75rem, 6.2vw, 6.25rem);
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.bodyCopy {
+  max-width: 52ch;
+}
+
+.cta {
+  --cta-arrow-size: 3.75rem;
+  background: transparent;
+  padding: 0;
+  font-family: var(--font-ui);
+  font-weight: 500;
+}
+
+.ctaLabel,
+.ctaArrow {
+  border-radius: 999px;
+  min-height: 3.75rem;
+}
+
+.ctaLabel {
+  padding: 0 1.75rem;
+}
+
+.ctaArrow {
+  width: 3.75rem;
+  font-size: 1.2rem;
+}
+
+@media (max-width: 760px) {
+  .section {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .rail,
+  .title,
+  .bodyCopy,
+  .cta {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .rail {
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* LAB (monks): zemin geçişi. Sarı zeminde metin, etiket, ok ve butonlar
+   siyaha döner (kontrast kuralı); halka fuşya kalır (sarıda görünür). */
+.section {
+  background-color: transparent;
+  transition: background-color 700ms var(--ease-lab), color 700ms var(--ease-lab);
+}
+
+.title,
+.bodyCopy,
+.rail,
+.railArrow,
+.ctaLabel,
+.ctaArrow {
+  transition:
+    color 700ms var(--ease-lab),
+    background-color 700ms var(--ease-lab),
+    transform 420ms var(--cta-ease, ease);
+}
+
+.section[data-grounded] {
+  background-color: var(--color-brand-yellow);
+  --heading-color: var(--color-text-on-yellow);
+}
+
+.section[data-grounded] .title,
+.section[data-grounded] .rail,
+.section[data-grounded] .railArrow {
+  color: var(--color-text-on-yellow);
+}
+
+.section[data-grounded] .bodyCopy {
+  color: color-mix(in srgb, var(--color-brand-black) 82%, transparent);
+}
+
+.section[data-grounded] .ctaLabel,
+.section[data-grounded] .ctaArrow {
+  background: var(--color-brand-black);
+  color: var(--color-brand-yellow);
+}
+
+/* LAB v2: tema sistemi. Bölüm kağıtla başlar, ekrana oturunca sarıya geçer
+   (data-ground değişir, renkler tokenlardan). */
+.section {
+  background-color: var(--ground);
+  color: var(--ink);
+}
+
+.title,
+.rail {
+  color: var(--ink);
+}
+
+.railArrow {
+  color: var(--ink);
+}
+
+.bodyCopy {
+  color: var(--ink-soft);
+}
+
+.ctaLabel,
+.ctaArrow {
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+}

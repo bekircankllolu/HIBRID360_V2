@@ -1,0 +1,99 @@
+/*
+ * LAB (monks.com) — What We Do ailesinin (hub, AI, Service Production, How We
+ * Work) ortak parçaları. Renkler yalnız `data-ground` anlamsal değişkenleri
+ * (--ink, --ink-soft, --line, --accent, --surface); hex yok.
+ */
+
+/* --- Sayfa sonu çağrısı (desen 12) --------------------------------------- */
+
+.closing {
+  padding-block: clamp(5rem, 11vw, 10rem);
+}
+
+.closingTitle {
+  max-width: 16ch;
+  margin: 0;
+}
+
+.closingLede {
+  max-width: 44ch;
+  margin: clamp(1.25rem, 2.2vw, 2rem) 0 0;
+  font-family: var(--font-body);
+  font-size: var(--font-size-body-lg);
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: clamp(2rem, 3.5vw, 3rem);
+}
+
+/* --- Sol etiket + el çizimi ok ------------------------------------------- */
+
+.railWithArrow {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.railArrow {
+  color: var(--accent);
+  transform: translateY(0.3rem) rotate(-8deg);
+}
+
+/* --- Satır listesi (desen 4): numara | kalın sans + serif devam ---------- */
+
+.rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 3.5rem minmax(0, 1fr);
+  column-gap: clamp(1rem, 2vw, 2rem);
+  align-items: baseline;
+  padding-block: clamp(1.15rem, 1.9vw, 1.7rem);
+  border-bottom: 1px solid var(--line);
+}
+
+.rowIndex {
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-soft);
+}
+
+.rowText {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: clamp(1.2rem, 0.95rem + 0.8vw, 1.75rem);
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+.rowText strong {
+  font-weight: 500;
+}
+
+/* Serif devam — monks "Unlocking High-Value Users with Machine Learning". */
+.rowSerif {
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 559px) {
+  .row {
+    grid-template-columns: 2.25rem minmax(0, 1fr);
+  }
+}

@@ -1,0 +1,16 @@
+/* LAB — kelime kelime yanan metin. pass ilerlemesi: 0 (alt kenara giriyor)
+   → 1 (üst kenardan çıktı). Yanma 0.15–0.55 aralığında tamamlanır: metin
+   ekranın ortasına gelmeden tam koyu. */
+.lit {
+  --progress: 1;
+}
+
+.lit[data-motion="scroll"] {
+  --progress: 0;
+}
+
+.word {
+  --lit: clamp(0, calc((var(--progress) - 0.15) / 0.4 * (var(--n) + 2) - var(--i)), 1);
+  opacity: calc(0.16 + var(--lit) * 0.84);
+  transition: opacity 120ms linear;
+}

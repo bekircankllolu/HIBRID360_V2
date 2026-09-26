@@ -1,92 +1,218 @@
+/*
+ * LAB (monks.com kart dili) — What We Do hizmet ızgarası. Bkz. ServiceDirectory.tsx.
+ *
+ * Renkler yalnız marka tokenlarından; soluk tonlar `color-mix` ile aynı
+ * tokenlardan türetilir. Dev numara DOLU, zeminin biraz açığı (konturlu
+ * yazı yok — typography-taste kuralı).
+ */
 .directory {
+  --number-size: clamp(4.25rem, 7.4vw, 7rem);
+  --stagger: clamp(2.5rem, 4.4vw, 4rem);
+  --card-gap: clamp(1.25rem, 2.2vw, 2rem);
+  /* Dev numara zeminin bir ton koyusu (kağıtta sıcak gri), üzerine
+     gelince vurgu rengine kayar. */
+  --number-tone: color-mix(in srgb, var(--ink) 9%, var(--ground));
+  --number-tone-hot: color-mix(in srgb, var(--accent) 38%, var(--ground));
+
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(22rem, 0.85fr);
-  gap: clamp(var(--space-8), 5vw, var(--space-24));
+  grid-template-columns: minmax(8rem, 1fr) minmax(0, 3fr);
+  column-gap: clamp(1.5rem, 4vw, 4rem);
   align-items: start;
-  /* Üst dolgu dar kademe: üstündeki PageHero zaten `--section-space` alt
-     dolgusu bırakıyor; ikisi toplanınca hero ile dizin arası ~265 px'e
-     çıkıyordu (Faz 2 / B1). */
-  padding-block: var(--section-space-tight) clamp(var(--space-16), 9vw, 8rem);
+  padding-block: var(--section-space);
 }
 
-.stage {
-  --pointer-x: 0%;
+/* Sol etiket sütunu (lab-rail + el çizimi ok). */
+.rail {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: 0.6rem 0 0;
+}
 
-  position: sticky;
-  top: calc(var(--header-height) + var(--space-6));
-  height: min(72vh, 46rem);
-  min-height: 32rem;
+.railArrow {
+  color: var(--accent);
+  transform: translateY(0.35rem) rotate(-8deg);
+}
+
+.title {
+  grid-column: 2;
+  grid-row: 1;
+  max-width: 20ch;
   margin: 0;
-  overflow: hidden;
-  background: var(--surface-1);
+  color: var(--ink);
+}
+
+/* --- Kart ızgarası ------------------------------------------------------ */
+
+.grid {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: var(--card-gap);
+  /* Satır arası: alttaki satırın numarası üstteki kartın metnine binmesin. */
+  row-gap: calc(var(--number-size) * 0.55 + var(--space-12));
+  align-items: start;
+  margin: 0;
+  /* İlk satırın numaraları başlığa değmesin. */
+  padding: calc(var(--number-size) * 0.55 + clamp(var(--space-12), 6vw, 6rem)) 0 0;
+  list-style: none;
+}
+
+.card {
+  position: relative;
   isolation: isolate;
+  display: grid;
+  align-content: start;
+  transition:
+    opacity 900ms var(--ease-lab),
+    transform 900ms var(--ease-lab);
+  transition-delay: calc(var(--col, 0) * 90ms);
 }
 
-.visual {
+/* Kademe: çift kartlar aşağıda (4 ve 2 sütunda çift sütun). */
+.card:nth-child(even) {
+  margin-top: var(--stagger);
+}
+
+/* Giriş: yalnız JS kurduysa ve kart henüz görünmediyse gizli. */
+.grid[data-armed] .card:not([data-inview]) {
+  opacity: 0;
+  transform: translate3d(0, 2.5rem, 0);
+}
+
+/* Dev numara: kartın sağ üst köşesinin ARKASINDA, alt yarısı görselin altında. */
+.number {
   position: absolute;
-  inset: 0;
-  animation: visual-in 620ms var(--ease-house) both;
+  z-index: 0;
+  top: calc(var(--number-size) * -0.56);
+  right: -0.04em;
+  font-family: var(--font-display);
+  font-size: var(--number-size);
+  font-weight: var(--font-weight-brand);
+  line-height: 0.8;
+  letter-spacing: -0.03em;
+  color: var(--number-tone);
+  pointer-events: none;
+  user-select: none;
+  transition: color 500ms var(--ease-lab);
 }
 
-.panLayer {
-  position: absolute;
-  inset: 0;
-  transform: translate3d(var(--pointer-x), 0, 0);
-  transition: transform 520ms var(--ease-house);
-  will-change: transform;
+.number::before {
+  content: attr(data-number);
 }
 
-.stageImage {
+.media {
+  position: relative;
+  z-index: 1;
+  aspect-ratio: 24 / 25;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.image {
   object-fit: cover;
-  filter: saturate(0.94) contrast(1.03) brightness(0.94);
-  transform: scale(1.09);
-  transition: filter 480ms ease-out;
-  backface-visibility: hidden;
+  filter: saturate(0.82);
+  transform: scale(1.001);
+  transition:
+    filter 700ms var(--ease-lab),
+    transform 900ms var(--ease-lab);
 }
 
-.stage::after {
+.name {
+  margin: var(--space-5) 0 0;
+  font-family: var(--font-ui);
+  font-size: clamp(1.25rem, 0.95rem + 0.7vw, 1.625rem);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: var(--tracking-heading);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+/* Bağlantı bütün kartı kaplar (numara hariç: numara kartın dışına taşıyor). */
+.link::after {
   content: "";
   position: absolute;
-  z-index: 1;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(180deg, transparent 52%, rgba(0, 0, 0, 0.78) 100%);
-}
-
-.stageMeta {
-  position: absolute;
   z-index: 2;
-  inset: auto var(--space-6) var(--space-6);
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-6);
-  padding-top: var(--space-3);
-  border-top: 1px solid rgba(255, 255, 255, 0.5);
-  font-family: var(--font-brand);
-  font-size: var(--font-size-label);
-  font-weight: var(--font-weight-heading-bold);
-  text-transform: uppercase;
+  inset: 0;
 }
 
-/*
- * Derece etiketi BEYAZ (eskiden fuşya). Fotoğrafın üzerinde fuşya ölçüldü:
- * 3.23:1 — küçük punto için gereken 4.5:1'in altında (18 Eylül 2026 kontrast
- * taraması, hem TR hem EN). Beyaz aynı zeminde ~10:1 veriyor. Fuşya "araç
- * rengi" olarak zeminin garanti koyu olduğu yerlerde kalıyor (tipografik
- * poster çizgileri, ChapterHero koordinatı).
- */
-.stageMeta span:first-child {
-  color: var(--color-brand-white);
-  opacity: 0.85;
+.link:focus-visible {
+  outline: none;
 }
 
-/*
- * AI satırının sahnesi: altta tipografik poster, üstünde MONA'nın partikül
- * küresi. MONA kurulduğunda (WebGL ya da hareket-azaltmada tek kare) poster
- * sönerek çekilir; kurulamadığı yerde (dokunmatik, dar ekran, WebGL yok)
- * poster tek başına sahneyi taşır.
- */
+.link:focus-visible::after {
+  outline: 2px solid var(--ink);
+  outline-offset: 6px;
+}
+
+/* Ok dairesi: kağıtta siyah daire + kağıt rengi ok; üzerine gelince fuşya
+   daire + SİYAH ok (fuşya zeminde beyaz AA geçmez). */
+.arrow {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  overflow: hidden;
+  color: var(--ground);
+  background: var(--ink);
+  transition:
+    background-color 320ms var(--ease-lab),
+    color 320ms var(--ease-lab);
+}
+
+.arrow svg {
+  width: 1rem;
+  height: 1rem;
+  stroke-width: 2;
+  transition: transform 520ms var(--ease-lab);
+}
+
+.description {
+  max-width: 34ch;
+  margin: var(--space-4) 0 0;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+/* --- Etkileşim ----------------------------------------------------------- */
+
+.card:hover .image,
+.card:focus-within .image {
+  filter: saturate(1.05);
+  transform: scale(1.05);
+}
+
+.card:hover .arrow,
+.card:focus-within .arrow {
+  color: var(--color-text-on-fuchsia);
+  background: var(--color-brand-fuchsia);
+}
+
+.card:hover .arrow svg,
+.card:focus-within .arrow svg {
+  transform: translateX(0.15rem);
+}
+
+.card:hover .number,
+.card:focus-within .number {
+  color: var(--number-tone-hot);
+}
+
+/* --- AI kartı: tipografik poster + (masaüstünde) MONA ------------------- */
+
 .aiStage {
   position: absolute;
   inset: 0;
@@ -100,19 +226,19 @@
 .typePoster {
   position: absolute;
   inset: 0;
-  transition: opacity 520ms var(--ease-house);
   display: grid;
   align-content: space-between;
-  padding: clamp(var(--space-6), 4vw, var(--space-12));
-  color: var(--color-brand-yellow);
-  background: var(--color-brand-black);
+  padding: var(--space-6);
+  color: var(--accent);
+  background: var(--ground);
+  transition: opacity 520ms var(--ease-lab);
 }
 
 .typePoster::before,
 .typePoster::after {
   content: "";
   position: absolute;
-  background: rgba(255, 0, 255, 0.55);
+  background: color-mix(in srgb, var(--color-brand-fuchsia) 55%, transparent);
 }
 
 .typePoster::before {
@@ -136,168 +262,114 @@
 }
 
 .typePoster span {
-  font-family: var(--font-brand);
+  font-family: var(--font-ui);
   font-size: var(--font-size-label);
-  font-weight: var(--font-weight-heading-bold);
+  font-weight: 500;
 }
 
 .typePoster strong {
-  max-width: 5.832em; /* 9ch: `ch` yedek fontla kayar, bkz. page.module.css .title */
-  font-family: var(--font-chapter-display);
-  font-size: clamp(3rem, 7vw, 7rem);
-  line-height: 0.86;
-  text-transform: uppercase;
+  max-width: 8ch;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 2.6vw, 2.5rem);
+  font-weight: var(--font-weight-brand);
+  line-height: 0.98;
+  letter-spacing: var(--tracking-display);
 }
 
-.list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-top: 1px solid var(--color-hairline);
-}
+/* --- Kırılımlar ---------------------------------------------------------- */
 
-.row {
-  border-bottom: 1px solid var(--color-hairline);
-}
-
-.link {
-  display: grid;
-  grid-template-columns: 3.25rem minmax(0, 1fr) 1.5rem;
-  gap: var(--space-4);
-  align-items: center;
-  min-height: clamp(7.5rem, 11vw, 10rem);
-  padding-block: var(--space-6);
-  color: var(--color-brand-white);
-}
-
-.number {
-  align-self: start;
-  padding-top: 0.35rem;
-  font-family: var(--font-brand);
-  font-size: var(--font-size-label);
-  font-weight: var(--font-weight-heading-bold);
-  color: var(--color-brand-fuchsia);
-}
-
-.copy {
-  display: grid;
-  gap: var(--space-3);
-}
-
-.name {
-  font-family: var(--font-chapter-display);
-  font-size: clamp(2rem, 3.15vw, 3.625rem);
-  font-weight: var(--font-weight-chapter-display);
-  line-height: 0.92;
-  letter-spacing: 0;
-  text-transform: uppercase;
-  transition: color 220ms ease-out, transform 420ms var(--ease-house);
-}
-
-.description {
-  max-width: 40ch;
-  font-family: var(--font-body);
-  font-size: clamp(1rem, 0.94rem + 0.14vw, 1.125rem);
-  line-height: 1.55;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.arrow {
-  width: 1.35rem;
-  height: 1.35rem;
-  color: var(--color-brand-yellow);
-  opacity: 0.45;
-  transition: opacity 220ms ease-out, transform 420ms var(--ease-house);
-}
-
-.row[data-active="true"] .name {
-  color: var(--color-brand-yellow);
-  transform: translateX(0.35rem);
-}
-
-.row[data-active="true"] .arrow {
-  opacity: 1;
-  transform: translate(0.15rem, -0.15rem);
-}
-
-.link:focus-visible {
-  outline: 2px solid var(--color-brand-fuchsia);
-  outline-offset: 4px;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .stage {
-    cursor: ew-resize;
+@media (max-width: 1099px) {
+  .directory {
+    --number-size: clamp(3.75rem, 11vw, 6rem);
+    --stagger: clamp(2rem, 6vw, 3rem);
   }
 
-  .stage:hover .stageImage {
-    filter: saturate(1) contrast(1.02) brightness(1);
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .card {
+    transition-delay: calc(var(--col2, 0) * 90ms);
+  }
+
+  .typePoster strong {
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
   }
 }
 
-@media (max-width: 899px) {
+@media (max-width: 767px) {
   .directory {
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-8);
   }
 
-  .stage {
-    top: calc(var(--header-height) + var(--space-3));
-    height: 42svh;
-    min-height: 18rem;
+  .rail,
+  .title {
+    grid-column: 1;
+    grid-row: auto;
   }
 
-  .list {
-    position: relative;
-    z-index: 2;
-    background: var(--color-brand-black);
-  }
-
-  .link {
-    grid-template-columns: 2.4rem minmax(0, 1fr) 1.25rem;
-    min-height: 8.5rem;
-  }
-
-  .name {
-    font-size: clamp(1.9rem, 7.6vw, 2.875rem);
+  .rail {
+    margin: 0 0 var(--space-6);
   }
 }
 
-@media (max-width: 420px) {
-  .stageMeta {
-    inset: auto var(--space-4) var(--space-4);
+/* Tek sütun: kademe kalkar, numara küçülür, görsel yatay (kaydırma boyu). */
+@media (max-width: 559px) {
+  .directory {
+    --number-size: 3.75rem;
+    --stagger: 0px;
   }
 
-  .description {
-    font-size: 1rem;
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: calc(var(--number-size) * 0.55 + var(--space-10));
+    padding-top: calc(var(--number-size) * 0.55 + var(--space-10));
+  }
+
+  .card {
+    transition-delay: 0ms;
+  }
+
+  .media {
+    aspect-ratio: 4 / 3;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .visual {
-    animation: none;
-  }
-
-  .panLayer {
-    transform: none !important;
+  .card,
+  .number,
+  .image,
+  .arrow,
+  .arrow svg,
+  .typePoster {
     transition: none;
   }
 
-  .stageImage,
-  .name,
-  .arrow {
-    transition: none;
+  .grid[data-armed] .card:not([data-inview]) {
+    opacity: 1;
+    transform: none;
+  }
+
+  .card:hover .image,
+  .card:focus-within .image,
+  .card:hover .arrow svg,
+  .card:focus-within .arrow svg {
+    transform: none;
   }
 }
 
-@keyframes visual-in {
-  from {
-    opacity: 0;
-    transform: scale(1.045);
-  }
+/* LAB: AI kartının fotoğrafı üstünde hover'da MONA — fotoğraf kararır,
+   noktalar belirir. Hareket azaltmada MonaShard kendisi statik kalır. */
+.aiOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: color-mix(in srgb, var(--color-brand-black) 72%, transparent);
+  opacity: 0;
+  transition: opacity 500ms var(--ease-lab);
+  pointer-events: none;
+}
 
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+.aiOverlay[data-active] {
+  opacity: 1;
 }

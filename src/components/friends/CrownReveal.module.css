@@ -58,9 +58,9 @@
   font-family: var(--font-brand);
   font-size: clamp(3.25rem, 8.5vw, 9.5rem);
   font-weight: var(--font-weight-brand);
-  line-height: 0.82;
-  letter-spacing: 0;
-  text-transform: uppercase;
+  /* LAB: cümle düzeni (büyük harf kalktı) — inen harfler için satır açıldı. */
+  line-height: 0.92;
+  letter-spacing: -0.03em;
   text-shadow: 0 2px 2rem rgba(0, 0, 0, 0.9);
   pointer-events: none;
 }

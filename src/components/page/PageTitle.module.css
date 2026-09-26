@@ -31,8 +31,8 @@
   letter-spacing: 0;
   text-transform: uppercase;
   text-align: left;
-  /* h1 rengi hep açık: globals.css'teki `--heading-color` mirasına güvenilmez. */
-  color: var(--color-brand-white);
+  /* LAB: zeminin ana metni (data-ground). Tema dışı bağlamda eski beyaz. */
+  color: var(--ink, var(--color-brand-white));
   /* Kelime ortasından kırılma yok. Üçü de kalıtsal: üst öğeden gelen bir
      değer sığdırma sözleşmesini bozmasın. */
   hyphens: manual;
@@ -83,5 +83,14 @@
 
 /* 2+ satırlı başlığın son satırı; tek satırlık başlıkta hiç yok. */
 .accent {
-  color: var(--color-brand-yellow);
+  /*
+   * LAB (monks "Transforming brands" + serif devam): son satır sarı değil,
+   * aynı mürekkeple SERİF ses. Sarı kağıt zeminde okunmuyordu; serif her
+   * zeminde çalışır. Serif, sığdırma tablosunun ölçtüğü geniş yüzden dar:
+   * satır taşamaz (fit yalnız küçülür).
+   */
+  color: var(--ink, var(--color-brand-yellow));
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  letter-spacing: -0.01em;
 }

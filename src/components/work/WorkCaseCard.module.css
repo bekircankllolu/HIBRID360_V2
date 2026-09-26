@@ -1,0 +1,207 @@
+/* LAB — monks "Popular Cases" kartı. Renkler tema değişkenlerinden. */
+
+.card,
+.skeleton {
+  /* Konumlu: gizli "+N" metni (srOnly, absolute) yatay kaydırıcının dışına
+     kaçıp belgeyi mobilde genişletiyordu. */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 0.35rem;
+}
+
+.media {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 6 / 7;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.image {
+  object-fit: cover;
+  transition: transform var(--media-zoom-duration) var(--media-zoom-ease);
+}
+
+.monogram {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-block: var(--space-5);
+  border-bottom: 1px solid var(--line);
+}
+
+.title {
+  font-family: var(--font-ui);
+  font-size: clamp(1.25rem, 1.05rem + 0.6vw, 1.5rem);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.dot {
+  color: var(--ink-soft);
+}
+
+/* Köşeli ok kutusu — Button'un ok kutusuyla aynı dil. */
+.arrow {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  color: var(--btn-fg);
+  background: var(--btn-bg);
+  transition:
+    background-color 320ms var(--ease-lab),
+    color 320ms var(--ease-lab),
+    transform 320ms var(--ease-lab);
+}
+
+.arrow svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.tags {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-top: var(--space-3);
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
+.more {
+  flex: none;
+  color: var(--ink);
+}
+
+@media (hover: hover) {
+  .card:hover .image,
+  .card:focus-visible .image {
+    transform: scale(var(--media-zoom-scale));
+  }
+
+  /* Fuşya zeminde ok SİYAH (kontrast kuralı). */
+  .card:hover .arrow,
+  .card:focus-visible .arrow {
+    background: var(--color-brand-fuchsia);
+    color: var(--color-text-on-fuchsia);
+    transform: translateX(0.25rem);
+  }
+}
+
+/* ── Boş envanter çerçevesi — içerik uydurmaz ─────────────────────── */
+
+/* Üç kart monks'taki gibi farklı yüksekliklerde durur (ritim). */
+.skeleton:nth-child(2) {
+  margin-top: clamp(1.5rem, 3vw, 3rem);
+}
+
+.skeleton .media {
+  background: var(--surface);
+}
+
+/* Soluk ışık şeridi: kartın üstünden yavaşça geçer. */
+.skeleton .media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 30%,
+    color-mix(in srgb, var(--ground) 70%, transparent) 50%,
+    transparent 70%
+  );
+  transform: translateX(-100%);
+  animation: sheen 2.8s var(--ease-lab) infinite;
+}
+
+.skeleton:nth-child(2) .media::after {
+  animation-delay: 0.25s;
+}
+
+.skeleton:nth-child(3) .media::after {
+  animation-delay: 0.5s;
+}
+
+@keyframes sheen {
+  60%,
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.bar {
+  display: block;
+  height: 0.7rem;
+  margin-top: var(--space-5);
+  background: var(--surface);
+}
+
+.bar[data-w="long"] {
+  width: 72%;
+}
+
+.bar[data-w="short"] {
+  width: 38%;
+  margin-top: var(--space-3);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+  .skeleton:nth-child(2) {
+    margin-top: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image,
+  .arrow {
+    transition: none;
+  }
+
+  .skeleton .media::after {
+    animation: none;
+    opacity: 0;
+  }
+
+  .card:hover .arrow,
+  .card:focus-visible .arrow {
+    transform: none;
+  }
+}

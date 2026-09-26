@@ -1,0 +1,270 @@
+/**
+ * LAB — monks.com uyarlaması (yalnız HIBRID360-lab, yerel deneme).
+ *
+ * Bu dosya sitenin görsel dilindeki TEK FARK katmanıdır: silinirse site
+ * (bileşen düzeyindeki lab değişiklikleri hariç) canlıdaki haline döner.
+ * Beğenilen kısımlar canlıya taşınırken buradaki geçici "zorla ez"
+ * seçicileri yerine bileşen CSS'lerinde kalıcı karşılıkları yazılmalı.
+ *
+ * Fontlar — monks.com'un dört sesi ve açık lisanslı karşılıkları:
+ *   Helvetica Now Extended 800 -> Archivo wdth 125 ("Lab Display")
+ *   Helvetica Now 400/500      -> Inter Tight
+ *   Morian (serif)             -> Newsreader (mevcut, değişmedi)
+ *   Caveat                     -> Caveat (aynısı)
+ * Üretim: python scripts/lab-fonts.py
+ */
+
+@font-face {
+  font-family: "Lab Display";
+  src: url("/fonts/lab-archivo-expanded-latin-tr.woff2") format("woff2-variations");
+  font-weight: 400 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter Tight";
+  src: url("/fonts/lab-inter-tight-latin-tr.woff2") format("woff2-variations");
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 82 KB: yalnız el yazısı vurgusu render edildiğinde indirilir
+   (font-display swap + tarayıcı ancak kullanılan glif için ister). */
+@font-face {
+  font-family: "Caveat";
+  src: url("/fonts/lab-caveat-latin-tr.woff2") format("woff2-variations");
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-display: "Lab Display", "Archivo Fallback", system-ui, sans-serif;
+  --font-brand: "Lab Display", "Archivo Fallback", system-ui, sans-serif;
+  --font-chapter-display: "Lab Display", "Archivo Fallback", system-ui, sans-serif;
+  --font-body: "Inter Tight", "Inter Fallback", system-ui, sans-serif;
+  --font-ui: "Inter Tight", "Inter Fallback", system-ui, sans-serif;
+  --font-hand: "Caveat", "Comic Sans MS", cursive;
+
+  /* monks: display 800 geniş, başlık/gövde 500 dar. */
+  --font-weight-brand: 800;
+  --font-weight-heading-bold: 800;
+  --font-weight-chapter-display: 800;
+
+  /* Büyük harf kalkınca etiket espası da kalkar. */
+  --tracking-ui: 0;
+  --tracking-micro: 0.01em;
+  --tracking-display: -0.02em;
+  --tracking-heading: -0.01em;
+  --leading-display: 1.02;
+  --leading-heading: 1.12;
+
+  /* Kolaylaştırma — monks: power4.out / expo.out. */
+  --ease-lab: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/*
+ * Cümle düzeni: monks hiçbir yerde büyük harf dönüşümü kullanmıyor
+ * (kullanıcı tercihi de aynı yönde: "büyük harf başlık çok güzel olmuyor").
+ * Kod tabanında 43 dosyada 71 `text-transform: uppercase` kuralı var; lab
+ * denemesi için tek seçiciyle eziliyor. `:not(#lab-x)` kimlik düzeyinde
+ * özgüllük verir — modül sınıflarının hepsini ezer, hiçbir elemanı dışlamaz.
+ */
+:not(#lab-x) {
+  text-transform: none;
+}
+
+/* İSTİSNA — logotype: "Hibrid 360" yazımının 5 render'ı eskisi gibi büyük
+   harf kalır (kullanıcı kuralı, 17 Eylül 2026). Modül sınıf adları yerel
+   adı taşır (Header…logo, Footer…wordmark, …megaBrand). */
+:not(#lab-x)[class*="logo"],
+:not(#lab-x)[class*="wordmark"],
+:not(#lab-x)[class*="megaBrand"],
+:not(#lab-x)[class*="LanguageSwitcher"][class*="eyebrow"] {
+  text-transform: uppercase;
+}
+
+/* ======================================================================
+ * TEMA SİSTEMİ — `data-ground` (monks.com `data-background-color` karşılığı)
+ *
+ * Her bölüm kendi zeminini bildirir: data-ground="paper|black|yellow|pink|white".
+ * Zemin, metin, soluk metin, çizgi, vurgu ve buton renkleri buradan türer;
+ * bileşenler yalnız bu anlamsal değişkenleri kullanır:
+ *   --ground  zemin          --ink       ana metin
+ *   --ink-soft ikincil metin  --line      ince ayırıcı çizgi
+ *   --accent  el çizimi/vurgu --btn-bg / --btn-fg  birincil buton
+ *   --surface kart zemini (zeminden bir ton ayrık)
+ *
+ * Yeni hex YOK: kağıt tonu marka beyazı + siyahı + bir tutam sarıdan
+ * color-mix ile türetilir (fuşya-açık tonun emsali). Kontrast: kağıtta
+ * siyah metin ~17:1, --ink-soft ~6.5:1 (AA gövde için 4.5 üstü).
+ * Kontrast kuralı: sarı ve pembe zeminde metin SİYAH.
+ * ====================================================================== */
+:root {
+  --paper: color-mix(
+    in srgb,
+    var(--color-brand-yellow) 5%,
+    color-mix(in srgb, var(--color-brand-white) 91%, var(--color-brand-black))
+  );
+  --paper-deep: color-mix(in srgb, var(--color-brand-black) 7%, var(--paper));
+  --pink: var(--color-brand-fuchsia-light);
+
+  /* Varsayılan zemin: kağıt. */
+  --ground: var(--paper);
+  --ink: var(--color-brand-black);
+  --ink-soft: color-mix(in srgb, var(--color-brand-black) 66%, var(--paper));
+  --line: color-mix(in srgb, var(--color-brand-black) 18%, transparent);
+  --accent: var(--color-brand-fuchsia);
+  --surface: var(--paper-deep);
+  --btn-bg: var(--color-brand-black);
+  --btn-fg: var(--color-brand-white);
+  --heading-color: var(--ink);
+}
+
+[data-ground] {
+  background-color: var(--ground);
+  color: var(--ink);
+  --heading-color: var(--ink);
+}
+
+[data-ground="paper"] {
+  --ground: var(--paper);
+  --ink: var(--color-brand-black);
+  --ink-soft: color-mix(in srgb, var(--color-brand-black) 66%, var(--paper));
+  --line: color-mix(in srgb, var(--color-brand-black) 18%, transparent);
+  --accent: var(--color-brand-fuchsia);
+  --surface: var(--paper-deep);
+  --btn-bg: var(--color-brand-black);
+  --btn-fg: var(--color-brand-white);
+}
+
+[data-ground="white"] {
+  --ground: var(--color-brand-white);
+  --ink: var(--color-brand-black);
+  --ink-soft: color-mix(in srgb, var(--color-brand-black) 64%, var(--color-brand-white));
+  --line: color-mix(in srgb, var(--color-brand-black) 14%, transparent);
+  --accent: var(--color-brand-fuchsia);
+  --surface: var(--paper);
+  --btn-bg: var(--color-brand-black);
+  --btn-fg: var(--color-brand-white);
+}
+
+[data-ground="black"] {
+  --ground: var(--color-brand-black);
+  --ink: var(--color-brand-white);
+  --ink-soft: color-mix(in srgb, var(--color-brand-white) 70%, var(--color-brand-black));
+  --line: color-mix(in srgb, var(--color-brand-white) 18%, transparent);
+  --accent: var(--color-brand-yellow);
+  --surface: color-mix(in srgb, var(--color-brand-white) 7%, var(--color-brand-black));
+  --btn-bg: var(--color-brand-yellow);
+  --btn-fg: var(--color-brand-black);
+}
+
+[data-ground="yellow"] {
+  --ground: var(--color-brand-yellow);
+  --ink: var(--color-brand-black);
+  --ink-soft: color-mix(in srgb, var(--color-brand-black) 74%, var(--color-brand-yellow));
+  --line: color-mix(in srgb, var(--color-brand-black) 22%, transparent);
+  --accent: var(--color-brand-fuchsia);
+  --surface: color-mix(in srgb, var(--color-brand-white) 45%, var(--color-brand-yellow));
+  --btn-bg: var(--color-brand-black);
+  --btn-fg: var(--color-brand-yellow);
+}
+
+[data-ground="pink"] {
+  --ground: var(--pink);
+  --ink: var(--color-brand-black);
+  --ink-soft: color-mix(in srgb, var(--color-brand-black) 76%, var(--pink));
+  --line: color-mix(in srgb, var(--color-brand-black) 22%, transparent);
+  --accent: var(--color-brand-black);
+  --surface: color-mix(in srgb, var(--color-brand-white) 40%, var(--pink));
+  --btn-bg: var(--color-brand-black);
+  --btn-fg: var(--color-brand-white);
+}
+
+/* Sayfa tabanı kağıt; siyah bölümler kendini bildirir. `html body`:
+   globals.css'teki `body` kuralı bu dosyadan SONRA geldiği için özgüllük. */
+html body {
+  background-color: var(--paper);
+  color: var(--ink);
+}
+
+h1,
+h2,
+h3 {
+  color: var(--heading-color, var(--ink));
+}
+
+::selection {
+  background: var(--color-brand-fuchsia);
+  color: var(--color-brand-black);
+}
+
+/* Kağıtta fuşya odak halkası zayıf: odak halkası metin rengini izler. */
+html :focus-visible {
+  outline-color: var(--ink);
+}
+
+/* ---------- Ortak tipografi sınıfları (lab) ---------- */
+
+/* Sol sütun etiketi (monks "Our Promise" / "Connect"). */
+.lab-rail {
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  line-height: 1.3;
+  letter-spacing: 0;
+  color: var(--ink);
+}
+
+/* Geniş, kalın bölüm başlığı (monks h2 — Helvetica Now Extended). */
+.lab-h2 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2rem, 3.35vw, 3.15rem);
+  line-height: 1.12;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+
+/* Konuşan dev başlık (monks h1 / "What can we do for you?"). Dar yüz, 500. */
+.lab-display {
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: clamp(2.6rem, 4.9vw, 4.6rem);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+/* Başlığın içinde serif ses (monks "Transforming brands"). */
+.lab-serif {
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+.lab-h3 {
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: clamp(1.25rem, 1.55vw, 1.45rem);
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+}
+
+.lab-body {
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.lab-meta {
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.3;
+  color: var(--ink-soft);
+}

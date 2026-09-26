@@ -1,24 +1,31 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { CulturePending } from "@/components/culture/CulturePending";
+import { DirectorCards } from "@/components/culture/DirectorCards";
+import { splitVoice } from "@/components/culture/lab-text";
+import { PageIntro } from "@/components/lab/PageIntro";
+import { Section } from "@/components/lab/Section";
 import { breadcrumbListJsonLd } from "@/lib/schema";
-import { EmptyState } from "@/components/EmptyState";
 import { getPublishedDirectors } from "@/lib/content";
-import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { localizedAlternates } from "@/lib/site";
+import shared from "@/styles/culture-page.module.css";
 import styles from "./page.module.css";
 
 /**
  * brief-rev12.md Bölüm 20.3 — Directors & Crew.
- * Hero metinleri "SİTEYE GİRECEK METİN" kutularından birebir; bu sayfada
- * brief hem EN hem TR sürümü veriyor, ikisi de messages dosyalarında.
+ * Hero metinleri "SİTEYE GİRECEK METİN" kutularından birebir (messages).
  *
  * TODO: docs/DECISIONS.md #14 bekleniyor — sayfaya kaç kişi girecek ve
  * fotoğraf çekimi ne zaman yapılacak. Brief'in uyarısı: fotoğraflar tek
- * seansta, aynı ışıkta çekilmeli; farklı yıllardan derlenmiş vesikalık
- * koleksiyonu sayfayı çürütür. Bu yüzden kadro + çekim tarihi gelmeden
- * hiçbir profil yayınlanmıyor.
+ * seansta, aynı ışıkta çekilmeli. Kadro + çekim tarihi gelmeden hiçbir
+ * profil yayınlanmıyor; liste boşken sayfa noindex ve dürüst bekleme
+ * durumu gösterir.
+ *
+ * LAB (monks.com insan portreli kart dili): PageIntro (kağıt; "Kadrajın"
+ * sans + "arkasındakiler." serif) → kadro ızgarası (4 sütun portre kart)
+ * ya da bekleme durumu.
  */
 
 export async function generateMetadata({
@@ -44,10 +51,13 @@ export default async function DirectorsPage({
 }) {
   const { locale } = await params;
   const t = await getTranslations("directors");
+  const tLab = await getTranslations("lab.culture.directors");
+  const tCommon = await getTranslations("common");
   const directors = await getPublishedDirectors();
+  const title = splitVoice(t("heroTitle"), 0.5);
 
   return (
-    <div className={styles.page}>
+    <div className={shared.page}>
       <JsonLd
         data={breadcrumbListJsonLd(locale, [
           { name: "Home", path: "" },
@@ -56,33 +66,23 @@ export default async function DirectorsPage({
         ])}
       />
 
-      <h1 className={styles.heroTitle}>{t("heroTitle")}</h1>
-      <p className={styles.heroSubtitle}>{t("heroSubtitle")}</p>
+      <PageIntro
+        rail={tLab("rail")}
+        title={
+          <>
+            {title.head} {title.tail ? <span className="lab-serif">{title.tail}</span> : null}
+          </>
+        }
+        lede={t("heroSubtitle")}
+      />
 
-      {directors.length === 0 ? (
-        <EmptyState message={t("empty")} />
-      ) : (
-        <div className={styles.grid}>
-          {directors.map((director) => (
-            <Link
-              key={director.id}
-              href={`/culture/directors/${director.slug}`}
-              className={styles.card}
-            >
-              {/* TODO: DECISIONS.md #14 — fotoğraf çekimi yapılana kadar
-                  photo_url boş; boş çerçeve gösteriliyor. */}
-              <span className={styles.photoPlaceholder} />
-              <span className={styles.name}>{director.full_name}</span>
-              <span className={styles.role}>{director.role}</span>
-              {(locale === "tr" ? director.one_liner_tr : director.one_liner_en) && (
-                <span className={styles.oneLiner}>
-                  {locale === "tr" ? director.one_liner_tr : director.one_liner_en}
-                </span>
-              )}
-            </Link>
-          ))}
-        </div>
-      )}
+      <Section wide={directors.length > 0} ground="paper" rail={tLab("crew")} className={styles.crew}>
+        {directors.length === 0 ? (
+          <CulturePending label={tCommon("pendingLabel")} message={t("empty")} />
+        ) : (
+          <DirectorCards directors={directors} locale={locale} />
+        )}
+      </Section>
     </div>
   );
 }

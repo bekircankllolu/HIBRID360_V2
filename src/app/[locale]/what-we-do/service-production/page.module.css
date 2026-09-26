@@ -1,64 +1,147 @@
 /*
- * Service Production (International) — Faz 2 / B1. Hero ortak `PageHero`'da
- * (kenar, dolgu, başlık, lede). Sayfa ortalı kap değil: her blok kendi
- * `--page-gutter` kenarından sola yaslı başlar, bloklar arası
- * `--section-space` (PageHero alt dolgusu da aynı token).
+ * LAB (monks.com kurumsal hizmet + Connect) — Service Production
+ * (International). Bölüm sırası page.tsx'te. Renkler yalnız `data-ground`
+ * anlamsal değişkenleri; hex yok.
  */
 .page {
-  padding-bottom: var(--section-space);
+  width: 100%;
+  overflow: clip;
 }
 
-/* TR sürümdeki dil notu (içerik İngilizce). Sarı çizgi araç, metin beyaz. */
+/* TR sürümdeki dil notu (içerik İngilizce). Vurgu çizgisi araç. */
 .localeNote {
-  max-width: var(--measure-prose);
-  margin: 0;
+  max-width: 52ch;
+  margin: clamp(1.5rem, 2.6vw, 2.25rem) 0 0;
   padding-left: var(--space-4);
-  border-left: 2px solid var(--color-brand-yellow);
-  font-size: var(--font-size-label);
+  border-left: 2px solid var(--accent);
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
 }
 
 .offer {
-  display: grid;
-  gap: var(--space-8);
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  padding-inline: var(--page-gutter);
-}
-
-.offerItem {
-  border-top: 1px solid var(--color-hairline);
-  padding-top: var(--space-4);
-}
-
-.offerTitle {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-  font-size: 1.125rem;
-  margin: 0 0 var(--space-2);
-}
-
-.offerBody {
-  margin: 0;
-  font-size: var(--font-size-body);
-}
-
-.section {
-  display: grid;
-  gap: var(--space-6);
-  margin-top: var(--section-space);
-  padding-inline: var(--page-gutter);
-}
-
-.cta {
-  margin-top: var(--section-space);
-  margin-inline: var(--page-gutter);
   padding-top: var(--section-space-tight);
-  border-top: 1px solid var(--color-hairline);
 }
 
-.ctaLead {
-  max-width: var(--measure-prose);
-  margin: 0 0 var(--space-6);
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: clamp(1.125rem, 2.5vw, 1.75rem);
+/* --- Merkez ofis (monks Connect ofis satırı) ----------------------------- */
+
+.base {
+  display: grid;
+  grid-template-columns: minmax(7rem, 1fr) minmax(0, 3fr);
+  column-gap: clamp(1.5rem, 3vw, 3rem);
+  padding: var(--section-space) var(--page-gutter);
+}
+
+.baseRail {
+  margin: 0.4rem 0 0;
+}
+
+.office {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(6rem, 1fr) minmax(0, 2.2fr) minmax(0, 2fr) auto;
+  column-gap: clamp(1rem, 2.5vw, 2.5rem);
+  align-items: center;
+  padding-block: clamp(1.5rem, 2.6vw, 2.25rem);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.officeTime {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 1.125rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.officeCity {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: clamp(2rem, 1.2rem + 3vw, 4rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+
+.officeAddress {
+  display: grid;
+  gap: var(--space-1);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-style: normal;
+  line-height: 1.45;
+}
+
+.officeLink {
+  display: inline-grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--ground);
+  transition:
+    background-color 320ms var(--ease-lab),
+    color 320ms var(--ease-lab);
+}
+
+.officeLink svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.officeLink:hover,
+.officeLink:focus-visible {
+  background: var(--accent);
+  color: var(--color-text-on-yellow);
+}
+
+/* --- Kanıt --------------------------------------------------------------- */
+
+.evidence {
+  padding-bottom: 0;
+}
+
+@media (max-width: 899px) {
+  .office {
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: var(--space-5);
+  }
+
+  .officeTime {
+    grid-column: 1 / -1;
+  }
+
+  .officeCity {
+    grid-column: 1;
+  }
+
+  .officeLink {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .officeAddress {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 760px) {
+  .base {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .baseRail {
+    margin: 0 0 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .officeLink {
+    transition: none;
+  }
 }

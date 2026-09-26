@@ -2,43 +2,49 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
-import { EmptyState } from "@/components/EmptyState";
+import { CulturePending } from "@/components/culture/CulturePending";
+import { sentenceCase } from "@/components/culture/lab-text";
 import { ClientNameIndex } from "@/components/friends/ClientNameIndex";
 import { AnniversaryMark } from "@/components/friends/AnniversaryMark";
 import { CrownReveal } from "@/components/friends/CrownReveal";
+import { PageIntro } from "@/components/lab/PageIntro";
+import { Scribble } from "@/components/lab/Scribble";
+import { Section } from "@/components/lab/Section";
 import { TestimonialList } from "@/components/testimonials/TestimonialList";
-import { Link } from "@/i18n/navigation";
+import { Button } from "@/components/ui/Button";
 import { getPublishedTestimonials } from "@/lib/content";
 import { clients, newClients, SHOW_NEW_CLIENTS } from "@/data/clients";
 import type { Locale } from "@/i18n/routing";
 import { localizedAlternates } from "@/lib/site";
+import shared from "@/styles/culture-page.module.css";
 import styles from "./page.module.css";
 
 /**
  * FRD-01..04 (nihai copy deck, Ağustos 2026) — Clients (deck'teki adı:
  * Friends).
  *
- * 29 Ağustos 2026 revizyonu: sayfanın görünür adı ve canonical rotası
- * Clients oldu (eski hibrid360.com'daki adına dönüş). /friends kalıcı
+ * 29 Ağustos 2026: görünür ad ve canonical rota Clients; /friends kalıcı
  * olarak buraya yönlendiriliyor (next.config.mjs).
  *
  * İÇERİK ÇELİŞKİSİ (açık, müşteriye sorulacak): deck'in gövde metni
- * "onlara müşteri değil, dost diyoruz" diyor — sayfanın yeni adı Clients
- * olunca bu cümle kendi kendisiyle çelişiyor. Onaylı metin silinmedi ve
- * yerine metin uydurulmadı; çelişki
- * docs/content/CURRENT_CONTENT_GAPS.md'de blocker olarak kayıtlı.
+ * "onlara müşteri değil, dost diyoruz" diyor — sayfanın adı Clients olunca
+ * cümle kendi kendisiyle çelişiyor. Onaylı metin silinmedi, yerine metin
+ * uydurulmadı; çelişki docs/content/CURRENT_CONTENT_GAPS.md'de blocker.
  *
- * 30 Ağustos Revizyon 13 düzeltmesi: isimler artık çerçeveli kutular
- * içinde değil. INNOCEAN client index referansının hiyerarşisi, siyah
- * zemin üzerinde çerçevesiz tipografik marka dizinine uyarlandı. Sektör
- * verisi doğrulanmadığı için sol ray gerçek veriden türeyen alfabetik
- * aralıklar kullanır; uydurma kategori eklenmez.
+ * FRD-03 [KARAR] kapatıldı (docs/DECISIONS.md #30): `newClients`
+ * `SHOW_NEW_CLIENTS` true iken render ediliyor. `verified: false` isimler
+ * hâlâ listelenmez (CURRENT_CONTENT_GAPS.md #5).
  *
- * FRD-03 [KARAR] kapatıldı — sözleşme izni doğrulandı (bkz.
- * docs/DECISIONS.md #30), `newClients` (src/data/clients.ts)
- * `SHOW_NEW_CLIENTS` true iken render ediliyor. `verified: false`
- * isimler bu sayfada hâlâ listelenmez (ayrı, çözülmemiş bir izin
- * sorunu — bkz. CURRENT_CONTENT_GAPS.md #5).
+ * Müşteri sözleri (brief 18.7): yalnız yazılı onaylı ve yayınlanmış
+ * kayıtlar; veri yoksa dürüst bekleme durumu. Uydurma alıntı yok.
+ *
+ * LAB (monks.com dili) — zemin ritmi:
+ *   PageIntro (kağıt; "Thank you" + serif teşekkür cümlesi)
+ *   → taç sahnesi (siyah; kaydırmaya bağlı film — tek büyük hareket anı)
+ *   → yıl dönümü + dost sayısı (siyah, filmin devamı)
+ *   → marka dizini (kağıt; sayaç + alfabetik süzgeç + isim ızgarası)
+ *   → müşteri sözleri (kağıt; editoryal serif satırlar)
+ *   → Work çağrısı (kağıt; hemen ardından global sarı CtaBand geliyor).
  */
 
 export async function generateMetadata({
@@ -49,9 +55,6 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta" });
   return {
-  // Sayfa başlığı locale'e bağlı: TR sekmesinde/arama sonucunda İngilizce
-  // başlık çıkıyordu. Görünür sayfa terminolojisiyle aynı sözlükten
-  // (meta.title) okunuyor; alternates/canonical yapısı değişmedi.
     title: t("title.clients"),
     description:
       locale === "en"
@@ -68,25 +71,26 @@ export default async function ClientsPage({
 }) {
   const { locale } = await params;
   const t = await getTranslations("clients");
+  const tLab = await getTranslations("lab.culture.friends");
+  const tCommon = await getTranslations("common");
   const testimonials = await getPublishedTestimonials();
 
-  // Yalnızca yazımı doğrulanmış isimler yayına girer. Deck'in [DOĞRULA]
-  // işaretlediği beş isim eski sitede de aynı yazımla duruyor ama deck
-  // yazımlarından şüpheli olduğu için teyit istiyor — teyit gelmeden
-  // listede görünmezler.
+  // Yalnızca yazımı doğrulanmış isimler yayına girer (deck [DOĞRULA]).
   const publishableClients = clients.filter((client) => client.verified);
-  /* Dizinin TAM listesi tek yerde kuruluyor: sarı paneldeki sayı ile
-     aşağıdaki isim dizini aynı diziden besleniyor, ayrışamazlar. */
+  /* Dizinin TAM listesi tek yerde kuruluyor: yıl dönümü bölümündeki sayı
+     ile isim dizini aynı diziden besleniyor, ayrışamazlar. */
   const indexedClients = [
     ...publishableClients,
-    ...(SHOW_NEW_CLIENTS
-      ? newClients.map((name) => ({ name, verified: true }))
-      : []),
+    ...(SHOW_NEW_CLIENTS ? newClients.map((name) => ({ name, verified: true })) : []),
   ];
   const friendsCount = indexedClients.length;
+  const english = locale === "tr" ? "en" : undefined;
+  const hasTestimonials = testimonials.some(
+    (item) => item.written_consent_confirmed && (item.placement ?? []).includes("friends"),
+  );
 
   return (
-    <div className={styles.page}>
+    <div className={shared.page}>
       <JsonLd
         data={breadcrumbListJsonLd(locale, [
           { name: "Home", path: "" },
@@ -94,81 +98,62 @@ export default async function ClientsPage({
         ])}
       />
 
+      <PageIntro
+        rail={<span lang={english}>Friends since 2004</span>}
+        title={
+          <>
+            <span lang={english}>
+              <Scribble shape="circle" tone="fuchsia" delay={300}>
+                {t("heroTitle")}
+              </Scribble>
+            </span>
+            <br />
+            <span className="lab-serif">{t("heroSupport")}</span>
+          </>
+        }
+        lede={t("heroBody")}
+      />
+
       <CrownReveal />
 
-      <header className={styles.hero}>
-        <p className={styles.eyebrow}>FRIENDS SINCE 2004</p>
-        <h1 className={styles.heroTitle}>{t("heroTitle")}</h1>
-        <p className={styles.heroSupport}>{t("heroSupport")}</p>
-        <p className={styles.body}>{t("heroBody")}</p>
-      </header>
-
-      {/*
-        19 Eylül 2026 — sarı panel yeniden kuruldu. Kullanıcı: *"yazının
-        olduğu yerde çok büyük bir boşluk var; ya bu yazıyı büyütelim, güzel
-        bir tipografiyle kutunun içine sığdıralım, ya da buraya başka bir
-        çözüm bulmamız lazım. Bu şekilde çok kötü duruyor."*
-
-        Ölçüldü: "2004 → TODAY" ile başlık arasında 210px ölü boşluk vardı.
-        Sebebi `justify-content: flex-end` + tarihin `margin-bottom: auto`
-        ile tepeye itilmesiydi — panel 778px, içerik ~370px.
-
-        Başlığı büyütmek çözüm DEĞİLDİ: sütunun iç genişliği 490px ve
-        "CHAMPIONS" zaten 86px'te o genişliği dolduruyor; daha büyüğü
-        kelimeyi taşırıyordu. Onun yerine panele bir ALT ÇAPA eklendi —
-        sayfanın hemen altındaki isim dizininin sayısı. Boşluk artık
-        anlamlı bir içerikle doluyor ve panel bir ilana dönüşüyor.
-
-        Sayı buradan geçiriliyor, bileşende sabit yazılmıyor: dizin ile
-        panelin sayısı hiçbir koşulda ayrışamaz.
-      */}
-      <section className={styles.anniversary} aria-labelledby="friends-champions">
-        <div className={styles.anniversaryImageWrap}>
+      <section data-ground="black" className={styles.anniversary} aria-labelledby="friends-champions">
+        <p className={`lab-rail ${styles.anniversaryRail}`} lang={english}>
+          2004 → today
+        </p>
+        <div className={styles.anniversaryMark}>
           <AnniversaryMark label={t("anniversaryAlt")} />
         </div>
         <div className={styles.anniversaryCopy}>
-          <p className={styles.anniversaryDate}>2004 → TODAY</p>
-          <div className={styles.anniversaryStatement}>
-            <h2 id="friends-champions">WORK WITH THE CHAMPIONS</h2>
-            <p>{t("friendsBody")}</p>
-          </div>
-          <p className={styles.anniversaryCount}>
-            <span className={styles.anniversaryCountValue}>{friendsCount}</span>
-            <span className={styles.anniversaryCountLabel}>
-              {t("friendsCountLabel")}
-            </span>
+          <h2 id="friends-champions" className="lab-h2" lang={english}>
+            Work with the champions
+          </h2>
+          <p className={styles.anniversaryBody}>{t("friendsBody")}</p>
+          <p className={styles.count}>
+            <span className={styles.countValue}>{friendsCount}</span>
+            <span className={styles.countLabel}>{sentenceCase(t("friendsCountLabel"), locale)}</span>
           </p>
         </div>
       </section>
 
       <ClientNameIndex clients={indexedClients} />
 
-      <section
-        className={`${styles.testimonials} ${
-          testimonials.length === 0 ? styles.testimonialsCompact : ""
-        }`}
-      >
-        <h2 className={styles.sectionTitle}>{t("testimonialsTitle")}</h2>
-        {/* brief 18.7: üç videolu söz, ızgaranın hemen altında. Hedef:
-            yayına girmeden en az 3 videolu, 6 yazılı söz. Yayın izni
-            kontrolü veritabanında (written_consent_confirmed). */}
-        <TestimonialList
-          testimonials={testimonials}
-          locale={locale}
-          placement="friends"
-        />
-        {testimonials.length === 0 && (
-          <EmptyState message={t("testimonialsEmpty")} compact />
+      <Section ground="paper" rail={t("testimonialsTitle")} className={styles.testimonials}>
+        {/* brief 18.7: hedef yayına girmeden en az 3 videolu, 6 yazılı söz.
+            Yayın izni kontrolü veritabanında (written_consent_confirmed). */}
+        {hasTestimonials ? (
+          <TestimonialList testimonials={testimonials} locale={locale} placement="friends" />
+        ) : (
+          <CulturePending label={tCommon("pendingLabel")} message={t("testimonialsEmpty")} />
         )}
-      </section>
+      </Section>
 
-      {/* FRD-04 — buton layout'taki global CtaBand'dan geliyor. WORK üst
-          menüde yok; bu bağlantı onun ana giriş noktalarından biri. */}
-      <section className={styles.cta}>
-        <p className={styles.ctaLead}>
-          {t("ctaLead")} <Link href="/work">→ WORK</Link>
-        </p>
-      </section>
+      {/* FRD-04 — WORK üst menüde yok; bu bağlantı onun ana giriş noktalarından biri. */}
+      <Section ground="paper" rail={<span lang={english}>Work</span>} className={styles.cta}>
+        <p className={`lab-display ${styles.ctaLead}`}>{t("ctaLead")}</p>
+        <div className={styles.ctaActions}>
+          <Button href="/work">{tLab("seeWork")}</Button>
+        </div>
+      </Section>
     </div>
   );
 }

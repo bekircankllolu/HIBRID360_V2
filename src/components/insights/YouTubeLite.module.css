@@ -61,3 +61,74 @@
 @media (prefers-reduced-motion: reduce) {
   .play { transition: none; }
 }
+
+/* ======================================================================
+ * LAB (26 Eylül 2026) — kapak siyah-beyaz, üzerine gelince renklenir
+ * (What We Do fotoğraflarıyla aynı davranış; kapaktaki kırmızı kolaj
+ * sayfanın renk dengesini bozuyordu). Kapak görseli ::before katmanına
+ * taşındı ki yalnız görsele filtre uygulansın. Düğme monks "Watch video"
+ * hapının köşeli karşılığı.
+ * ====================================================================== */
+.poster {
+  background: var(--color-brand-black);
+  isolation: isolate;
+}
+
+.poster::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  content: "";
+  background: url("https://i.ytimg.com/vi/yj9rokSeack/maxresdefault.jpg") center / cover no-repeat;
+  filter: grayscale(1) contrast(1.05) brightness(0.82);
+  transform: scale(1.02);
+  transition:
+    filter 700ms var(--ease-lab),
+    transform 1100ms var(--ease-lab);
+}
+
+.poster:hover::before,
+.poster:focus-visible::before {
+  filter: grayscale(0) brightness(0.9);
+  transform: scale(1.05);
+}
+
+.poster::after {
+  border-color: var(--line, color-mix(in srgb, var(--color-brand-white) 16%, transparent));
+}
+
+.watch {
+  display: inline-flex;
+  gap: 3px;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.watchLabel,
+.watchIcon {
+  display: inline-grid;
+  place-items: center;
+  min-height: 3.25rem;
+  background: var(--color-brand-yellow);
+  color: var(--color-brand-black);
+  transition:
+    background-color 360ms var(--ease-lab),
+    color 360ms var(--ease-lab);
+}
+
+.watchLabel {
+  padding: 0 1.4rem;
+}
+
+.watchIcon {
+  width: 3.25rem;
+}
+
+.poster:hover .watchLabel,
+.poster:hover .watchIcon,
+.poster:focus-visible .watchLabel,
+.poster:focus-visible .watchIcon {
+  background: var(--color-brand-fuchsia);
+  color: var(--color-text-on-fuchsia);
+}

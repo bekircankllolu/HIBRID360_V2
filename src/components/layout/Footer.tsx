@@ -31,7 +31,7 @@ export function Footer() {
   const showCarbonBadge = isSustainabilityPublishable();
 
   return (
-    <footer className={styles.footer}>
+    <footer className={styles.footer} data-ground="black">
       <div className={styles.inner}>
         <div className={styles.topRow}>
           <p className={styles.wordmark} lang="en">Hibrid 360</p>
@@ -42,60 +42,73 @@ export function Footer() {
           </p>
         </div>
 
-        <div className={styles.columns}>
-          <section className={styles.column} aria-labelledby="footer-contact">
-            <h2 id="footer-contact">{tNav("contact")}</h2>
-            <address className={styles.contact}>
-              <a href={`tel:${CONTACT.phone.replace(/\s/g, "")}`}>
-                {CONTACT.phone}
-              </a>
-              <span className={styles.address}>
-                {CONTACT.addressLines.map((line) => (
-                  <span className={styles.addressLine} key={line}>
-                    {line}
-                  </span>
-                ))}
-              </span>
-            </address>
-          </section>
+        {/* LAB (monks): solda etiket, ortada dev keşfet linkleri, sağda ok
+            daireli yasal liste, en sağda iletişim + sosyal hap'ları. */}
+        <div className={styles.explore}>
+          <h2 className={styles.exploreLabel}>{tNav("explore")}…</h2>
 
-          <nav className={styles.column} aria-label={tNav("explore")}>
-            <h2>{tNav("explore")}</h2>
+          <nav className={styles.bigNav} aria-label={tNav("explore")}>
             <ul>
               {FOOTER_NAV.map((item) => (
                 <li key={item.href}>
-                  <Link href={item.href}>{tNav(item.labelKey)}</Link>
+                  <Link href={item.href} className={styles.bigLink}>
+                    {tNav(item.labelKey)}
+                  </Link>
                 </li>
               ))}
             </ul>
           </nav>
 
-          <nav className={styles.column} aria-label={tNav("legal")}>
-            <h2>{tNav("legal")}</h2>
+          <nav className={styles.legalNav} aria-labelledby="footer-legal">
+            <h2 id="footer-legal" className="srOnly">
+              {tNav("legal")}
+            </h2>
             <ul>
               {legalItems.map((item) => (
                 <li key={item.href}>
-                  <Link href={item.href}>{item.label}</Link>
+                  <Link href={item.href} className={styles.legalLink}>
+                    <span>{item.label}</span>
+                    <span className={styles.legalDot} aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                        <path d="M5 12h13M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </span>
+                  </Link>
                 </li>
               ))}
             </ul>
           </nav>
 
-          <section className={styles.column} aria-labelledby="footer-social">
-            <h2 id="footer-social">{t("social.label")}</h2>
-            <div className={styles.social}>
-              {SOCIAL_LINKS.map((platform) => (
-                <a
-                  key={platform.name}
-                  href={platform.href}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {platform.name}
-                </a>
-              ))}
-            </div>
-          </section>
+          <div className={styles.side}>
+            <section aria-labelledby="footer-contact">
+              <h2 id="footer-contact" className={styles.sideLabel}>
+                {tNav("contact")}
+              </h2>
+              <address className={styles.contact}>
+                <a href={`tel:${CONTACT.phone.replace(/\s/g, "")}`}>{CONTACT.phone}</a>
+                <span className={styles.address}>
+                  {CONTACT.addressLines.map((line) => (
+                    <span className={styles.addressLine} key={line}>
+                      {line}
+                    </span>
+                  ))}
+                </span>
+              </address>
+            </section>
+
+            <section aria-labelledby="footer-social">
+              <h2 id="footer-social" className={styles.sideLabel}>
+                {t("social.label")}
+              </h2>
+              <div className={styles.socialPills}>
+                {SOCIAL_LINKS.map((platform) => (
+                  <a key={platform.name} href={platform.href} target="_blank" rel="noreferrer">
+                    {platform.name}
+                  </a>
+                ))}
+              </div>
+            </section>
+          </div>
         </div>
 
         <div className={styles.bottomRow}>

@@ -32,7 +32,8 @@ export type ServiceImageKey =
   | "digital"
   | "liveBroadcast"
   | "cloudTv"
-  | "eventManagement";
+  | "eventManagement"
+  | "aiCreativeProduction";
 
 export interface ServiceEntry {
   /** messages `whatWeDo.items.<id>` anahtarı ve dahili kimlik. */
@@ -98,12 +99,13 @@ export const SERVICE_CATALOG: ServiceEntry[] = [
     imageKey: "eventManagement",
   },
   {
-    // Kendi fotoğrafı yok; What We Do hub'ında görselsiz "featured" kart.
-    // TODO: brief 11.9 — AI görseli teslim edilince imageKey eklenecek.
+    // LAB (26 Eylül 2026): görsel, AI showreel'in kendi karesi (AI ile
+    // üretilmiş portre). TODO: brief 11.9 — kendi AI görseli gelince değişir.
     id: "aiCreativeProduction",
     name: "AI Creative Production",
     href: "/what-we-do/ai-creative-production",
     linkLabel: "AI CREATIVE PRODUCTION",
+    imageKey: "aiCreativeProduction",
   },
 ];
 

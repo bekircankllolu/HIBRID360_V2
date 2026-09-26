@@ -7,11 +7,13 @@ import styles from "./YouTubeLite.module.css";
 type YouTubeLiteProps = {
   title: string;
   playLabel: string;
+  /** LAB: köşeli "İzle" düğmesinin görünür etiketi (verilmezse yalnız ikon). */
+  watchLabel?: string;
 };
 
 const VIDEO_ID = "yj9rokSeack";
 
-export function YouTubeLite({ title, playLabel }: YouTubeLiteProps) {
+export function YouTubeLite({ title, playLabel, watchLabel }: YouTubeLiteProps) {
   const [playing, setPlaying] = useState(false);
 
   return (
@@ -32,9 +34,18 @@ export function YouTubeLite({ title, playLabel }: YouTubeLiteProps) {
           aria-label={playLabel}
           onClick={() => setPlaying(true)}
         >
-          <span className={styles.play} aria-hidden="true">
-            <Play size="42%" fill="currentColor" />
-          </span>
+          {watchLabel ? (
+            <span className={styles.watch} aria-hidden="true">
+              <span className={styles.watchLabel}>{watchLabel}</span>
+              <span className={styles.watchIcon}>
+                <Play size="44%" fill="currentColor" />
+              </span>
+            </span>
+          ) : (
+            <span className={styles.play} aria-hidden="true">
+              <Play size="42%" fill="currentColor" />
+            </span>
+          )}
         </button>
       )}
     </div>

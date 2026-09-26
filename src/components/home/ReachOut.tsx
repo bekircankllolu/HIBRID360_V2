@@ -5,6 +5,8 @@ import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { ContactForm } from "@/components/contact/ContactForm";
 import type { Locale } from "@/i18n/routing";
+import { Scribble, ScribbleArrow } from "@/components/lab/Scribble";
+import { useGroundShift } from "@/components/lab/useGroundShift";
 import styles from "./ReachOut.module.css";
 
 const FOCUSABLE_SELECTOR =
@@ -21,6 +23,9 @@ const FOCUSABLE_SELECTOR =
  */
 export function ReachOut() {
   const t = useTranslations("home.reachOut");
+  const tNav = useTranslations("nav");
+  // LAB (monks): bölüm ekrana oturunca zemin siyahtan sarıya geçer.
+  const ground = useGroundShift<HTMLElement>();
   const locale = useLocale() as Locale;
   const [open, setOpen] = useState(false);
   const ctaRef = useRef<HTMLButtonElement>(null);
@@ -101,9 +106,25 @@ export function ReachOut() {
   }, [open]);
 
   return (
-    <section className={styles.section} aria-labelledby="reach-out-title">
+    <section
+      ref={ground.ref}
+      className={styles.section}
+      data-ground={ground.grounded ? "yellow" : "paper"}
+      aria-labelledby="reach-out-title"
+    >
+      {/* LAB (monks): sol etiket sütunu + el çizimi halka. */}
+      <p className={styles.rail} lang="en">
+        {tNav("contact")}
+        <ScribbleArrow className={styles.railArrow} />
+      </p>
       <h2 id="reach-out-title" className={styles.title}>
-        {t("title")}
+        {t.rich("title", {
+          mark: (chunks) => (
+            <Scribble shape="circle" tone="fuchsia" delay={200}>
+              {chunks}
+            </Scribble>
+          ),
+        })}
       </h2>
       <p className={styles.bodyCopy}>{t("body")}</p>
       <button

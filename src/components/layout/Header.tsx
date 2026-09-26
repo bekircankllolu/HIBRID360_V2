@@ -17,6 +17,10 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeMenuHref, setActiveMenuHref] = useState<string | null>(null);
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
+  /** LAB (monks): aşağı kaydırınca header çekilir, yukarı kaydırınca döner. */
+  const [isTucked, setIsTucked] = useState(false);
+  /** LAB (monks): header altındaki bölümün zeminini alır (data-ground). */
+  const [ground, setGround] = useState<string>("paper");
   const headerRef = useRef<HTMLElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const firstLinkRef = useRef<HTMLAnchorElement>(null);
@@ -29,6 +33,9 @@ export function Header() {
     setIsMenuOpen(false);
     setActiveMenuHref(null);
     setIsLanguageOpen(false);
+    // LAB: yeni sayfanın zeminini oku (readGround scroll'u dinliyor).
+    const frame = requestAnimationFrame(() => window.dispatchEvent(new Event("scroll")));
+    return () => cancelAnimationFrame(frame);
   }, [pathname]);
 
   useEffect(() => {
@@ -45,6 +52,47 @@ export function Header() {
     return () => {
       window.removeEventListener("keydown", closeOnEscape);
       window.removeEventListener("scroll", closeOnScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    let lastY = window.scrollY;
+    let frame = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const y = window.scrollY;
+        const delta = y - lastY;
+        // 8 px eşiği: trackpad titremesi header'ı oynatmasın.
+        if (Math.abs(delta) < 8) return;
+        setIsTucked(delta > 0 && y > 240);
+        lastY = y;
+      });
+    };
+    let groundFrame = 0;
+    const readGround = () => {
+      cancelAnimationFrame(groundFrame);
+      groundFrame = requestAnimationFrame(() => {
+        const header = headerRef.current;
+        if (!header) return;
+        const probeY = header.getBoundingClientRect().bottom + 2;
+        const under = document
+          .elementsFromPoint(window.innerWidth / 2, probeY)
+          .find((element) => !header.contains(element));
+        const value = under?.closest<HTMLElement>("[data-ground]")?.dataset.ground;
+        setGround(value ?? "paper");
+      });
+    };
+    readGround();
+    window.addEventListener("scroll", readGround, { passive: true });
+    window.addEventListener("resize", readGround, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      cancelAnimationFrame(frame);
+      cancelAnimationFrame(groundFrame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("scroll", readGround);
+      window.removeEventListener("resize", readGround);
     };
   }, []);
 
@@ -83,6 +131,9 @@ export function Header() {
     <header
       ref={headerRef}
       className={styles.header}
+      data-ground={ground}
+      data-tucked={isTucked && !isMenuOpen && !activeMenu && !isLanguageOpen ? "" : undefined}
+      onFocusCapture={() => setIsTucked(false)}
       onMouseLeave={() => setActiveMenuHref(null)}
       onBlur={closeDesktopMenuWhenFocusLeaves}
     >

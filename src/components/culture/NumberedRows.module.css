@@ -1,0 +1,78 @@
+/* LAB — numaralı satır listesi (bkz. NumberedRows.tsx). */
+.rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 3.5rem minmax(0, 1fr) auto;
+  column-gap: clamp(1rem, 2.5vw, 2.5rem);
+  align-items: baseline;
+  padding: clamp(1.1rem, 2vw, 1.6rem) 0;
+  border-top: 1px solid var(--line);
+}
+
+.index {
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-soft);
+}
+
+.main {
+  min-width: 0;
+}
+
+.text {
+  margin: 0;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+.head {
+  font-family: var(--font-ui);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.tail {
+  color: var(--ink);
+}
+
+.aside {
+  justify-self: end;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--ink-soft);
+}
+
+.lg .text {
+  font-size: clamp(1.75rem, 3.4vw, 3.25rem);
+  line-height: 1.08;
+}
+
+.lg .tail {
+  letter-spacing: -0.02em;
+}
+
+.md .text {
+  font-size: clamp(1.2rem, 1.7vw, 1.6rem);
+  line-height: 1.3;
+}
+
+@media (max-width: 600px) {
+  .row {
+    grid-template-columns: 2.25rem minmax(0, 1fr);
+  }
+
+  .aside {
+    grid-column: 2;
+    justify-self: start;
+    margin-top: 0.75rem;
+  }
+}

@@ -1,42 +1,44 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
+import { ArrowRight } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { PageHero } from "@/components/page/PageHero";
-import { PageTitle } from "@/components/page/PageTitle";
+import { PageIntro } from "@/components/lab/PageIntro";
+import { Reveal } from "@/components/lab/Reveal";
+import { Scribble } from "@/components/lab/Scribble";
+import { Button } from "@/components/ui/Button";
+import { Link } from "@/i18n/navigation";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { siteImages } from "@/data/site-images";
 import { SERVICE_CATALOG } from "@/data/services";
+import { CRYSTAL_MEDIA } from "@/data/solar-system";
 import type { Locale } from "@/i18n/routing";
-import { chapterOf, formatDegree } from "@/lib/service-chapter";
 import { localizedAlternates } from "@/lib/site";
+import { LoopVideo } from "./_lab/LoopVideo";
 import { ServiceDirectory, type ServiceDirectoryItem } from "./ServiceDirectory";
 import styles from "./page.module.css";
 
 /**
  * WWD-01/02 (nihai copy deck, Ağustos 2026) — What We Do hub sayfası.
  *
- * 29 Ağustos 2026 revizyonu: hizmet sırası ve kapsamı artık burada değil,
- * `src/data/services.ts` içinde tutuluyor (tek veri kaynağı; ana sayfa
- * hizmet satırı ve navigasyon mega menüsü de oradan besleniyor).
- * Photography katalogdan çıktı — dokuz kart sekize indi, /what-we-do/
- * photography kalıcı olarak bu hub'a yönlendiriliyor.
+ * Hizmet sırası ve kapsamı `src/data/services.ts` içinde (tek veri kaynağı;
+ * ana sayfa hizmet satırı ve mega menü de oradan). Başlıklar (hizmet adları)
+ * iki dilde de İngilizce; tek satırlık tanımlar `whatWeDo.list` altında.
  *
- * Başlıklar (hizmet adları) katalogdan gelir, iki dilde de İngilizcedir;
- * tek satırlık tanımlar çevrilir ve `whatWeDo.list` altındadır. İki kaynak
- * hizmet adı üzerinden eşleşir; eşleşmenin bozulmadığını
- * src/data/services.test.ts doğruluyor.
- *
- * Sunum: editoryal hizmet dizini ve aktif hizmete ait sabit görsel alanı.
- * Yeni sinematik fotoğraflar src/data/site-images.ts üzerinden paylaşılır.
- * AI Creative Production görselsiz tipografik kapak kullanır.
- *
- * Faz 2 / B1: hero ortak `PageHero` (band) + `PageTitle` ile çiziliyor —
- * kırıntı soluk (fuşya metin yok), başlık `splitTitle` ile bölünür (TR "NE" /
- * "YAPIYORUZ": ilk satır beyaz, son satır sarı), kenar = `--page-gutter`.
- * Başlık sayfa dilinde çevrilen bir metin: `lang` = locale.
+ * LAB (monks.com What We Do dili) — bölüm sırası:
+ *   1. PageIntro, pembe tema zemini: "Tek fikir, uçtan uca üretim." (el
+ *      çizimi alt çizgi + serif ses; metin `whatWeDo.heroBody`'nin iki
+ *      parçaya bölünmüş hali, `lab.whatWeDo.intro*`).
+ *   2. Kağıt: kademeli kart ızgarası (ServiceDirectory).
+ *   3. Siyah: dönen Hibrid taşı videosunun yanında "birlikte çalışmanın
+ *      yolları" listesi (desen 9) — Service Production, How We Work,
+ *      Solutions, Brief Builder. Tanım satırları bu sayfaların kendi meta
+ *      açıklamalarıdır (yeni metin yok).
+ *   4. Sayfa sonu çağrısı: layout'taki global CtaBand (sarı) — sayfaya
+ *      ikinci bir sarı kapanış eklenmedi.
+ * Partner/müşteri logo ızgarası YOK: sitede logo varlığı yok, uydurulmadı.
  */
 
-// META tablosu (Bölüm 10) — TR description henüz yazılmadı, EN'de ayarlı.
 export async function generateMetadata({
   params,
 }: {
@@ -45,9 +47,6 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta" });
   return {
-  // Sayfa başlığı locale'e bağlı: TR sekmesinde/arama sonucunda İngilizce
-  // başlık çıkıyordu. Görünür sayfa terminolojisiyle aynı sözlükten
-  // (meta.title) okunuyor; alternates/canonical yapısı değişmedi.
     title: t("title.whatWeDo"),
     description:
       locale === "en"
@@ -57,6 +56,16 @@ export async function generateMetadata({
   };
 }
 
+/** Desen 9 satırları: ad (özel ad, iki dilde İngilizce) + rota. */
+const PATHS = [
+  { key: "serviceProduction", name: "Service Production (International)", href: "/what-we-do/service-production" },
+  { key: "howWeWork", name: "How We Work", href: "/what-we-do/how-we-work" },
+  { key: "solutions", name: "Solutions", href: "/solutions" },
+  { key: "brief", name: "Brief Builder", href: "/brief" },
+] as const;
+
+const serif = (chunks: ReactNode) => <span className="lab-serif">{chunks}</span>;
+
 export default async function WhatWeDoPage({
   params,
 }: {
@@ -64,6 +73,7 @@ export default async function WhatWeDoPage({
 }) {
   const { locale } = await params;
   const t = await getTranslations("whatWeDo");
+  const tLab = await getTranslations("lab.whatWeDo");
   const descriptions = t.raw("list") as Array<{ title: string; body: string }>;
   const items: ServiceDirectoryItem[] = SERVICE_CATALOG.map((service) => {
     const image = service.imageKey ? siteImages.services[service.imageKey] : undefined;
@@ -72,14 +82,7 @@ export default async function WhatWeDoPage({
       name: service.name,
       href: service.href,
       description: descriptions.find((item) => item.title === service.name)?.body ?? "",
-      degree: formatDegree(chapterOf(service.id).degree),
-      image: image
-        ? {
-            src: image.src,
-            alt: image.alt[locale],
-            focus: image.focus,
-          }
-        : undefined,
+      image: image ? { src: image.src, alt: image.alt[locale], focus: image.focus } : undefined,
     };
   });
 
@@ -91,31 +94,71 @@ export default async function WhatWeDoPage({
           { name: "What We Do", path: "/what-we-do" },
         ])}
       />
-      <PageHero
-        crumbs={[
-          { label: "Hibrid 360", href: "/" },
-          { label: "What We Do", lang: "en" },
-        ]}
-        title={<PageTitle text={t("heroTitle")} lang={locale} />}
-      >
-        <div className={styles.heroFooter}>
-          <p className={styles.heroBody}>{t("heroBody")}</p>
-          <p
-            className={styles.heroCount}
-            aria-label={locale === "tr" ? "Sekiz hizmet alanı" : "Eight service disciplines"}
-          >
-            <strong>08</strong>
-            <span>{locale === "tr" ? "ALAN · 360°" : "DISCIPLINES · 360°"}</span>
-          </p>
-        </div>
-      </PageHero>
 
-      <div className={styles.directoryFrame}>
+      <PageIntro
+        ground="pink"
+        rail={t("heroTitle")}
+        title={tLab.rich("introTitle", {
+          serif,
+          mark: (chunks) => (
+            <Scribble shape="underline" tone="current" delay={350}>
+              {chunks}
+            </Scribble>
+          ),
+        })}
+        lede={tLab("introLede")}
+        actions={
+          <Button variant="ghost" href="/what-we-do/how-we-work" lang="en">
+            How We Work
+          </Button>
+        }
+      />
+
+      <div className={styles.directoryFrame} data-ground="paper">
         <ServiceDirectory
           items={items}
-          label={locale === "tr" ? "Hizmet alanları" : "Service disciplines"}
+          rail={tLab("rail")}
+          titleId="wwd-directory-title"
+          title={tLab.rich("title", {
+            mark: (chunks) => (
+              <Scribble shape="circle" tone="fuchsia" delay={200}>
+                {chunks}
+              </Scribble>
+            ),
+          })}
         />
       </div>
+
+      <section className={styles.paths} data-ground="black" aria-labelledby="wwd-paths-title">
+        <div className={styles.pathsMedia} aria-hidden="true">
+          <LoopVideo
+            className={styles.pathsVideo}
+            poster={CRYSTAL_MEDIA.poster}
+            sources={[{ src: CRYSTAL_MEDIA.interactive, type: "video/mp4" }]}
+          />
+        </div>
+        <div className={styles.pathsBody}>
+          <h2 id="wwd-paths-title" className={`lab-rail ${styles.pathsRail}`}>
+            {tLab("pathsTitle")}
+          </h2>
+          <ul className={styles.pathsList}>
+            {PATHS.map((path, index) => (
+              <Reveal as="li" key={path.key} delay={index * 90} className={styles.pathItem}>
+                <Link href={path.href} className={styles.pathLink}>
+                  <span className={styles.pathName} lang="en">
+                    {path.name}
+                  </span>
+                  <span className={styles.pathArrow} aria-hidden="true">
+                    <ArrowRight />
+                  </span>
+                </Link>
+                <p className={styles.pathBody}>{tLab(`paths.${path.key}`)}</p>
+              </Reveal>
+            ))}
+          </ul>
+        </div>
+      </section>
+
     </div>
   );
 }

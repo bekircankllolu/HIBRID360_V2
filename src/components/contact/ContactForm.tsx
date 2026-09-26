@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { ArrowRight } from "lucide-react";
 import type { Locale } from "@/i18n/routing";
 import { submitContact, type SubmissionResult } from "@/lib/submissions";
+import { Button } from "@/components/ui/Button";
 import styles from "./ContactForm.module.css";
 
 /**
@@ -32,6 +33,15 @@ import styles from "./ContactForm.module.css";
  * bozuluyor). Odak halkası korunuyor; hairline animasyonu odak
  * göstergesinin YERİNE değil, yanına geçiyor.
  * Hata ve başarı mesajları `role="status"` ile duyuruluyor.
+ *
+ * ## LAB (monks "sohbet" formu) — `theme="chat"`
+ * Contact sayfası kağıt zeminde: her alanın etiketi solda Hibrid 360'ın
+ * sorusu gibi bir balon, girdi sağda beyaz yuvarlak kutu (Brief Builder'ın
+ * sohbet dili, bkz. src/components/brief/Chat.module.css). Etiket yine
+ * GERÇEK `<label>` — yalnız görünüm değişiyor; numara ve hairline gizli.
+ * Gönder butonu sitenin ortak köşeli `Button`'ı. Alanlar, doğrulama ve
+ * gönderim mantığı üç temada da aynı. `dark`/`yellow` değişmedi
+ * (ana sayfa ReachOut `yellow` kullanıyor).
  *
  * TODO: GEN-11 "Phone (optional)" alanını listeliyor ama
  * docs/supabase-schema.sql'deki contact_submissions tablosunda phone
@@ -71,7 +81,7 @@ export function ContactForm({
   theme = "dark",
 }: {
   locale: Locale;
-  theme?: "dark" | "yellow";
+  theme?: "dark" | "yellow" | "chat";
 }) {
   const t = useTranslations("contactForm");
   const [name, setName] = useState("");
@@ -99,7 +109,7 @@ export function ContactForm({
 
   if (result?.ok) {
     return (
-      <p className={styles.success} role="status">
+      <p className={`${styles.success} ${theme === "chat" ? styles.chatSuccess : ""}`} role="status">
         {t("success")}
       </p>
     );
@@ -107,7 +117,7 @@ export function ContactForm({
 
   return (
     <form
-      className={`${styles.form} ${theme === "yellow" ? styles.yellow : ""}`}
+      className={`${styles.form} ${theme === "yellow" ? styles.yellow : ""} ${theme === "chat" ? styles.chat : ""}`}
       onSubmit={onSubmit}
     >
       {result && !result.ok && (
@@ -179,10 +189,18 @@ export function ContactForm({
         <span>{t("consent")}</span>
       </label>
 
-      <button type="submit" className={styles.submit} disabled={submitting}>
-        <span>{submitting ? t("sending") : t("send")}</span>
-        <ArrowRight aria-hidden="true" size={20} strokeWidth={1.75} />
-      </button>
+      {theme === "chat" ? (
+        <div className={styles.chatSubmit}>
+          <Button type="submit" disabled={submitting}>
+            {submitting ? t("sending") : t("send")}
+          </Button>
+        </div>
+      ) : (
+        <button type="submit" className={styles.submit} disabled={submitting}>
+          <span>{submitting ? t("sending") : t("send")}</span>
+          <ArrowRight aria-hidden="true" size={20} strokeWidth={1.75} />
+        </button>
+      )}
     </form>
   );
 }

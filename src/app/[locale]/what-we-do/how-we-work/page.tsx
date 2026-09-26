@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import { PageIntro } from "@/components/lab/PageIntro";
+import { Reveal } from "@/components/lab/Reveal";
+import { Scribble } from "@/components/lab/Scribble";
+import { Section } from "@/components/lab/Section";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { breadcrumbListJsonLd } from "@/lib/schema";
-import { PageHero } from "@/components/page/PageHero";
-import { PageTitle } from "@/components/page/PageTitle";
-import { ChapterRule } from "@/components/service-chapter/ChapterRule";
 import { Button } from "@/components/ui/Button";
 import { processSteps, budgetBands } from "@/data/how-we-work";
 import type { Locale } from "@/i18n/routing";
+import { breadcrumbListJsonLd } from "@/lib/schema";
 import { localizedAlternates } from "@/lib/site";
+import { ClosingCall } from "../_lab/ClosingCall";
 import styles from "./page.module.css";
 
 /**
@@ -19,15 +21,17 @@ import styles from "./page.module.css";
  * (src/data/how-we-work.ts — çeviri müşteri onayı bekliyor).
  *
  * TODO: docs/DECISIONS.md #15 bekleniyor — bütçe bandı başlangıç rakamları
- * ([X]) ve süre bantları ([n] weeks) ticari karardır, müşteride kalmalı.
- * Rakam uydurulmadı: tablodaki ilgili hücreler "belirlenecek" rozetiyle
- * render ediliyor. Karar geldiğinde yalnızca src/data/how-we-work.ts
- * güncellenecek, arayüz değişmeyecek.
+ * ([X]) ve süre bantları ([n] weeks) ticari karardır. Rakam uydurulmadı:
+ * ilgili hücreler "belirlenecek" rozetiyle render ediliyor (kullanıcı
+ * kararı: rozetler yayında KALIR).
  *
- * Faz 2 / B1 (tasarım dili): hero `PageHero` + `PageTitle`; slogan iki dilde
- * İngilizce → `lang="en"`. Bölüm başlıkları `ChapterRule` (h2 — e2e ilk h3'ü
- * adım başlığı olarak okuyor, sıra bozulmaz). Sayfa ortalı kaptan çıktı:
- * bölümler `--page-gutter` kenarından sola yaslı.
+ * LAB (monks.com) — bölüm sırası:
+ *   1. PageIntro SİYAH zeminde: "No black box." — slogan kendi zemininde,
+ *      "black box" el çizimi halkayla işaretli.
+ *   2. Kağıt: süreç — dev numaralı büyük satırlar (numara | başlık + gövde).
+ *   3. Siyah: bütçe bandı — satır envanteri (desen 5), gerçek <table>.
+ *   4. Kağıt: kapanış — tek CTA: Brief Builder (brief 20.5).
+ *   Sayfa sonu çağrısı layout'taki global CtaBand (sarı).
  */
 
 export async function generateMetadata({
@@ -53,6 +57,7 @@ export default async function HowWeWorkPage({
 }) {
   const { locale } = await params;
   const t = await getTranslations("howWeWork");
+  const tLab = await getTranslations("lab.howWeWork");
 
   const pendingBadge = (
     <span className={styles.pending} title={t("pendingHint")}>
@@ -70,41 +75,59 @@ export default async function HowWeWorkPage({
         ])}
       />
 
-      <PageHero
-        crumbs={[
-          { label: "What We Do", href: "/what-we-do", lang: "en" },
-          { label: "How We Work", lang: "en" },
-        ]}
-        title={<PageTitle text="NO BLACK BOX." lang="en" />}
+      <PageIntro
+        ground="black"
+        rail={<span lang="en">How We Work</span>}
+        title={
+          <span lang="en" className={styles.introTitle}>
+            No{" "}
+            <Scribble shape="circle" tone="current" delay={300}>
+              black box.
+            </Scribble>
+          </span>
+        }
         lede={t("lead")}
       />
 
-      <section className={styles.section}>
-        <ChapterRule title={t("processTitle")} />
+      <Section ground="paper" wide labelledBy="hww-process-title" className={styles.process}>
+        <h2 id="hww-process-title" className={`lab-rail ${styles.sectionRail}`}>
+          {t("processTitle")}
+        </h2>
         <ol className={styles.steps}>
-          {processSteps[locale].map((step) => {
+          {processSteps[locale].map((step, index) => {
             const [before, after] = step.body.split("{pending}");
             return (
-              <li key={step.step}>
-                <span className={styles.stepNumber}>{step.step}</span>
-                <h3 className={styles.stepTitle}>{step.title}</h3>
-                <p className={styles.stepBody}>
-                  {before}
-                  {after !== undefined && (
-                    <>
-                      {pendingBadge}
-                      {after}
-                    </>
-                  )}
-                </p>
-              </li>
+              <Reveal as="li" key={step.step} delay={index * 60} className={styles.step}>
+                <span className={styles.stepNumber} aria-hidden="true">
+                  {String(step.step).padStart(2, "0")}
+                </span>
+                <div className={styles.stepText}>
+                  <h3 className={styles.stepTitle}>
+                    <span className="srOnly">
+                      {tLab("stepLabel")} {step.step}:{" "}
+                    </span>
+                    {step.title}
+                  </h3>
+                  <p className={styles.stepBody}>
+                    {before}
+                    {after !== undefined && (
+                      <>
+                        {pendingBadge}
+                        {after}
+                      </>
+                    )}
+                  </p>
+                </div>
+              </Reveal>
             );
           })}
         </ol>
-      </section>
+      </Section>
 
-      <section className={styles.section}>
-        <ChapterRule title={t("budgetTitle")} />
+      <Section ground="black" wide labelledBy="hww-budget-title" className={styles.budget}>
+        <h2 id="hww-budget-title" className={`lab-rail ${styles.sectionRail}`}>
+          {t("budgetTitle")}
+        </h2>
         <div className={styles.tableWrapper}>
           <table className={styles.table}>
             <thead>
@@ -118,24 +141,36 @@ export default async function HowWeWorkPage({
             <tbody>
               {budgetBands[locale].map((band) => (
                 <tr key={band.format}>
-                  <td className={styles.formatCell}>{band.format}</td>
-                  <td>{band.startingFrom ?? pendingBadge}</td>
-                  <td>{band.scope.join(" · ")}</td>
-                  <td>{band.duration ?? pendingBadge}</td>
+                  <th scope="row" className={styles.formatCell}>
+                    {band.format}
+                  </th>
+                  <td data-label={t("table.startingFrom")}>{band.startingFrom ?? pendingBadge}</td>
+                  <td data-label={t("table.scope")} className={styles.scopeCell}>
+                    {band.scope.join(" · ")}
+                  </td>
+                  <td data-label={t("table.duration")}>{band.duration ?? pendingBadge}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        <p className={styles.tableNote}>{t("pendingHint")}</p>
-      </section>
+        <p className={`lab-meta ${styles.tableNote}`}>{t("pendingHint")}</p>
+      </Section>
 
-      <section className={styles.cta}>
-        {/* brief 20.5: "Sayfanın altında tek CTA: Brief Builder (20.8)". */}
-        <Button variant="primary" href="/brief">
-          {t("cta")}
-        </Button>
-      </section>
+      {/* brief 20.5: "Sayfanın altında tek CTA: Brief Builder (20.8)". */}
+      <ClosingCall
+        ground="paper"
+        id="hww-closing-title"
+        rail={tLab("closingRail")}
+        title={tLab.rich("closingTitle", {
+          mark: (chunks) => (
+            <Scribble shape="underline" tone="fuchsia" delay={200}>
+              {chunks}
+            </Scribble>
+          ),
+        })}
+        actions={<Button href="/brief">{t("cta")}</Button>}
+      />
     </div>
   );
 }

@@ -1,0 +1,28 @@
+/* LAB — imza cümlesi. */
+.section {
+  display: grid;
+  grid-template-columns: minmax(7rem, 1fr) minmax(0, 3fr);
+  column-gap: clamp(1.5rem, 3vw, 3rem);
+  padding: clamp(5rem, 10vw, 9rem) var(--page-gutter);
+}
+
+.rail {
+  margin: 0.9rem 0 0;
+}
+
+.claim {
+  margin: 0;
+  max-width: 17ch;
+  font-size: clamp(2.5rem, 5.2vw, 5rem);
+  line-height: 1.06;
+}
+
+@media (max-width: 760px) {
+  .section {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .rail {
+    margin: 0 0 1.25rem;
+  }
+}

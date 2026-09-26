@@ -1,178 +1,108 @@
+/* LAB — marka dizini (monks "Work inventory" dili). Kağıt zemin, tokenlar. */
 .index {
   width: 100%;
   min-width: 0;
-  box-sizing: border-box;
-  display: grid;
-  grid-template-columns: minmax(10rem, 18vw) minmax(0, 1fr);
-  gap: clamp(2rem, 5vw, 7rem);
-  align-items: start;
-  padding: clamp(3rem, 6vw, 6rem) var(--page-gutter)
-    clamp(5rem, 9vw, 9rem);
+  padding: var(--section-space) var(--page-gutter);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem 2rem;
+}
+
+.title {
+  margin: 0;
+}
+
+.count {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: var(--font-size-body-lg);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-soft);
 }
 
 .filters {
-  min-width: 0;
-  max-width: 100%;
-  position: sticky;
-  top: calc(var(--header-height) + 2rem);
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.7rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: clamp(1.5rem, 3vw, 2.25rem) 0 clamp(2rem, 4vw, 3rem);
 }
 
+/* Köşeli etiket hapı; basılı olan zemin rengini tersine çevirir. */
 .filter {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  min-height: 2rem;
-  border: 0;
-  padding: 0;
+  min-height: 2.75rem;
+  padding: 0 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: 0;
   background: transparent;
-  /* Pasif filtre rengi. 0.38 alfa siyah üzerinde #616161'e denk geliyordu
-     ve kontrast 3.39:1'de kalıyordu — axe bunu "serious" olarak düşürüyordu
-     (18px/600 ağırlık büyük metin sayılmıyor, eşik 4.5:1). 0.58 alfa
-     #949494'e denk gelir ve 6.9:1 verir. Aktif filtre saf beyaz (21:1)
-     olduğu için pasif/aktif hiyerarşisi görünür kalıyor; ayrıca aktif
-     olanın sarı oku ve aria-pressed'i var, ayrım yalnızca renge bağlı
-     değil. Marka paleti dışına çıkılmadı (beyaz, azaltılmış opaklıkta). */
-  color: rgba(255, 255, 255, 0.58);
-  font-family: var(--font-brand);
-  font-size: clamp(0.9rem, 1.3vw, 1.125rem);
-  font-weight: var(--font-weight-heading-semibold);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 0.9375rem;
   cursor: pointer;
-  transition: color 180ms ease;
+  transition:
+    background-color 250ms var(--ease-lab),
+    color 250ms var(--ease-lab),
+    border-color 250ms var(--ease-lab);
 }
 
-.filter:hover,
-.filter:focus-visible,
-.filterActive {
-  color: var(--color-brand-white);
+.filter:hover {
+  border-color: var(--ink);
 }
 
-/* Aktif madde ayrıca kalınlaşır: pasif/aktif ayrımı renk körlüğünde de
-   okunur kalsın (sarı ok ve aria-pressed'e ek üçüncü ipucu). */
-.filterActive {
-  font-weight: var(--font-weight-brand);
+.filter[aria-pressed="true"] {
+  border-color: var(--btn-bg);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
 }
 
 .filter:focus-visible {
-  outline: 2px solid var(--color-brand-yellow);
-  outline-offset: 0.35rem;
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
 }
 
-.arrow {
-  width: 1.1rem;
-  color: var(--color-brand-yellow);
-  opacity: 0;
-  transform: translateX(-0.35rem);
-  transition:
-    opacity 180ms ease,
-    transform 180ms ease;
-}
-
-.filterActive .arrow,
-.filter:hover .arrow,
-.filter:focus-visible .arrow {
-  opacity: 1;
-  transform: none;
-}
-
+/* Çerçevesiz tipografik ızgara (e2e: isim hücresinde kenar/zemin yok);
+   satır ritmini listenin üst çizgisi ve sütun aralığı kurar. */
 .names {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  column-gap: clamp(2rem, 6vw, 8rem);
-  row-gap: clamp(2.5rem, 4vw, 4.75rem);
-  margin: 0;
-  padding: 0;
   list-style: none;
+  margin: 0;
+  padding: clamp(1.25rem, 2vw, 1.75rem) 0 0;
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(0.9rem, 1.4vw, 1.25rem) clamp(1rem, 2.4vw, 2.5rem);
 }
 
 .nameItem {
   min-width: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  font-family: var(--font-brand);
-  font-size: clamp(1.1rem, 1.85vw, 2rem);
-  font-weight: var(--font-weight-heading-semibold);
-  line-height: 1.06;
-  color: var(--color-brand-white);
-}
-
-.nameItem span {
-  max-width: 18ch;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: clamp(1.05rem, 1.35vw, 1.3rem);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--ink);
   overflow-wrap: anywhere;
-  text-wrap: balance;
 }
 
-@media (max-width: 900px) {
-  .index {
-    grid-template-columns: 1fr;
-    gap: 3rem;
-  }
-
-  .filters {
-    width: 100%;
-    position: static;
-    flex-direction: row;
-    gap: 1.5rem;
-    padding-bottom: 0.75rem;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-
-  .filters::-webkit-scrollbar {
-    display: none;
-  }
-
-  .filter {
-    flex: 0 0 auto;
-  }
-
+@media (max-width: 1000px) {
   .names {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 520px) {
-  .index {
-    padding-inline: 1rem;
-  }
-
+@media (max-width: 700px) {
   .names {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: 1.25rem;
-    row-gap: 2.25rem;
-  }
-
-  .filters {
-    justify-content: space-between;
-    gap: 0;
-  }
-
-  .filter {
-    gap: 0.35rem;
-  }
-
-  .arrow {
-    width: 0.75rem;
-  }
-
-  .nameItem {
-    font-size: clamp(1rem, 4.8vw, 1.25rem);
-  }
-
-  .nameItem span {
-    max-width: 18ch;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .filter,
-  .arrow {
+  .filter {
     transition: none;
   }
 }

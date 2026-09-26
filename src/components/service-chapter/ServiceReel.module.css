@@ -1,0 +1,102 @@
+/* LAB — tam genişlik film karesi + "İzle" hapı (monks desen 6). */
+.reel {
+  position: relative;
+  display: grid;
+  justify-items: center;
+}
+
+.frame {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: var(--color-brand-black);
+}
+
+.video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Hap: köşeli etiket kutusu + kare ikon kutusu (lab Button dili). Karenin
+   alt kenarına yarı binmiş durur — monks'taki "Watch video 00:58". */
+.pill {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: stretch;
+  gap: 3px;
+  margin-top: -1.375rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--btn-fg);
+}
+
+.pillLabel,
+.pillIcon {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  background: var(--btn-bg);
+  transition: color 420ms var(--ease-lab);
+}
+
+.pillLabel {
+  padding: 0 1.125rem;
+  white-space: nowrap;
+}
+
+.pillTime {
+  margin-left: 0.35em;
+  opacity: 0.62;
+}
+
+.pillIcon {
+  justify-content: center;
+  width: 2.75rem;
+}
+
+.pillIcon svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.pillLabel::before,
+.pillIcon::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--color-brand-fuchsia);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 520ms var(--ease-lab);
+}
+
+.pill:hover .pillLabel,
+.pill:hover .pillIcon,
+.pill:focus-visible .pillLabel,
+.pill:focus-visible .pillIcon {
+  color: var(--color-text-on-fuchsia);
+}
+
+.pill:hover .pillLabel::before,
+.pill:hover .pillIcon::before,
+.pill:focus-visible .pillLabel::before,
+.pill:focus-visible .pillIcon::before {
+  transform: scaleX(1);
+}
+
+.pill:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}

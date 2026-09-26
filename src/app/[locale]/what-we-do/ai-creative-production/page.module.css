@@ -1,33 +1,351 @@
-.chapter { overflow: clip; background: var(--color-brand-black); color: var(--color-brand-white); }
-.intro, .proof, .flowSection, .band, .closing, .transcript { position: relative; padding: clamp(4rem, 10vw, 9rem) var(--page-gutter); }
-.intro { min-height: 72svh; display: grid; align-content: end; gap: var(--space-8); }
-.intro > h2 { max-width: 5.832em; /* 9ch: bkz. ../page.module.css .title */ margin: 0; font-family: var(--font-chapter-display); font-size: var(--chapter-display); line-height: .86; letter-spacing: 0; }
-.intro > h2 span { display: block; color: var(--color-brand-yellow); }
-.intro > p { max-width: 34ch; margin: 0; font-size: var(--font-size-lead); line-height: 1.4; }
-.proof { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 7vw, 7rem); }
-.proof > div { display: grid; align-content: start; gap: var(--space-6); }
-.proof > div > h2 { margin: 0; font-family: var(--font-chapter-display); font-size: clamp(2rem, 5vw, 5rem); line-height: .95; letter-spacing: 0; text-transform: uppercase; }
-.proof p, .proof li { font-size: var(--font-size-body-lg); line-height: 1.55; }
-.proof p { max-width: var(--measure-prose); margin: 0; }
-/* Sarı zemin: başlıklar da siyah (globals.css --heading-color notu). */
-.proofPanel { padding: clamp(2rem, 5vw, 5rem); background: var(--color-brand-yellow); color: var(--color-text-on-yellow); --heading-color: var(--color-text-on-yellow); }
-/* Marka adı başlıkta ayrı bir <span> taşıyor; rengi panelden miras alsın. */
-.proofPanel h2 span { color: inherit; }
-.proofPanel ul { display: grid; gap: var(--space-3); margin: 0; padding: 0; list-style: none; }
-.proofPanel li::before { content: "↳ "; color: var(--color-brand-fuchsia); }
-.flowSection { display: grid; gap: var(--space-10); padding-block: clamp(3rem, 6vw, 5.5rem); }
-.flow { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
-.flow span { padding: var(--space-3) var(--space-4); border: 1px solid color-mix(in srgb, var(--color-brand-white) 30%, transparent); font-family: var(--font-brand); font-size: var(--font-size-label); font-weight: var(--font-weight-heading-bold); text-transform: uppercase; }
-.flow i { color: var(--color-brand-fuchsia); font-style: normal; }
-.manifesto { position: relative; min-height: min(52svh, 34rem); display: grid; place-items: center; padding: var(--space-16) var(--page-gutter); background: var(--color-brand-fuchsia); color: var(--color-text-on-fuchsia); }
-.manifesto p, .band p { max-width: 11.664em; /* 18ch */ margin: 0; font-family: var(--font-chapter-display); font-size: var(--chapter-manifesto); font-weight: var(--font-weight-chapter-display); line-height: 1; letter-spacing: 0; }
-.band p { color: var(--color-brand-yellow); }
-.closing { display: grid; gap: var(--space-5); }
-.closing p, .closing strong { max-width: 30ch; margin: 0; font-family: var(--font-brand); font-size: clamp(1.4rem, 3vw, 3rem); line-height: 1.15; }
-.closing strong { color: var(--color-brand-yellow); }
-.transcript { padding-top: 0; }
-.transcript summary { cursor: pointer; font-family: var(--font-brand); font-size: var(--font-size-label); font-weight: var(--font-weight-heading-bold); color: var(--color-brand-yellow); text-transform: uppercase; }
-.transcript dl { max-width: var(--measure-prose); }
-.transcript dt { margin-top: var(--space-6); font-weight: var(--font-weight-heading-bold); }
-.transcript dd { margin: var(--space-2) 0 0; line-height: 1.55; }
-@media (max-width: 767px) { .proof { grid-template-columns: minmax(0, 1fr); } }
+/*
+ * LAB (monks.com "AI" sayfası) — AI Creative Production. Bölüm sırası
+ * page.tsx'te. Renkler yalnız `data-ground` anlamsal değişkenleri; hex yok.
+ */
+.page {
+  width: 100%;
+  overflow: clip;
+}
+
+/* --- 1. MONA: pembe çerçeve içinde siyah "ekran" ------------------------- */
+
+.monaFrame {
+  padding: clamp(1.25rem, 2.4vw, 2.25rem) var(--page-gutter) 0;
+}
+
+.monaTop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: clamp(1rem, 1.8vw, 1.5rem);
+}
+
+.monaTop p {
+  margin: 0;
+}
+
+.monaScreen {
+  position: relative;
+  overflow: hidden;
+  /* Ekran hissi: pembe zeminde ince siyah kenar. */
+  box-shadow: 0 0 0 1px var(--ink);
+}
+
+/* Sahnenin yüksekliği çerçeveye göre: pembe üst şerit + etiket satırı
+   kadar kısalır, ilk ekranda ekranın alt kenarı görünür kalır. Yalnız
+   sunum — MONA bileşenine dokunulmadı. */
+.monaScreen :global([data-testid="mona-experience"]) {
+  height: calc(100svh - var(--header-height) - clamp(4.5rem, 7vw, 6.5rem));
+  min-height: 34rem;
+  max-height: 60rem;
+}
+
+/* --- 2. İddia ------------------------------------------------------------- */
+
+.claim {
+  padding-bottom: var(--section-space-tight);
+}
+
+.claimText {
+  max-width: 22ch;
+  margin: 0;
+}
+
+.claimSerif {
+  max-width: 30ch;
+  margin: clamp(1.5rem, 3vw, 2.5rem) 0 0;
+  font-size: clamp(1.6rem, 1.1rem + 1.6vw, 2.6rem);
+  line-height: 1.2;
+  color: var(--ink-soft);
+}
+
+/* --- 3. Fark -------------------------------------------------------------- */
+
+.diff {
+  padding-top: var(--section-space-tight);
+}
+
+.diffTitle {
+  max-width: 18ch;
+  margin: 0;
+  font-size: clamp(2.1rem, 3.6vw, 3.6rem);
+}
+
+.diffBody {
+  max-width: 62ch;
+  margin: clamp(1.5rem, 3vw, 2.5rem) 0 0;
+  font-size: var(--font-size-body-lg);
+  columns: 2 22rem;
+  column-gap: clamp(1.5rem, 3vw, 3rem);
+}
+
+/* --- 4. Kanıt + iş akışı -------------------------------------------------- */
+
+.proof h2 {
+  max-width: 16ch;
+  margin: 0;
+}
+
+.proofLead {
+  max-width: 60ch;
+  margin: var(--space-5) 0 clamp(2rem, 4vw, 3.5rem);
+}
+
+.proofRows {
+  margin-bottom: clamp(3.5rem, 7vw, 6rem);
+}
+
+.proofText {
+  font-size: clamp(1.4rem, 1rem + 1.4vw, 2.4rem);
+  line-height: 1.12;
+}
+
+.flowTitle {
+  margin: 0 0 var(--space-6);
+  color: var(--ink-soft);
+}
+
+/* Beş adım yan yana bir zaman çizelgesi: üstte ince çizgi, her adımın
+   başında vurgu rengi bir nokta. */
+.flow {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.flowStep {
+  position: relative;
+  display: grid;
+  gap: var(--space-3);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--line);
+}
+
+.flowStep::before {
+  content: "";
+  position: absolute;
+  top: -0.3125rem;
+  left: 0;
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.flowIndex {
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
+.flowName {
+  font-family: var(--font-ui);
+  font-size: clamp(1.05rem, 0.9rem + 0.4vw, 1.3rem);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/* --- 5. Neler üretiyoruz: büyük satırlar ---------------------------------- */
+
+.buildRail {
+  margin: 0 0 clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.buildList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.buildItem {
+  display: grid;
+  grid-template-columns: minmax(7rem, 1fr) minmax(0, 3fr);
+  column-gap: clamp(1.5rem, 3vw, 3rem);
+  align-items: baseline;
+  padding-block: clamp(0.9rem, 1.6vw, 1.4rem);
+  border-bottom: 1px solid var(--line);
+}
+
+.buildIndex {
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
+.buildName {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 1.2rem + 4.2vw, 5.4rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  transition:
+    color 400ms var(--ease-lab),
+    transform 600ms var(--ease-lab);
+}
+
+.buildItem:hover .buildName {
+  color: var(--accent);
+  transform: translateX(0.5rem);
+}
+
+/* --- 6. Bakış ------------------------------------------------------------- */
+
+.statementSerif {
+  color: var(--accent);
+}
+
+.closingQuestion {
+  flex-basis: 100%;
+  margin: 0 0 var(--space-2);
+}
+
+/* --- 7. Replikler + sıradaki --------------------------------------------- */
+
+.transcript {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.transcript summary {
+  cursor: pointer;
+  padding-block: var(--space-5);
+  list-style-position: inside;
+}
+
+.transcript dl {
+  max-width: var(--measure-prose);
+  margin: 0;
+  padding-bottom: var(--space-8);
+}
+
+.transcript dt {
+  margin-top: var(--space-6);
+  font-family: var(--font-ui);
+  font-weight: 600;
+}
+
+.transcript dd {
+  margin: var(--space-2) 0 0;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+.next {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "label arrow"
+    "name arrow"
+    "blurb arrow";
+  row-gap: var(--space-2);
+  align-items: center;
+  margin-top: clamp(3rem, 6vw, 5rem);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.next > :first-child {
+  grid-area: label;
+}
+
+.nextName {
+  grid-area: name;
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 1.4rem + 4vw, 5.5rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.nextBlurb {
+  grid-area: blurb;
+  color: var(--ink-soft);
+}
+
+.nextArrow {
+  grid-area: arrow;
+  display: inline-grid;
+  place-items: center;
+  width: clamp(3rem, 5vw, 4.5rem);
+  height: clamp(3rem, 5vw, 4.5rem);
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--ground);
+  transition:
+    background-color 320ms var(--ease-lab),
+    color 320ms var(--ease-lab);
+}
+
+.nextArrow svg {
+  width: 45%;
+  height: 45%;
+  transition: transform 520ms var(--ease-lab);
+}
+
+.next:hover .nextArrow,
+.next:focus-visible .nextArrow {
+  background: var(--color-brand-fuchsia);
+  color: var(--color-text-on-fuchsia);
+}
+
+.next:hover .nextArrow svg,
+.next:focus-visible .nextArrow svg {
+  transform: translateX(0.2rem);
+}
+
+/* --- Kırılımlar ----------------------------------------------------------- */
+
+@media (max-width: 899px) {
+  .flow {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .flowStep {
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    align-items: baseline;
+    padding-block: var(--space-4);
+    padding-left: var(--space-5);
+    border-top: 0;
+    border-left: 1px solid var(--line);
+  }
+
+  .flowStep::before {
+    top: 1.35rem;
+    left: -0.3125rem;
+  }
+}
+
+@media (max-width: 760px) {
+  .buildItem {
+    grid-template-columns: 2.25rem minmax(0, 1fr);
+    column-gap: var(--space-3);
+  }
+
+  .monaScreen :global([data-testid="mona-experience"]) {
+    min-height: 40rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .buildName,
+  .nextArrow,
+  .nextArrow svg {
+    transition: none;
+  }
+
+  .buildItem:hover .buildName,
+  .next:hover .nextArrow svg,
+  .next:focus-visible .nextArrow svg {
+    transform: none;
+  }
+}

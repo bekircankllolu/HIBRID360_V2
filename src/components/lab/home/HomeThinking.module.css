@@ -1,0 +1,161 @@
+/* LAB — "On our minds" satır listesi. */
+.section {
+  padding: var(--section-space) var(--page-gutter);
+}
+
+.head {
+  display: grid;
+  grid-template-columns: minmax(7rem, 1fr) minmax(0, 3fr);
+  column-gap: clamp(1.5rem, 3vw, 3rem);
+  align-items: baseline;
+  margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+.title {
+  margin: 0;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+
+.row {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(7rem, 1fr) minmax(0, 2.2fr) minmax(6rem, 0.5fr) auto;
+  column-gap: clamp(1.5rem, 3vw, 3rem);
+  align-items: center;
+  padding: 1.35rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+/* Satır üzerine gelince alt çizgi soldan fuşyayla dolar. */
+.row::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 700ms var(--ease-lab);
+}
+
+.row:hover::after,
+.row:focus-within::after {
+  transform: scaleX(1);
+}
+
+.category {
+  color: var(--ink);
+}
+
+.heading {
+  margin: 0;
+  font-size: clamp(1.05rem, 1.35vw, 1.3rem);
+  line-height: 1.3;
+}
+
+.lead {
+  font-family: var(--font-ui);
+  font-weight: 600;
+}
+
+.rest {
+  font-size: 1.08em;
+  color: var(--ink);
+}
+
+.time b {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.cta {
+  display: inline-flex;
+  gap: 3px;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 0.9375rem;
+}
+
+/* Satırın tamamı tıklanır. */
+.cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.ctaLabel,
+.ctaArrow {
+  display: inline-grid;
+  place-items: center;
+  min-height: 2.5rem;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  transition:
+    background-color 360ms var(--ease-lab),
+    color 360ms var(--ease-lab);
+}
+
+.ctaLabel {
+  padding: 0 1rem;
+}
+
+.ctaArrow {
+  width: 2.5rem;
+}
+
+.ctaArrow svg {
+  width: 46%;
+  height: 46%;
+}
+
+.row:hover .ctaLabel,
+.row:hover .ctaArrow,
+.cta:focus-visible .ctaLabel,
+.cta:focus-visible .ctaArrow {
+  background: var(--color-brand-fuchsia);
+  color: var(--color-text-on-fuchsia);
+}
+
+.more {
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+
+@media (max-width: 900px) {
+  .head {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 1rem;
+  }
+
+  .row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "category time"
+      "heading heading"
+      "cta cta";
+    row-gap: 0.75rem;
+  }
+
+  .category {
+    grid-area: category;
+  }
+
+  .heading {
+    grid-area: heading;
+  }
+
+  .time {
+    grid-area: time;
+  }
+
+  .cta {
+    grid-area: cta;
+  }
+}

@@ -1,116 +1,19 @@
+/* LAB — monks "work inventory" sayfa iskeleti. Renkler yalnız tema
+   değişkenlerinden (data-ground); başlık/kapanış yapı taşları lab'dan. */
+
 .page {
   width: 100%;
-  padding-top: clamp(5rem, 10vw, 9rem);
-  background: var(--color-brand-black);
 }
 
-.hero {
-  position: relative;
-  /*
-   * Sayfanın üst dolgusunu GERİ ALIYOR: hero artık başlığın hemen altından
-   * başlıyor. Dolgu yerinde kalınca kadrajın üstünde ~145px siyah bir
-   * şerit oluşuyordu; parçacık ağı seyrek olduğu için fark edilmiyordu ama
-   * fotoğrafla birlikte hata gibi duruyor. Başlık (`Header`) sticky ve
-   * kendi siyah zeminini taşıyor, yani altına giren kadraj görünmüyor —
-   * bu yüzden güvenli.
-   */
-  margin-top: calc(-1 * clamp(5rem, 10vw, 9rem));
-  min-height: min(82svh, 56rem);
-  display: flex;
-  align-items: flex-end;
-  padding: 0 var(--page-gutter) clamp(2rem, 5vw, 4rem);
-  overflow: hidden;
-  isolation: isolate;
+/* monks: son satır serif ve kendi satırında. */
+.serif {
+  display: block;
 }
 
-/*
- * Alt perde. Video doneminde 0.92 siyah / %72 idi: parlak kadrajin uzerinde
- * basligin okunmasi icin gerekliydi. Artik arkada ag var -- ayni yogunluk
- * dugumlerin yarisini yutuyordu. Basligin oturdugu seride yeterli kontrasti
- * birakan en ince perde (olculdu: baslik satirinda zemin en fazla 12/12/12).
- */
-.hero::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.78), transparent 44%);
-}
-
-.heroCopy {
-  width: 100%;
-}
-
-.heroTitle {
-  margin: 0;
-  font-family: var(--font-brand);
-  /* Taban 4.5rem 320px'te "RECENT"i içerik genişliğinin dışına
-     taşırıyordu; 2.5rem'den itibaren ölçüyü vw terimi belirliyor.
-     11vw ve 11rem korundu — masaüstü ölçüsü değişmedi. */
-  max-width: 12ch;
-  font-size: clamp(2.5rem, 9vw, 9rem);
-  font-weight: var(--font-weight-brand);
-  line-height: 0.82;
-  letter-spacing: 0;
-}
-
-.heroLead {
-  max-width: var(--measure-prose);
-
-  margin: var(--space-6) 0 0 auto;
-  font-family: var(--font-brand);
-  font-size: clamp(1rem, 2vw, 1.5rem);
-  line-height: 1.35;
-  color: var(--color-brand-yellow);
-}
-
-.archiveTitle {
-  margin: 0;
-  padding: clamp(3rem, 7vw, 6rem) var(--page-gutter) var(--space-6);
-  font-family: var(--font-brand);
-  font-size: clamp(2.25rem, 7vw, 7rem);
-  line-height: 0.9;
-  color: var(--color-brand-yellow);
-}
-
-.outro {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(16rem, 40rem);
-  gap: clamp(2rem, 8vw, 9rem);
-  padding: clamp(5rem, 10vw, 10rem) var(--page-gutter);
-  border-top: 1px solid rgba(255, 255, 255, 0.18);
-}
-
-.seoHeading,
-.closingLead {
-  margin: 0;
-}
-
-.seoHeading {
-  max-width: 36rem;
-  /* Etiket rolü: Inter. Archivo display ve başlık sesi — 14px büyük
-     harfte fazla geniş ve ağır duruyor, içeriğin önüne geçiyor. */
-  font-family: var(--font-ui);
-  font-size: var(--font-size-label);
-
-  font-weight: var(--font-weight-heading-semibold);
-  text-transform: uppercase;
-  color: var(--color-brand-yellow);
-}
-
-.closingLead {
-  font-family: var(--font-brand);
-  font-size: clamp(1.5rem, 3.5vw, 3.25rem);
-  font-weight: var(--font-weight-heading-semibold);
-  line-height: 1.04;
-}
-
-@media (max-width: 760px) {
-  .hero {
-    min-height: 15rem;
-  }
-
-  .outro {
-    grid-template-columns: 1fr;
-  }
+/* El çizimi zemine göre renk alır (kağıtta fuşya, siyahta sarı). Alt
+   çizgi kelimeye yaklaştırıldı: ortak ölçü (-0.34em) bu sıkı satır
+   aralığında alttaki satırın harflerine biniyordu. */
+.mark svg {
+  bottom: -0.1em;
+  stroke: var(--accent);
 }

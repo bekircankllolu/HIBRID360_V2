@@ -7,45 +7,58 @@
   display: none;
 }
 
+/*
+ * LAB (monks çerez paneli): sayfa boyu şerit değil, sol altta yüzen siyah
+ * panel. Renkler `data-ground="black"` temasından (--ground/--ink/--btn-*);
+ * köşeli butonlar Hibrid'in kutu dilinde. Dar ekranda kenardan kenara
+ * (kenar boşluğu korunur), yüksekliği sınırlı ve kendi içinde kayar.
+ */
 .banner {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  left: var(--space-4);
+  bottom: var(--space-4);
   z-index: 90;
-  background: var(--color-brand-yellow);
-  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
-  --heading-color: var(--color-text-on-yellow);
-  color: var(--color-text-on-yellow);
-  border-top: 2px solid var(--color-brand-black);
+  width: min(30rem, calc(100vw - 2 * var(--space-4)));
+  border: 1px solid var(--line);
+  background: var(--ground);
+  color: var(--ink);
 }
 
 .inner {
-  max-width: var(--content-max-width);
-  margin: 0 auto;
-  padding: var(--space-4);
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  flex-direction: column;
   gap: var(--space-4);
-  justify-content: space-between;
+  padding: var(--space-5) var(--space-5) var(--space-4);
+}
+
+.title {
+  margin: 0;
 }
 
 .text {
   margin: 0;
+  font-family: var(--font-body);
   font-size: 0.875rem;
-  max-width: 44rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
 }
 
 .link {
+  color: var(--ink);
   text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.link:hover {
+  text-decoration-color: var(--accent);
 }
 
 .settings {
-  display: flex;
-  gap: var(--space-6);
-  flex-wrap: wrap;
-  width: 100%;
+  display: grid;
+  gap: var(--space-2);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--line);
+  font-family: var(--font-ui);
   font-size: 0.875rem;
 }
 
@@ -55,44 +68,77 @@
   gap: var(--space-2);
 }
 
+.setting input {
+  accent-color: var(--accent);
+}
+
 .actions {
   display: flex;
-  gap: var(--space-2);
   flex-wrap: wrap;
+  gap: 3px;
 }
 
 /* Kabul ve reddet aynı görsel ağırlıkta — reddetmek kabul etmek kadar
-   kolay olmalı (KVKK/GDPR açık rıza ilkesi). */
-.primary {
-  background: var(--color-brand-black);
-  color: var(--color-brand-white);
-  border: 1px solid var(--color-brand-black);
-  font-family: var(--font-body);
+   kolay olmalı (KVKK/GDPR açık rıza ilkesi). Köşeli, zeminin birincil
+   buton renkleri; üzerine gelince fuşya süpürme + SİYAH metin
+   (fuşyada beyaz metin AA geçmez). */
+.primary,
+.secondary {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 2.75rem;
+  padding: 0 var(--space-4);
+  border: 0;
+  border-radius: 0;
+  font-family: var(--font-ui);
+  font-weight: 500;
   font-size: 0.875rem;
-  padding: var(--space-2) var(--space-4);
   cursor: pointer;
+  transition: color 420ms var(--ease-lab);
 }
 
-.primary:hover {
-  background: transparent;
-  border-color: var(--color-brand-black);
-  color: var(--color-brand-black);
+.primary {
+  background: var(--btn-bg);
+  color: var(--btn-fg);
 }
 
 .secondary {
   background: transparent;
-  border: 1px solid var(--color-brand-black);
-  color: var(--color-brand-black);
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  padding: var(--space-2) var(--space-4);
-  cursor: pointer;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 55%, transparent);
 }
 
-.secondary:hover {
-  background: var(--color-brand-black);
-  border-color: var(--color-brand-black);
-  color: var(--color-brand-yellow);
+.primary::before,
+.secondary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--color-brand-fuchsia);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 520ms var(--ease-lab);
+}
+
+.primary:hover,
+.primary:focus-visible,
+.secondary:hover,
+.secondary:focus-visible {
+  color: var(--color-text-on-fuchsia);
+}
+
+.primary:hover::before,
+.primary:focus-visible::before,
+.secondary:hover::before,
+.secondary:focus-visible::before {
+  transform: scaleX(1);
+}
+
+.primary:focus-visible,
+.secondary:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
 }
 
 @media (max-width: 767px) {
@@ -100,40 +146,31 @@
     left: var(--space-2);
     right: var(--space-2);
     bottom: var(--space-2);
-    border: 1px solid var(--color-brand-black);
-    max-height: min(34svh, 17rem);
+    width: auto;
+    max-height: min(40svh, 19rem);
     overflow-y: auto;
     overscroll-behavior: contain;
   }
 
   .inner {
-    padding: var(--space-2);
-    gap: var(--space-2);
+    gap: var(--space-3);
+    padding: var(--space-3);
   }
 
   .text {
-    font-size: var(--font-size-micro);
-    line-height: 1.35;
-  }
-
-  .settings {
-    gap: var(--space-2);
-    font-size: var(--font-size-micro);
+    font-size: 0.8125rem;
+    line-height: 1.4;
   }
 
   .actions {
-    width: 100%;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-2);
   }
 
   .primary,
   .secondary {
     width: 100%;
-    min-height: 2.25rem;
     padding: var(--space-1) var(--space-2);
-    font-size: var(--font-size-label);
     line-height: 1.15;
   }
 
@@ -143,8 +180,9 @@
   }
 }
 
-@media (min-width: 768px) {
-  .actions {
-    flex: 0 0 auto;
+@media (prefers-reduced-motion: reduce) {
+  .primary::before,
+  .secondary::before {
+    transition: none;
   }
 }

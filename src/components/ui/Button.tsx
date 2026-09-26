@@ -32,6 +32,11 @@ export type ButtonVariant = "primary" | "ghost" | "inverse";
 export type ButtonSize = "md" | "sm";
 
 interface ButtonOwnProps {
+  /**
+   * LAB (monks): etiket hapı + ayrı ok dairesi. Varsayılan açık; ok
+   * istemeyen yerde `arrow={false}`.
+   */
+  arrow?: boolean;
   /** Renk rolü; varsayılan "primary". */
   variant?: ButtonVariant;
   /** "md" birincil CTA ölçüsü (varsayılan), "sm" 44 px dokunma hedefli küçük buton. */
@@ -69,34 +74,59 @@ function classNames(
   variant: ButtonVariant = "primary",
   size: ButtonSize = "md",
   className?: string,
+  arrow = true,
 ): string {
-  return [styles.button, styles[variant], styles[size], className].filter(Boolean).join(" ");
+  return [styles.button, styles[variant], styles[size], arrow && styles.split, className]
+    .filter(Boolean)
+    .join(" ");
+}
+
+/** Ok: dinlenmede biri görünür, üzerine gelince diğeri soldan kayarak girer. */
+function ArrowGlyph() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+      <path d="M5 12h13M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function Content({ children, arrow }: { children: ReactNode; arrow: boolean }) {
+  if (!arrow) return <>{children}</>;
+  return (
+    <>
+      <span className={styles.label}>{children}</span>
+      <span className={styles.arrow} aria-hidden="true">
+        <ArrowGlyph />
+        <ArrowGlyph />
+      </span>
+    </>
+  );
 }
 
 export function Button(props: ButtonProps) {
   if (props.href !== undefined) {
-    const { variant, size, className, children, href, ...anchorProps } = props;
-    const classes = classNames(variant, size, className);
+    const { variant, size, className, children, href, arrow = true, ...anchorProps } = props;
+    const classes = classNames(variant, size, className, arrow);
 
     if (isExternalHref(href)) {
       return (
         <a {...anchorProps} href={href} className={classes}>
-          {children}
+          <Content arrow={arrow}>{children}</Content>
         </a>
       );
     }
 
     return (
       <Link {...anchorProps} href={href} className={classes}>
-        {children}
+        <Content arrow={arrow}>{children}</Content>
       </Link>
     );
   }
 
-  const { variant, size, className, children, type = "button", ...buttonProps } = props;
+  const { variant, size, className, children, type = "button", arrow = true, ...buttonProps } = props;
   return (
-    <button {...buttonProps} type={type} className={classNames(variant, size, className)}>
-      {children}
+    <button {...buttonProps} type={type} className={classNames(variant, size, className, arrow)}>
+      <Content arrow={arrow}>{children}</Content>
     </button>
   );
 }

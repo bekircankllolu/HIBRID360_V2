@@ -36,8 +36,10 @@ export function CookieBanner() {
   if (decided) return null;
 
   return (
-    <div className={styles.banner} role="dialog" aria-label={t("label")}>
+    // LAB: siyah panel (data-ground) — sayfanın kağıt zemininden ayrışır.
+    <div className={styles.banner} role="dialog" aria-label={t("label")} data-ground="black">
       <div className={styles.inner}>
+        <p className={`lab-rail ${styles.title}`}>{t("label")}</p>
         <p className={styles.text}>
           {t("message")}{" "}
           <Link href="/cookie-policy" className={styles.link}>

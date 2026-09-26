@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import { PageIntro } from "@/components/lab/PageIntro";
+import { Scribble } from "@/components/lab/Scribble";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { TeamBand } from "@/components/work/TeamBand";
-import { WorkHeroFilm } from "@/components/work/WorkHeroFilm";
-import { WorkArchive } from "@/components/work/WorkArchive";
+import { WorkInventory } from "@/components/work/WorkInventory";
 import type { Locale } from "@/i18n/routing";
 import { getPublishedWorks } from "@/lib/content";
 import { breadcrumbListJsonLd } from "@/lib/schema";
@@ -19,9 +19,9 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "meta" });
   const works = await getPublishedWorks();
   return {
-  // Sayfa başlığı locale'e bağlı: TR sekmesinde/arama sonucunda İngilizce
-  // başlık çıkıyordu. Görünür sayfa terminolojisiyle aynı sözlükten
-  // (meta.title) okunuyor; alternates/canonical yapısı değişmedi.
+    // Sayfa başlığı locale'e bağlı: TR sekmesinde/arama sonucunda İngilizce
+    // başlık çıkıyordu. Görünür sayfa terminolojisiyle aynı sözlükten
+    // (meta.title) okunuyor; alternates/canonical yapısı değişmedi.
     title: t("title.work"),
     description:
       locale === "en"
@@ -32,6 +32,17 @@ export async function generateMetadata({
   };
 }
 
+/**
+ * LAB — monks.com "work inventory" düzeni, `paper` tabanlı tema sistemiyle.
+ *
+ *   PageIntro (paper)  sol etiket + konuşan başlık, el çizimi alt çizgi, serif son satır
+ *   WorkInventory      sayaç + Filtreler → öne çıkan 3 kart → Müşteri | Proje | Hizmetler
+ *   (sayfa sonu çağrısı layout'taki sarı CtaBand — burada ikinci bir kapanış yok)
+ *
+ * Başlık, brief 7.1'in showreel altı gövde metni. `WorkHeroFilm` ve
+ * `TeamBand` dosyaları duruyor (monks envanter sayfası tipografiyle
+ * açılıyor, üstte medya yok).
+ */
 export default async function WorkPage({
   params,
   searchParams,
@@ -42,11 +53,11 @@ export default async function WorkPage({
   const { locale } = await params;
   const { service } = await searchParams;
   const t = await getTranslations("work");
-  const tCommon = await getTranslations("common");
+  const tLab = await getTranslations("lab.works");
   const works = await getPublishedWorks();
 
   return (
-    <main className={styles.page}>
+    <div className={styles.page}>
       <JsonLd
         data={breadcrumbListJsonLd(locale, [
           { name: "Home", path: "" },
@@ -54,37 +65,28 @@ export default async function WorkPage({
         ])}
       />
 
-      <header className={styles.hero}>
-        {/* 20 Eylül 2026: etkileşimli nöron ağı kaldırıldı (kullanıcı:
-            "buradaki nöron görselini değiştirelim, buraya takım
-            çalışmasını anlatan özgün bir video koyabilirsin"). Sunulan üç
-            yönden GERÇEK SET seçildi. */}
-        <WorkHeroFilm locale={locale} disclosure={tCommon("aiRepresentative")} />
-        <div className={styles.heroCopy}>
-          <h1 className={styles.heroTitle}>THE ART OF TEAMWORK</h1>
-          <p className={styles.heroLead}>{t("showreelBody")}</p>
-        </div>
-      </header>
-
-      <h2 className={styles.archiveTitle}>{t("recentTitle")}</h2>
-      <WorkArchive
-        works={works}
-        locale={locale}
-        confidentialLabel={t("confidentialClient")}
-        initialService={service}
+      <PageIntro
+        rail={tLab("eyebrow")}
+        title={tLab.rich("title", {
+          mark: (chunks) => (
+            <span className={styles.mark}>
+              <Scribble shape="underline" tone="current" delay={250}>
+                {chunks}
+              </Scribble>
+            </span>
+          ),
+          serif: (chunks) => <span className={`lab-serif ${styles.serif}`}>{chunks}</span>,
+        })}
       />
 
-      {/* Arşiv ile kapanış çağrısı arasında bir nefes. Burası daha önce
-          marka ident'i taşıyordu (önce dönen parçacık küresi videosu,
-          sonra parçacıkların "HIBRID 360" yazdığı sahne); ikisi de
-          markadan söz ediyordu. Kullanıcı isteğiyle bant artık sayfanın
-          KONUSUNU gösteriyor: birlikte çalışan bir ekip. */}
-      <TeamBand locale={locale} disclosure={tCommon("aiRepresentative")} />
-
-      <div className={styles.outro}>
-        <p className={styles.seoHeading}>{t("tagline")}</p>
-        <p className={styles.closingLead}>{t("ctaLead")}</p>
+      <div data-ground="paper">
+        <WorkInventory
+          works={works}
+          locale={locale}
+          confidentialLabel={t("confidentialClient")}
+          initialService={service}
+        />
       </div>
-    </main>
+    </div>
   );
 }

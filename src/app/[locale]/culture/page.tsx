@@ -2,11 +2,18 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
-import { CultureIndex } from "@/components/culture/CultureIndex";
+import { ChapterCards } from "@/components/culture/ChapterCards";
+import { ValueCards } from "@/components/culture/ValueCards";
+import { sentenceCase } from "@/components/culture/lab-text";
+import { LitText } from "@/components/lab/LitText";
+import { PageIntro } from "@/components/lab/PageIntro";
+import { Scribble } from "@/components/lab/Scribble";
+import { Section } from "@/components/lab/Section";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { siteImages } from "@/data/site-images";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import type { Locale } from "@/i18n/routing";
+import shared from "@/styles/culture-page.module.css";
 import styles from "./page.module.css";
 
 // brief-rev12.md Bölüm 3.1 / nihai copy deck Bölüm 6 — CULTURE altı.
@@ -17,13 +24,13 @@ import styles from "./page.module.css";
 // ama rota **silinmedi**: Directors & Crew ve Sustainability'nin başka bir
 // üst sayfası yok, ikisi de buradan ve footer'dan erişiliyor.
 //
-// Sunum: numaralı kart ızgarası. Kart etiketleri `culture.hub`
-// sözlüğünden geliyor; her kart gittiği sayfanın kendi adını gösteriyor.
-// TR karşılığı onaylı olmayan bölüm adı İngilizce kaldı — bkz.
-// DECISIONS.md "TR çevirisi bekleyen metinler".
-//
+// LAB (monks.com "Careers / Culture" dili):
+//   PageIntro (pembe tema) → kademeli bölüm kartları (kağıt) → "What we
+//   stand for" siyah film bandı + kelime kelime yanan iddia (sayfanın tek
+//   büyük hareket anı) → değer kartları (kağıt, monks "Our Values").
 // Kartlara açıklama YAZILMADI — deck bu hub için tanım cümlesi vermedi ve
-// uydurma metin commit edilmiyor.
+// uydurma metin commit edilmiyor. Değer başlıkları büyük harften cümle
+// düzenine indi (metin aynı, yalnız yazım biçimi — lab kuralı).
 export async function generateMetadata({
   params,
 }: {
@@ -105,69 +112,71 @@ export default async function CulturePage({
 }) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "culture.hub" });
+  const tLab = await getTranslations({ locale, namespace: "lab.culture.hub" });
   const standFor = STAND_FOR_COPY[locale];
 
   return (
-    <div className={styles.page}>
+    <div className={shared.page}>
       <JsonLd
         data={breadcrumbListJsonLd(locale, [
           { name: "Home", path: "" },
           { name: "Culture", path: "/culture" },
         ])}
       />
-      <div className={styles.hub}>
-        <h1 className={styles.title}>CULTURE</h1>
-        <p className={styles.lead}>
-          {locale === "tr"
-            ? "Bizi tanımlayan fikirler, insanlar ve değerler."
-            : "The ideas, people and values that shape who we are."}
-        </p>
 
-        <CultureIndex
+      <PageIntro
+        ground="pink"
+        rail={tLab("rail")}
+        title={tLab.rich("title", {
+          mark: (chunks) => (
+            <Scribble shape="circle" tone="ink" delay={300}>
+              {chunks}
+            </Scribble>
+          ),
+          serif: (chunks) => <span className="lab-serif">{chunks}</span>,
+        })}
+      />
+
+      <Section wide ground="paper" rail={tLab("chapters")}>
+        <ChapterCards
+          eyebrow={tLab("rail")}
           items={SECTIONS.map((section) => ({
             href: section.href,
             title: t(section.key),
             image: section.image,
+            // "Think & Thank" iki dilde de marka adı.
+            lang: section.key === "thinkAndThank" && locale === "tr" ? "en" : undefined,
           }))}
         />
-      </div>
+      </Section>
 
-      <section className={styles.standFor} aria-labelledby="stand-for-title">
-        <div className={styles.standForIntro}>
-          <span className={styles.standForMarker} aria-hidden="true" />
-          <p className={styles.standForEyebrow} lang="en">Hibrid 360 / Culture</p>
-          <h2 id="stand-for-title" className={styles.standForTitle}>
-            WHAT WE
-            <br />
-            STAND FOR
-          </h2>
-          <p className={styles.standForLead}>
-            <strong>{standFor.lead[0]}</strong>
-            <span>{standFor.lead[1]}</span>
-          </p>
-        </div>
+      <Section ground="black" rail={tLab("stance")} labelledBy="stand-for-title">
+        <h2 id="stand-for-title" className={`lab-h2 ${styles.standForTitle}`} lang="en">
+          What we stand for
+        </h2>
+        <LitText as="p" className={`lab-display ${styles.standForClaim}`} text={standFor.lead[0]} />
+        <p className={styles.standForBody}>{standFor.lead[1]}</p>
+      </Section>
 
+      <div data-ground="black" className={styles.standForFrame}>
         <figure className={styles.standForImage}>
           <Image
             src={siteImages.culture.standFor.src}
             alt={siteImages.culture.standFor.alt[locale]}
             fill
-            sizes="100vw"
+            sizes="(max-width: 760px) 100vw, 92vw"
           />
         </figure>
+      </div>
 
-        <ol className={styles.values}>
-          {standFor.values.map((value, index) => (
-            <li key={value.title} className={styles.value}>
-              <span className={styles.valueNumber} aria-hidden="true">
-                {String(index + 1).padStart(2, "0")}
-              </span>
-              <h3 className={styles.valueTitle}>{value.title}</h3>
-              <p className={styles.valueBody}>{value.body}</p>
-            </li>
-          ))}
-        </ol>
-      </section>
+      <Section ground="paper" rail={tLab("values")}>
+        <ValueCards
+          items={standFor.values.map((value) => ({
+            title: sentenceCase(value.title, locale),
+            body: value.body,
+          }))}
+        />
+      </Section>
     </div>
   );
 }

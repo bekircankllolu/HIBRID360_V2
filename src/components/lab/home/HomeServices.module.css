@@ -1,0 +1,185 @@
+/* LAB — ana sayfa hizmet ızgarası (kademeli + arkada dev numara). */
+.section {
+  padding: var(--section-space) var(--page-gutter);
+}
+
+.head {
+  display: grid;
+  grid-template-columns: minmax(7rem, 1fr) minmax(0, 3fr);
+  column-gap: clamp(1.5rem, 3vw, 3rem);
+  margin-bottom: clamp(3rem, 6vw, 6rem);
+}
+
+.rail {
+  margin: 0.8rem 0 0;
+}
+
+.title {
+  margin: 0;
+  max-width: 24ch;
+}
+
+.grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: clamp(1rem, 2vw, 2rem);
+  row-gap: clamp(3rem, 5vw, 5rem);
+}
+
+/* Kademe: 2. ve 4. sütun aşağıda. */
+.cell:nth-child(even) {
+  margin-top: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+.card {
+  position: relative;
+  isolation: isolate;
+  padding-top: clamp(2.5rem, 4.4vw, 4rem);
+}
+
+/* Dev dolu numara: kartın sağ üst köşesinin ARKASINDA, alt yarısı görselin
+   altında kalır. Kağıtta beyaz — monks'taki gibi silik ama okunur. */
+.number {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: -1;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(4rem, 8vw, 8rem);
+  line-height: 0.8;
+  letter-spacing: -0.04em;
+  color: var(--color-brand-white);
+  transition: color 500ms var(--ease-lab);
+}
+
+.media {
+  position: relative;
+  aspect-ratio: 1 / 1.04;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.media img {
+  object-fit: cover;
+  filter: grayscale(0.35);
+  transform: scale(1.001);
+  transition:
+    transform 900ms var(--ease-lab),
+    filter 700ms var(--ease-lab);
+}
+
+.label {
+  margin: 1.25rem 0 0.4rem;
+}
+
+.name {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+/* Kartın tamamı tıklanır; erişilebilir ad yalnız hizmet adı. */
+.link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.link:focus-visible {
+  outline: none;
+}
+
+.card:has(.link:focus-visible) {
+  outline: 2px solid var(--ink);
+  outline-offset: 6px;
+}
+
+.arrow {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 2rem;
+  height: 2rem;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  transition:
+    background-color 360ms var(--ease-lab),
+    color 360ms var(--ease-lab);
+}
+
+.arrow svg {
+  width: 50%;
+  height: 50%;
+  transition: transform 420ms var(--ease-lab);
+}
+
+.body {
+  margin: 0.9rem 0 0;
+  max-width: 34ch;
+}
+
+.card:hover .media img,
+.card:has(.link:focus-visible) .media img {
+  transform: scale(1.045);
+  filter: grayscale(0);
+}
+
+.card:hover .arrow,
+.card:has(.link:focus-visible) .arrow {
+  background: var(--color-brand-fuchsia);
+  color: var(--color-text-on-fuchsia);
+}
+
+.card:hover .arrow svg {
+  transform: translateX(2px);
+}
+
+.card:hover .number {
+  color: var(--pink);
+}
+
+.more {
+  margin-top: clamp(3rem, 5vw, 4.5rem);
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .head {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .rail {
+    margin: 0 0 1.25rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cell:nth-child(even) {
+    margin-top: 0;
+  }
+
+  .media {
+    aspect-ratio: 4 / 3;
+  }
+
+  .more {
+    justify-content: flex-start;
+  }
+}

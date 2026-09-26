@@ -707,3 +707,73 @@
     display: none;
   }
 }
+
+/* ======================================================================
+ * LAB (26 Eylül 2026, kullanıcı: "ekosistem kalsın, başlığı yeni dile") —
+ * sola yaslı rail + iki sesli başlık. Harfleri açılmış büyük harf
+ * "E C O S Y S T E M" kalktı; sahneye dokunulmadı.
+ * ====================================================================== */
+.heading {
+  display: grid;
+  grid-template-columns: minmax(7rem, 1fr) minmax(0, 3fr);
+  column-gap: clamp(1.5rem, 3vw, 3rem);
+  align-items: start;
+  text-align: left;
+}
+
+.labRail {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  margin: 0.9rem 0 0;
+}
+
+.title {
+  grid-column: 2;
+  align-items: flex-start;
+  text-align: left;
+  gap: 0;
+  color: var(--ink);
+}
+
+.titleLead {
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: clamp(2.2rem, 4.4vw, 4.2rem);
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
+
+.titleWord {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.6rem, 5.6vw, 5.4rem);
+  letter-spacing: -0.03em;
+  margin-right: 0;
+  line-height: 1.02;
+  color: var(--accent);
+}
+
+.instruction {
+  grid-column: 2;
+  text-align: left;
+  max-width: 44ch;
+  font-size: 0.9375rem;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 760px) {
+  .heading {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .labRail,
+  .title,
+  .instruction {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .labRail {
+    margin: 0 0 1rem;
+  }
+}

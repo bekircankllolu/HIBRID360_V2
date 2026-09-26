@@ -71,8 +71,9 @@
 /* ---------- Varyantlar: yalnız renk rolleri ---------- */
 
 .primary {
-  --button-bg: var(--color-brand-yellow);
-  --button-fg: var(--color-text-on-yellow);
+  /* LAB: zemine duyarlı — data-ground temasının buton renkleri. */
+  --button-bg: var(--btn-bg, var(--color-brand-yellow));
+  --button-fg: var(--btn-fg, var(--color-text-on-yellow));
   --button-frame: transparent;
   /* Siyah zeminde beyaz ofset blok. */
   --button-offset: var(--color-brand-white);
@@ -84,8 +85,8 @@
    bileşen sınırı için gereken 3:1'in üstünde (WCAG 1.4.11). */
 .ghost {
   --button-bg: transparent;
-  --button-fg: var(--color-text-on-black);
-  --button-frame: var(--text-muted);
+  --button-fg: var(--ink, var(--color-text-on-black));
+  --button-frame: color-mix(in srgb, var(--ink, var(--color-brand-white)) 55%, transparent);
   --button-offset: var(--color-brand-white);
 }
 
@@ -184,5 +185,149 @@
     padding: 1rem 1.25rem;
     font-size: 0.9375rem;
     text-wrap: balance;
+  }
+}
+
+/* ======================================================================
+ * LAB (monks.com) — ayrık buton: etiket hapı + ayrı ok dairesi.
+ *
+ * monks'ta etiket ve ok iki ayrı yuvarlak parça; aralarında ince bir
+ * boşluk. Üzerine gelince ok soldan kayarak yenisiyle değişir. Markanın
+ * fuşya süpürmesi korunur, yalnız artık iki parçada birden ve siyah
+ * metinle (kontrast kuralı). Sert ofset blok ve yukarı zıplama kalkar —
+ * monks'un sakin hareketi.
+ * ====================================================================== */
+.split {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 3px;
+  padding: 0;
+  background: transparent;
+  overflow: visible;
+  border-radius: 0;
+  box-shadow: none;
+  font-family: var(--font-ui);
+  font-weight: var(--font-weight-body-medium);
+  letter-spacing: 0;
+  min-height: 0;
+}
+
+.split::before {
+  content: none;
+}
+
+.split .label,
+.split .arrow {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--button-bg);
+  color: var(--button-fg);
+  box-shadow: inset 0 0 0 1px var(--button-frame);
+  /* LAB: köşeli (kullanıcı: "monks'takinin birebir aynısı olmasın").
+     Etiket kutusu + ayrı kare ok kutusu — Hibrid'in eski CTA dili. */
+  border-radius: 0;
+  transition: color 420ms var(--ease-lab);
+}
+
+.split .label::before,
+.split .arrow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--color-brand-fuchsia);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 520ms var(--ease-lab);
+}
+
+.split .arrow::before {
+  transition-delay: 60ms;
+}
+
+.split.md .label {
+  min-height: 3.5rem;
+  padding: 0 1.75rem;
+}
+
+.split.md .arrow {
+  width: 3.5rem;
+  height: 3.5rem;
+  flex: none;
+}
+
+.split.sm .label {
+  min-height: 2.75rem;
+  padding: 0 1.125rem;
+}
+
+.split.sm .arrow {
+  width: 2.75rem;
+  height: 2.75rem;
+  flex: none;
+}
+
+.split .arrow svg {
+  position: absolute;
+  width: 42%;
+  height: 42%;
+  transition: transform 520ms var(--ease-lab);
+}
+
+.split .arrow svg:last-child {
+  transform: translateX(-160%);
+}
+
+.split:hover,
+.split:focus-visible,
+.split:active {
+  transform: none;
+  box-shadow: none;
+}
+
+.split:hover .label,
+.split:hover .arrow,
+.split:focus-visible .label,
+.split:focus-visible .arrow {
+  color: var(--color-text-on-fuchsia);
+}
+
+.split:hover .label::before,
+.split:hover .arrow::before,
+.split:focus-visible .label::before,
+.split:focus-visible .arrow::before {
+  transform: scaleX(1);
+}
+
+.split:hover .arrow svg:first-child,
+.split:focus-visible .arrow svg:first-child {
+  transform: translateX(160%);
+}
+
+.split:hover .arrow svg:last-child,
+.split:focus-visible .arrow svg:last-child {
+  transform: translateX(0);
+}
+
+.split:focus-visible {
+  outline-offset: 4px;
+}
+
+.split:disabled .label::before,
+.split:disabled .arrow::before {
+  transform: scaleX(0);
+}
+
+@media (max-width: 480px) {
+  .split.md {
+    padding: 0;
+  }
+
+  .split.md .label {
+    padding: 0 1.125rem;
   }
 }

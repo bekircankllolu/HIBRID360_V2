@@ -3,8 +3,10 @@ import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { BriefBuilder } from "@/components/brief/BriefBuilder";
+import { ScribbleArrow } from "@/components/lab/Scribble";
 import type { Locale } from "@/i18n/routing";
 import { localizedAlternates } from "@/lib/site";
+import styles from "./page.module.css";
 
 // brief-rev12.md Bölüm 18.8 — Brief Builder. URL: /tr/brief · /en/brief
 export async function generateMetadata({
@@ -32,20 +34,22 @@ export default async function BriefPage({
   const t = await getTranslations("brief");
 
   return (
-    <div>
+    // LAB: kağıt zemin (data-ground) — balonlar ve alanlar zemine duyarlı.
+    <div className={styles.page} data-ground="paper">
       <JsonLd
         data={breadcrumbListJsonLd(locale, [
           { name: "Home", path: "" },
           { name: "Brief Builder", path: "/brief" },
         ])}
       />
-      {/* Sayfanın görsel açılışı MONA'nın repliği (bkz. BriefBuilder) —
-          o büyük fuşya satırın üstüne ikinci bir görünür başlık koymak
-          tasarımı kalabalıklaştırır. h1 burada .srOnly: hem sayfanın
-          adım/özet/gönderim durumlarının hepsinde sabit kalır (BriefBuilder
-          kendi içinde birden çok koşullu döngü render ediyor), hem de
-          erişilebilirlik/SEO için gerekli tekil başlığı sağlar. */}
-      <h1 className="srOnly">{t("pageTitle")}</h1>
+      {/* LAB (monks.com): solda görünür sayfa başlığı, sağda sohbet. h1
+          BriefBuilder'ın dışında: adım/özet/gönderim durumlarının hepsinde
+          sabit kalır (tekil başlık, SEO + erişilebilirlik). Açılış metni
+          artık sohbetin ilk balonu, başlıkla yarışmıyor. */}
+      <header className={styles.intro}>
+        <h1 className={styles.title}>{t("pageTitle")}</h1>
+        <ScribbleArrow tone="current" className={styles.arrow} />
+      </header>
       <BriefBuilder locale={locale} />
     </div>
   );

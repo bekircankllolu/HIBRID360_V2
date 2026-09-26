@@ -1,0 +1,13 @@
+/* LAB — giriş hareketi. */
+.reveal[data-reveal="pre"] {
+  opacity: 0;
+  transform: translateY(2.25rem);
+}
+
+.reveal[data-reveal="in"] {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 900ms var(--ease-lab) var(--reveal-delay, 0ms),
+    transform 1100ms var(--ease-lab) var(--reveal-delay, 0ms);
+}

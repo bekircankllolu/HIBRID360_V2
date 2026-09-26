@@ -425,7 +425,11 @@ describe("MeetTheCrewReveal behaviour", () => {
 });
 
 describe("Who We Are CUL-06 section gate", () => {
-  it("renders the circular reveal in silent-loop mode — video, no captions, no playable CTA", async () => {
+  // LAB (26 Eylül 2026): kullanıcı kararıyla "Ekiple tanışın" TV kafalı
+  // kültür filmi Who We Are'dan kaldırıldı (yeni dile yabancı, gerçek ekibi
+  // değil AI temsili görseli gösteriyordu). Bileşen testleri yukarıda duruyor;
+  // burada sayfanın artık sahneyi çizmediği doğrulanır.
+  it("does not render the circular crew reveal on the Who We Are page", async () => {
     const { default: WhoWeArePage } = await import("@/app/[locale]/who-we-are/page");
 
     const page = await WhoWeArePage({
@@ -435,25 +439,10 @@ describe("Who We Are CUL-06 section gate", () => {
     const host = document.createElement("div");
     host.innerHTML = renderToStaticMarkup(<WithIntl locale="tr">{page}</WithIntl>);
 
-    // Reveal sayfada: bölüm artık boş durum değil.
-    const reveal = host.querySelector("[data-reveal]");
-    expect(reveal).not.toBeNull();
-    expect(reveal?.getAttribute("data-film")).toBe("loop");
-    // Sessiz döngü: video var ama sesi ve altyazısı yok, bekleme metni yok.
-    const video = host.querySelector("video");
-    expect(video).not.toBeNull();
-    expect(video?.hasAttribute("muted")).toBe(true);
-    expect(video?.hasAttribute("autoplay")).toBe(false);
-    expect(video?.getAttribute("preload")).toBe("none");
-    expect(host.querySelector("track")).toBeNull();
-    expect(host.textContent).not.toContain(trMessages.culture.whoWeAre.filmNote);
-    // CTA oktan arınmış pasif etikete düşer — başlatılacak sesli film yok.
-    expect(host.textContent).toContain(passiveCtaLabel(trMessages.culture.whoWeAre.filmCta));
-    // "AI ile üretilmiş temsili görseldir" etiketi görünür olmalı.
-    expect(host.textContent).toContain(trMessages.video.aiGenerated);
-    // Tek buton WCAG 2.2.2 duraklat/oynat — sesli film başlatan CTA değil.
-    const buttons = [...host.querySelectorAll("button")];
-    expect(buttons).toHaveLength(1);
-    expect(buttons[0].textContent).toBe(trMessages.video.pause);
+    expect(host.querySelector("[data-reveal][data-film]")).toBeNull();
+    // Filmin etiketi ("Ekiple tanışın") sayfada yok. Kurucu bölümündeki
+    // "AI ile üretilmiş" ibaresi ayrı bir öğe olduğu için burada aranmaz.
+    expect(host.textContent).not.toContain(passiveCtaLabel(trMessages.culture.whoWeAre.filmCta));
+    expect(host.querySelector("h1")).not.toBeNull();
   });
 });

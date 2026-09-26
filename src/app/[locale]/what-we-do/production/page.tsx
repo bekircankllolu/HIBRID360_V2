@@ -1,17 +1,13 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { EmptyState } from "@/components/EmptyState";
 import { SERVICE_OFFERINGS } from "@/data/service-offerings";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { ServiceChapter } from "@/components/service-chapter/ServiceChapter";
-import detailStyles from "@/components/service-chapter/ServiceChapter.module.css";
-import { ServiceSignatureVideo } from "@/components/service-chapter/ServiceSignatureVideo";
+import { ServiceChapter, signatureReel } from "@/components/service-chapter/ServiceChapter";
 import { hibridSolutions } from "@/data/hibrid-solutions";
 import { serviceSignatureVideos } from "@/data/service-signature-videos";
 import { siteImages } from "@/data/site-images";
 import type { Locale } from "@/i18n/routing";
 import { breadcrumbListJsonLd } from "@/lib/schema";
-import { nextChapter } from "@/lib/service-chapter";
 import { localizedAlternates } from "@/lib/site";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
@@ -25,17 +21,17 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   };
 }
 
+/** LAB: monks hizmet sayfası şablonu (ServiceChapter) — sarı sayfa başı. */
 export default async function ProductionPage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
+  const tr = locale === "tr";
   const t = await getTranslations("services.production");
-  const tEvidence = await getTranslations("services");
-  const tChapter = await getTranslations("services.chapter");
+  const tServices = await getTranslations("services");
   const tWhatWeDo = await getTranslations("whatWeDo");
   const body = t.raw("body") as string[];
-  const next = nextChapter("production");
   const list = tWhatWeDo.raw("list") as Array<{ title: string; body: string }>;
-  const nextBlurb = list.find((item) => item.title === next.name)?.body ?? "";
   const blurb = list.find((item) => item.title === "Production")?.body ?? "";
+  const photo = siteImages.services.production;
 
   return (
     <>
@@ -46,36 +42,25 @@ export default async function ProductionPage({ params }: { params: Promise<{ loc
       <ServiceChapter
         locale={locale}
         chapterId="production"
-        titleLines={["PRODUCTION"]}
-        lede="PURE. SIMPLE. POWERFUL."
-        body={body}
+        ground="yellow"
+        slogan="Pure. Simple. Powerful."
+        lede={blurb}
+        manifesto={body[0] ?? ""}
+        manifestoRail={tr ? "Kadrajın içinde" : "Inside the frame"}
+        body={body.slice(1)}
         services={SERVICE_OFFERINGS.production}
-        visual={{ src: siteImages.services.production.src, alt: siteImages.services.production.alt[locale] }}
-        shape="aperture"
-        blurb={blurb}
-        signature={
-          <ServiceSignatureVideo
-            src={serviceSignatureVideos.production}
-            title={locale === "tr" ? "KAMERA · LENS · ODAK" : "CAMERA · LENS · FOCUS"}
-          />
-        }
-        labels={{
-          hub: tWhatWeDo("heroTitle"), services: tChapter("servicesTitle"), next: tChapter("next"),
-          field: locale === "tr" ? "KADRAJIN İÇİNDE" : "INSIDE THE FRAME",
-        }}
-        nextBlurb={nextBlurb}
-      >
-        <section>
-          <h2>{locale === "tr" ? "TEK EKİP. TAM AKIŞ." : "ONE CREW. FULL FLOW."}</h2>
-          <ol className={detailStyles.detailList}>
-            {hibridSolutions.map((line) => <li key={line.en}>{locale === "tr" ? line.tr : line.en}</li>)}
-          </ol>
-        </section>
-        <section>
-          <h2>{tEvidence("evidenceTitle")}</h2>
-          <EmptyState message={t("evidenceEmpty")} compact />
-        </section>
-      </ServiceChapter>
+        reel={signatureReel(serviceSignatureVideos.production, tr ? "Kamera · lens · odak" : "Camera · lens · focus")}
+        photo={{ src: photo.src, alt: photo.alt[locale], focus: photo.focus }}
+        details={[
+          {
+            kind: "rows",
+            id: "crew",
+            title: tr ? "Tek ekip. Tam akış." : "One crew. Full flow.",
+            rows: hibridSolutions.map((line) => ({ body: tr ? line.tr : line.en })),
+          },
+          { kind: "pending", id: "evidence", title: tServices("evidenceTitle"), message: t("evidenceEmpty") },
+        ]}
+      />
     </>
   );
 }

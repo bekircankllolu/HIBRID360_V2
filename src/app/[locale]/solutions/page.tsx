@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
+import { PageIntro } from "@/components/lab/PageIntro";
+import { Reveal } from "@/components/lab/Reveal";
+import { Scribble } from "@/components/lab/Scribble";
 import type { Locale } from "@/i18n/routing";
 import { localizedAlternates } from "@/lib/site";
 import styles from "./page.module.css";
@@ -23,10 +26,12 @@ import styles from "./page.module.css";
  * olmaktan çıktı ama bir yetenek olarak eski sitede de burada
  * listeleniyordu (bkz. docs/DECISIONS.md #17).
  *
- * SUNUM: tam genişlik kapak + tipografik ızgara (bkz. page.module.css).
- * Maddeler bağlantı DEĞİL — her yeteneğin kendi sayfası yok ve olmayan
- * bir hedefe link uydurulmadı. Hover göstergesi bu yüzden yalnızca
- * dekoratif: çizgi ve ok, metin rengi sabit.
+ * LAB (monks): kağıt zeminde PageIntro (rail = eski kapağın "More And
+ * More" satırı, dev dar başlık + el çizimi alt çizgi, altında sayaç), ardından
+ * siyah zeminde büyük satır listesi (monks "karanlık üstünde hizmet
+ * listesi"). Maddeler bağlantı DEĞİL — her yeteneğin kendi sayfası yok ve
+ * olmayan bir hedefe link uydurulmadı; bu yüzden hover göstergesi yok.
+ * e2e sözleşmesi: `main li` = 15 (sayfada başka `li` yok).
  */
 
 export async function generateMetadata({
@@ -56,11 +61,12 @@ export default async function SolutionsPage({
 }) {
   const { locale } = await params;
   const t = await getTranslations("solutions");
+  const tLab = await getTranslations("lab.solutions");
   const items = t.raw("items") as string[];
 
   return (
     // <main> layout'ta zaten var (#main-content) — burada tekrarlanmaz.
-    <div className={styles.page}>
+    <>
       <JsonLd
         data={breadcrumbListJsonLd(locale, [
           { name: "Home", path: "" },
@@ -68,28 +74,32 @@ export default async function SolutionsPage({
         ])}
       />
 
-      <header className={styles.hero}>
-        {/* Eski sayfanın kendi üst başlığı; marka dili, iki dilde de aynı. */}
-        <p className={styles.kicker}>{t("heroKicker")}</p>
-        <h1 className={styles.title}>{t("heroTitle")}</h1>
-      </header>
+      <PageIntro
+        // Eski sayfanın kendi üst başlığı; marka dili, iki dilde de İngilizce.
+        rail={<span lang="en">{t("heroKicker")}</span>}
+        title={
+          <Scribble shape="underline" tone="fuchsia">
+            {t("heroTitle")}
+          </Scribble>
+        }
+        lede={tLab("count", { count: items.length })}
+      />
 
-      <section className={styles.list}>
-        <h2 className={styles.listTitle}>{t("listTitle")}</h2>
-        <ul className={styles.grid}>
+      <section className={styles.list} data-ground="black" aria-labelledby="solutions-list">
+        <h2 id="solutions-list" className={`lab-rail ${styles.listTitle}`}>
+          {t("listTitle")}
+        </h2>
+        <ul className={styles.rows}>
           {items.map((item, index) => (
-            <li key={item} className={styles.item}>
-              <span className={styles.index}>
+            <Reveal as="li" key={item} delay={Math.min(index, 6) * 50} className={styles.row}>
+              <span className={`lab-meta ${styles.index}`} aria-hidden="true">
                 {String(index + 1).padStart(2, "0")}
               </span>
               <span className={styles.label}>{item}</span>
-              <span className={styles.arrow} aria-hidden="true">
-                →
-              </span>
-            </li>
+            </Reveal>
           ))}
         </ul>
       </section>
-    </div>
+    </>
   );
 }

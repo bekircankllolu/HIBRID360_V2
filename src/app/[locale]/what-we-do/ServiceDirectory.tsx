@@ -1,13 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowUpRight } from "lucide-react";
-import {
-  type PointerEvent as ReactPointerEvent,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { ArrowRight } from "lucide-react";
+import { type CSSProperties, type ReactNode, useEffect, useRef, useState } from "react";
+import { ScribbleArrow } from "@/components/lab/Scribble";
 import { MonaShard } from "@/components/mona/MonaShard";
 import { Link } from "@/i18n/navigation";
 import styles from "./ServiceDirectory.module.css";
@@ -17,7 +13,6 @@ export interface ServiceDirectoryItem {
   name: string;
   href: string;
   description: string;
-  degree: string;
   image?: {
     src: string;
     alt: string;
@@ -25,154 +20,153 @@ export interface ServiceDirectoryItem {
   };
 }
 
+/**
+ * LAB (monks.com "Your trusted partner…" kart dili) — What We Do hizmet
+ * ızgarası.
+ *
+ * - Kağıt zemin (`data-ground="paper"` çağırandan); renkler anlamsal
+ *   değişkenlerden, AI kartının posteri kendi siyah zemininde.
+ * - Kart etiketi (derece "045°") kalktı: numara zaten kartın arkasında.
+ * - Sol etiket sütunu + el çizimi vurgulu başlık (başlık çağırandan gelir).
+ * - Kartlar kademeli: çift sıradaki kartlar aşağıda (CSS `nth-child(even)`;
+ *   4 ve 2 sütunda da çift sütuna denk gelir, ritim satırlar boyunca sürer).
+ * - Her kartın arkasında dev, DOLU numara (konturlu yazı yok); görsel
+ *   numaranın alt yarısını örter.
+ * - Bağlantı yalnız hizmet adında (ekran okuyucu kısa ad duyar), `::after`
+ *   ile bütün karta yayılır — kart her yerinden tıklanır.
+ * - Görünür alana girişte hafif yükselme; JS yoksa ya da hareket azaltmada
+ *   kartlar baştan görünür (gizleme yalnız `data-armed` varken).
+ * - AI Creative Production'ın fotoğrafı yok: tipografik poster; masaüstünde
+ *   kartın üzerinde kalınınca MONA (tek WebGL sahnesi kilidi MonaShard'da).
+ */
 export function ServiceDirectory({
   items,
-  label,
+  rail,
+  title,
+  titleId,
 }: {
   items: readonly ServiceDirectoryItem[];
-  label: string;
+  rail: string;
+  title: ReactNode;
+  titleId: string;
 }) {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const rowsRef = useRef<Array<HTMLLIElement | null>>([]);
-  const stageRef = useRef<HTMLElement>(null);
-  const pointerFrameRef = useRef<number | null>(null);
-  const active = items[activeIndex] ?? items[0];
+  const gridRef = useRef<HTMLOListElement>(null);
+  const [armed, setArmed] = useState(false);
+  const [aiHover, setAiHover] = useState(false);
   const [monaMounted, setMonaMounted] = useState(false);
 
-  // MONA (WebGL) yalnız AI satırı ÜZERİNDE KALINDIĞINDA kurulur. Listede
-  // hızlıca gezinirken satır bir an aktif olup geçiyor; gecikme olmasaydı
-  // her geçişte bir WebGL bağlamı kurulup yıkılırdı.
-  const aiActive = !active?.image;
+  // MONA yalnız AI kartı ÜZERİNDE KALINDIĞINDA kurulur: ızgarada gezinirken
+  // her geçişte bir WebGL bağlamı kurulup yıkılmasın.
   useEffect(() => {
-    if (!aiActive) {
+    if (!aiHover) {
       setMonaMounted(false);
       return;
     }
     const timer = window.setTimeout(() => setMonaMounted(true), 180);
     return () => window.clearTimeout(timer);
-  }, [aiActive]);
-
-  const setPointerOffset = (progress: number) => {
-    if (pointerFrameRef.current !== null) cancelAnimationFrame(pointerFrameRef.current);
-    pointerFrameRef.current = requestAnimationFrame(() => {
-      stageRef.current?.style.setProperty("--pointer-x", `${progress * 3.5}%`);
-      pointerFrameRef.current = null;
-    });
-  };
-
-  const handlePointerMove = (event: ReactPointerEvent<HTMLElement>) => {
-    if (event.pointerType === "touch") return;
-
-    const bounds = event.currentTarget.getBoundingClientRect();
-    const progress = ((event.clientX - bounds.left) / bounds.width - 0.5) * 2;
-    setPointerOffset(Math.max(-1, Math.min(1, progress)));
-  };
-
-  const resetPointer = () => setPointerOffset(0);
+  }, [aiHover]);
 
   useEffect(() => {
-    const rows = rowsRef.current.filter((row): row is HTMLLIElement => Boolean(row));
+    const grid = gridRef.current;
+    if (!grid) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const cards = Array.from(grid.querySelectorAll<HTMLElement>("[data-card]"));
     const observer = new IntersectionObserver(
       (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => {
-            const center = window.innerHeight / 2;
-            const aDistance = Math.abs(a.boundingClientRect.top + a.boundingClientRect.height / 2 - center);
-            const bDistance = Math.abs(b.boundingClientRect.top + b.boundingClientRect.height / 2 - center);
-            return aDistance - bDistance;
-          });
-        const index = Number(visible[0]?.target.getAttribute("data-index"));
-        if (Number.isInteger(index)) setActiveIndex(index);
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          entry.target.setAttribute("data-inview", "");
+          observer.unobserve(entry.target);
+        }
       },
-      { rootMargin: "-38% 0px -38%", threshold: 0.01 },
+      { rootMargin: "0px 0px -12% 0px" },
     );
-
-    rows.forEach((row) => observer.observe(row));
+    cards.forEach((card) => observer.observe(card));
+    setArmed(true);
     return () => observer.disconnect();
   }, [items.length]);
 
-  useEffect(
-    () => () => {
-      if (pointerFrameRef.current !== null) cancelAnimationFrame(pointerFrameRef.current);
-    },
-    [],
-  );
-
   return (
-    <section className={styles.directory} aria-label={label}>
-      <figure
-        ref={stageRef}
-        className={styles.stage}
-        data-active-service={active.id}
-        aria-hidden="true"
-        onPointerMove={handlePointerMove}
-        onPointerLeave={resetPointer}
-        onPointerCancel={resetPointer}
-      >
-        <div className={styles.visual} key={active.id}>
-          {active.image ? (
-            <div className={styles.panLayer}>
-              <Image
-                className={styles.stageImage}
-                src={active.image.src}
-                alt=""
-                fill
-                sizes="(min-width: 1440px) 52vw, (min-width: 900px) 56vw, 100vw"
-                quality={92}
-                priority={activeIndex === 0}
-                draggable={false}
-                style={{ objectPosition: active.image.focus }}
-              />
-            </div>
-          ) : (
-            /* Görseli olmayan tek satır AI Creative Production: orada fotoğraf
-               değil MONA'nın kendisi duruyor (18 Eylül 2026 kullanıcı isteği:
-               "AI Creative Production üzerine geldiğimizde orada MONA'yı
-               görelim, partiküllerden oluşsun ve fareye tepki versin").
-               Tipografik poster altta kalır: MONA kurulamadığında (dokunmatik,
-               dar ekran, WebGL yok) sahne boş kalmasın. */
-            <div className={styles.aiStage}>
-              <div className={styles.typePoster}>
-                <span>H360 / AI</span>
-                <strong lang="en">{active.name}</strong>
-              </div>
-              {monaMounted ? <MonaShard placement="center" /> : null}
-            </div>
-          )}
-        </div>
-        <div className={styles.stageMeta}>
-          <span>{active.degree}</span>
-          <span lang="en">{active.name}</span>
-        </div>
-      </figure>
+    <section className={styles.directory} aria-labelledby={titleId}>
+      <p className={`lab-rail ${styles.rail}`}>
+        {rail}
+        <ScribbleArrow className={styles.railArrow} />
+      </p>
+      <h2 id={titleId} className={`lab-h2 ${styles.title}`}>
+        {title}
+      </h2>
 
-      <ol className={styles.list}>
-        {items.map((item, index) => (
-          <li
-            key={item.id}
-            ref={(row) => {
-              rowsRef.current[index] = row;
-            }}
-            className={styles.row}
-            data-index={index}
-            data-active={index === activeIndex}
-          >
-            <Link
-              href={item.href}
-              className={styles.link}
-              onPointerEnter={() => setActiveIndex(index)}
-              onFocus={() => setActiveIndex(index)}
+      <ol ref={gridRef} className={styles.grid} data-armed={armed ? "" : undefined}>
+        {items.map((item, index) => {
+          // LAB: AI kartı artık kimliğinden tanınır (fotoğrafı var: AI
+          // showreel karesi); hover'da MONA fotoğrafın üstünde belirir.
+          const isAi = item.id === "aiCreativeProduction";
+          const aiHandlers = isAi
+            ? {
+                onPointerEnter: () => setAiHover(true),
+                onPointerLeave: () => setAiHover(false),
+                onFocus: () => setAiHover(true),
+                onBlur: () => setAiHover(false),
+              }
+            : {};
+
+          return (
+            <li
+              key={item.id}
+              className={styles.card}
+              data-card=""
+              data-service={item.id}
+              style={{ "--col": index % 4, "--col2": index % 2 } as CSSProperties}
+              {...aiHandlers}
             >
-              <span className={styles.number}>{String(index + 1).padStart(2, "0")}</span>
-              <span className={styles.copy}>
-                <strong className={styles.name} lang="en">{item.name}</strong>
-                <span className={styles.description}>{item.description}</span>
-              </span>
-              <ArrowUpRight className={styles.arrow} aria-hidden="true" />
-            </Link>
-          </li>
-        ))}
+              {/* Dekoratif numara CSS `content: attr()` ile çizilir: metin
+                  düğümü yok, kontrast denetimine takılmaz, okunmaz. */}
+              <span
+                className={styles.number}
+                aria-hidden="true"
+                data-number={String(index + 1).padStart(2, "0")}
+              />
+
+              <div className={styles.media}>
+                {item.image ? (
+                  <Image
+                    className={styles.image}
+                    src={item.image.src}
+                    alt={item.image.alt}
+                    fill
+                    sizes="(min-width: 1100px) 23vw, (min-width: 700px) 46vw, 100vw"
+                    quality={85}
+                    draggable={false}
+                    style={{ objectPosition: item.image.focus }}
+                  />
+                ) : (
+                  <div className={styles.aiStage} data-ground="black">
+                    <div className={styles.typePoster} aria-hidden="true">
+                      <span>H360 / AI</span>
+                      <strong lang="en">{item.name}</strong>
+                    </div>
+                  </div>
+                )}
+                {isAi ? (
+                  <div className={styles.aiOverlay} data-active={aiHover ? "" : undefined} aria-hidden="true">
+                    {monaMounted ? <MonaShard placement="center" /> : null}
+                  </div>
+                ) : null}
+              </div>
+
+              <h3 className={styles.name}>
+                <Link href={item.href} className={styles.link} lang="en">
+                  <span>{item.name}</span>
+                  <span className={styles.arrow} aria-hidden="true">
+                    <ArrowRight />
+                  </span>
+                </Link>
+              </h3>
+              <p className={styles.description}>{item.description}</p>
+            </li>
+          );
+        })}
       </ol>
     </section>
   );

@@ -40,8 +40,13 @@ export function TestimonialList({
                 zorunlu. Video varlıkları geldiğinde quote'un üstüne poster +
                 preload="none" ile eklenecek. */}
             <blockquote className={styles.quote}>&ldquo;{quote}&rdquo;</blockquote>
+            {/* LAB: brief 18.7 sırası korunur (ad · unvan · marka); ad
+                ayrı satırda ve koyu, unvan+marka soluk meta. */}
             <figcaption className={styles.attribution}>
-              {item.person_name} · {item.person_title} · {item.brand_name}
+              <span className={styles.person}>{item.person_name}</span>
+              <span>
+                {item.person_title} · {item.brand_name}
+              </span>
             </figcaption>
           </figure>
         );

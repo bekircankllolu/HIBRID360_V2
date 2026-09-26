@@ -1,30 +1,39 @@
+/*
+ * LAB: zemine duyarlı (data-ground). Kutu zeminin `--surface` tonu, çerçeve
+ * `--line`, üst kenar vurgu rengi — siyahta sarı, kağıtta fuşya, pembede
+ * siyah. Tema dışı bağlamda eski koyu görünüm (ikinci değerler).
+ */
 .emptyState {
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-top: 2px solid var(--color-brand-yellow);
+  border: 1px solid var(--line, rgba(255, 255, 255, 0.16));
+  border-top: 2px solid var(--accent, var(--color-brand-yellow));
   padding: var(--space-12) var(--space-6);
   text-align: center;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--surface, rgba(255, 255, 255, 0.03));
+  color: var(--ink, inherit);
 }
 
 .emptyStateLabel {
   display: inline-block;
   margin-bottom: var(--space-3);
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
+  font-family: var(--font-ui);
+  font-weight: 500;
   /* 0.6875rem (11px) idi — yardımcı/disclosure metni olsa bile mobilde
      okunabilirlik sınırının altındaydı. 0.8125rem (13px) gövde
      metninden hâlâ belirgin biçimde küçük, yani kompakt hiyerarşi
      korunuyor. */
   font-size: 0.8125rem;
-  letter-spacing: 0.16em;
+  letter-spacing: 0;
   text-transform: uppercase;
-  color: var(--empty-state-label-color, var(--color-brand-yellow));
+  /* Kağıtta sarı etiket okunmaz: zeminin soluk metni. Çağıran yine
+     --empty-state-label-color ile ezebilir. */
+  color: var(--empty-state-label-color, var(--ink-soft, var(--color-brand-yellow)));
 }
 
 .emptyStateMessage {
   margin: 0;
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
+  font-family: var(--font-ui);
+  font-weight: 500;
+  letter-spacing: -0.01em;
   font-size: var(--font-size-subheading);
 }
 
@@ -32,7 +41,8 @@
   max-width: 42rem;
   margin: var(--space-3) auto 0;
   font-size: 0.875rem;
-  opacity: 0.72;
+  color: var(--ink-soft, inherit);
+  opacity: var(--empty-state-detail-opacity, 1);
 }
 
 /* Kompakt varyant: veri beklenen bölüm sayfanın ana içeriği değilse

@@ -41,20 +41,22 @@
   padding-bottom: var(--space-4);
   /* Meta satırı → başlık boşluğu = bu + `.hero` gap'i. */
   margin-bottom: var(--section-space-tight);
-  border-bottom: 1px solid var(--color-hairline);
+  /* LAB: zemine duyarlı ince çizgi (data-ground). */
+  border-bottom: 1px solid var(--line, var(--color-hairline));
 }
 
 /* Meta yazısı soluk: fuşya yalnız araç (numara, çizgi, odak), metin değil. */
 .crumbs,
 .aside {
   margin: 0;
-  font-family: var(--font-brand);
-  font-size: var(--font-size-label);
-  font-weight: var(--font-weight-heading-bold);
-  line-height: 1.2;
-  letter-spacing: var(--tracking-micro);
+  /* LAB (monks rail): dar yüz 500, cümle düzeni, zeminin soluk metni. */
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--ink-soft, var(--text-muted));
 }
 
 .crumbs {
@@ -70,7 +72,9 @@
 
 .crumbLink:hover,
 .crumbLink:focus-visible {
-  color: var(--color-brand-yellow);
+  color: var(--ink, var(--color-brand-yellow));
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
 }
 
 /*
@@ -81,11 +85,12 @@
 .lede {
   max-width: 22.5em;
   margin: 0;
-  font-family: var(--font-brand);
+  /* LAB: gövde yüzü, zeminin ana metni (siyah zeminde beyaz, kağıtta siyah). */
+  font-family: var(--font-ui);
   font-size: var(--font-size-lead);
-  font-weight: var(--font-weight-heading-semibold);
+  font-weight: 500;
   line-height: 1.35;
-  color: var(--color-brand-white);
+  color: var(--ink, var(--color-brand-white));
 }
 
 /* Lede'yi başlığa bağlayan kısa fuşya çizgi (araç rengi, metin değil). */
@@ -95,5 +100,6 @@
   width: 3rem;
   height: 2px;
   margin-bottom: var(--space-4);
-  background: var(--color-brand-fuchsia);
+  /* LAB: zeminin vurgu rengi (kağıtta fuşya, siyahta sarı, pembede siyah). */
+  background: var(--accent, var(--color-brand-fuchsia));
 }

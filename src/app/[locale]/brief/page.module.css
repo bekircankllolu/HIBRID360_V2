@@ -1,0 +1,60 @@
+/**
+ * Brief Builder sayfası — LAB (monks.com "Let's unlock what's possible
+ * together."): kağıt zemin, solda dev başlık, sağda sohbet sütunu.
+ *
+ * Mobil önce tek sütun; 960px'ten itibaren iki sütun ve başlık yapışkan
+ * (sohbet uzadıkça solda kalır).
+ */
+.page {
+  display: grid;
+  gap: var(--space-10);
+  max-width: 90rem;
+  margin: 0 auto;
+  padding: var(--space-24) var(--page-gutter) var(--section-space);
+}
+
+.intro {
+  position: relative;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-heading-bold);
+  font-size: clamp(2.75rem, 1.6rem + 5vw, 6.5rem);
+  line-height: var(--leading-display, 1.02);
+  letter-spacing: var(--tracking-display, -0.02em);
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+/* El çizimi ok yalnız iki sütunda: başlıktan sohbete işaret eder.
+   `.intro .arrow`: Scribble.module.css'teki .arrowMark ölçülerini ezer
+   (aynı özgüllükte CSS yükleme sırasına kalırdı). */
+.intro .arrow {
+  display: none;
+}
+
+@media (min-width: 960px) {
+  .page {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    column-gap: clamp(2rem, 5vw, 6rem);
+    align-items: start;
+    padding-top: clamp(8rem, 12vw, 11rem);
+  }
+
+  .intro {
+    position: sticky;
+    top: var(--space-24);
+  }
+
+  .intro .arrow {
+    display: block;
+    width: 6rem;
+    height: 4.5rem;
+    margin: var(--space-8) 12% 0 auto;
+    /* Zeminin vurgusu: kağıtta fuşya. */
+    color: var(--accent);
+    transform: rotate(-12deg);
+  }
+}

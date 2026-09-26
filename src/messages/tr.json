@@ -62,17 +62,17 @@
         "Markanızın içine girmeyi seviyoruz:\nrakamların ve bilançonun ötesine geçip,\nmarkanızı yeniden konumlandırırken\nmağaza deneyiminizi de yeniden düşünüp\nyeniden kuruyoruz."
       ]
     },
-    "makeBrand": "MAKE YOUR BRAND “THE” BRAND",
+    "makeBrand": "Make your brand <mark>“the”</mark> brand",
     "tagline": "Türkiye’nin AI-native kreatif prodüksiyon stüdyosu",
     "reachOut": {
-      "title": "Sizin için ne yapabiliriz?",
+      "title": "<mark>Sizin</mark> için ne yapabiliriz?",
       "body": "Hibrid 360’ta işin son rötuşunu, o parlak bitişi ciddiye alıyoruz. Tam da bu yüzden her iş için ayrı bir prodüksiyon modeli, size özel bir çözüm kuruyoruz.",
       "cta": "Bize ulaşın",
       "popupIntro": "Merhaba. Neyi, ne zaman yapmak istediğinizi yazın. Gerisini biz hallederiz.",
       "close": "Kapat"
     },
     "closing": {
-      "title": "EN İYİ İŞ, İŞ GİBİ HİSSETTİRMEZ",
+      "title": "En iyi iş, iş gibi hissettirmez",
       "subtitle": "Neyle meşgulüz, görmek ister misiniz?"
     },
     "slogansLabel": "Sloganlar",
@@ -120,7 +120,7 @@
     }
   },
   "whatWeDo": {
-    "heroTitle": "NE YAPIYORUZ",
+    "heroTitle": "Ne yapıyoruz",
     "heroBody": "Tek fikir, uçtan uca üretim: strateji, film, fotoğraf, canlı yayın, dijital ve AI. Tek çatı, tek ekip.",
     "list": [
       {
@@ -158,11 +158,11 @@
     ]
   },
   "contact": {
-    "heroTitle": "İLETİŞİME GEÇELİM VE BİRLİKTE HARİKA BİR ŞEY BAŞLATALIM",
+    "heroTitle": "İletişime geçelim ve birlikte harika bir şey başlatalım",
     "heroLead1": "Sizden haber almak isteriz.",
     "heroLead2": "Merhaba deyin",
     "heroBody": "Bağlantı kurmayı seviyoruz. Kısa bir merhaba, derin bir yaratıcı iş birliği ya da sosyal medyada bir takip; hepsi olur. Merhaba deyin, ürettiklerimizi takipte kalın!",
-    "motionTitle": "MOTION OFFICE’E HOŞ GELDİNİZ",
+    "motionTitle": "Motion Office’e hoş geldiniz",
     "motionBody": [
       "İstanbul merkezli bir ajansız ve nerede olursak olalım ofisteyiz. Ekibimiz uluslararası ve resmiyetten uzak.",
       "Dünyanın en büyük ofisine sahibiz diyebilirsiniz: duvarsız ve sınırsız. Bu bize Hibrid 360’ın bütün avantajlarını veriyor. Hizmetimiz yüzeyin ötesine geçiyor. Markanızın özünü anlatmak için sanatı, tasarımı, teknolojiyi ve etkileşimli, proaktif hikâye anlatımını kullanıyoruz."
@@ -203,7 +203,7 @@
       "sustainability": "Sürdürülebilirlik"
     },
     "whoWeAre": {
-      "heroTitle": "BİZ KİMİZ",
+      "heroTitle": "Biz kimiz",
       "quote1": "“Geleceğin görsel deneyimlerini üretiyoruz.”",
       "quote2": "“Sadece içerik üretmiyoruz; markaların gelecekte nasıl iletişim kuracağını tasarlıyoruz.”",
       "heroLead": "Dünyanın her yerinde markalar ve kültürel değer üretmeye ve dönüştürmeye odaklıyız.",
@@ -215,7 +215,7 @@
         "Uzun yol için yoldayız ve aynı bakışa sahip yol arkadaşları arıyoruz."
       ],
       "founderQuote": "“Yapay zekâdan önce aylar süren işi şimdi saniyelerde yapıyoruz. Kazandığımız zamanı fikre geri koyuyoruz.”",
-      "secondTitle": "NE YAPIYORSAK OYUZ!",
+      "secondTitle": "Ne yapıyorsak oyuz!",
       "secondBody": [
         "Hayalinizdeki projeyi bize getirdiğinizde, ona yüreğimizi koymamızı beklersiniz. Hibrid 360’ta tam olarak bunu yapıyoruz.",
         "Projenizin içine giriyor, beyin fırtınası yapıyor ve size hem estetik hem işlevsel olarak doğru konsepti çıkarıyoruz.",
@@ -227,27 +227,27 @@
     },
     "whatWeBelieve": {
       "vision": {
-        "title": "VİZYONUMUZ",
+        "title": "Vizyonumuz",
         "items": [
-          "YENİLİKÇİ ÜRETİM",
-          "AKTİF İŞ BİRLİĞİ",
-          "İHTİYACINIZ OLAN ARAÇLARI SUNMAK",
-          "EN İYİ HİZMETİ TESLİM ETMEK",
-          "ÇÖZÜM, ÇÖZÜM, ÇÖZÜM"
+          "Yenilikçi üretim",
+          "Aktif iş birliği",
+          "İhtiyacınız olan araçları sunmak",
+          "En iyi hizmeti teslim etmek",
+          "Çözüm, çözüm, çözüm"
         ]
       },
       "mission": {
-        "title": "MİSYONUMUZ",
+        "title": "Misyonumuz",
         "items": [
-          "DOĞRU EKİP — DENEYİMLİ EKİP",
-          "DOĞRU ZAMANLAMA — GÜVENİLİR ZAMANLAMA",
-          "DOĞRU KALİTE — ÖDÜN VERMEYEN KALİTE",
-          "DOĞRU FİYAT — REKABETÇİ FİYAT",
-          "DOĞRU ÇÖZÜM — HER ZAMAN DOĞRU ÇÖZÜM"
+          "Doğru ekip — deneyimli ekip",
+          "Doğru zamanlama — güvenilir zamanlama",
+          "Doğru kalite — ödün vermeyen kalite",
+          "Doğru fiyat — rekabetçi fiyat",
+          "Doğru çözüm — her zaman doğru çözüm"
         ]
       },
       "inspires": {
-        "title": "BİZE İLHAM VERENLER",
+        "title": "Bize ilham verenler",
         "items": [
           "Proaktif çözümleri ve ileri teknolojiyi benimsemek,",
           "Yaptığımız her işte görünen genç bir bakış,",
@@ -255,7 +255,7 @@
         ]
       },
       "edict": {
-        "title": "İLKELERİMİZ",
+        "title": "İlkelerimiz",
         "items": [
           "“Kalıpların dışında düşünmek” tabiri bizi anlatmak için icat edilmiş. Çözümünüzü ilmek ilmek örüyoruz; sonuç size tam oturuyor.",
           "Az çoktur. Nokta. Markanız sade ve net olmalı.",
@@ -272,7 +272,7 @@
     "partners": {
       "quote": "“Önce kendine yaratıcı bir deha ünü kazandır. Sonra kendinden daha iyi ortaklarla çevrele. Üçüncüsü, işi onlara bırak.”",
       "quoteAuthor": "— David Ogilvy",
-      "partnerName": "STUDIO FOOD ROOM",
+      "partnerName": "Studio Food Room",
       "partnerBody": "Grup bünyesinde bağımsız bir mutfak ve çekim stüdyosu.",
       "partnerUrl": "studiofoodroom.com"
     }
@@ -320,19 +320,19 @@
       "closingBody": "Tek seferlik içerikten sürekli çalışan içerik sistemlerine kadar; dijital üretimi bugünün izleyicisinin hızına, ölçeğine ve alışkanlığına göre kuruyoruz.",
       "quad": [
         {
-          "title": "INNOVATION",
+          "title": "Innovation",
           "body": "İhtiyaçlarınıza daha iyi çözümler üretmek için yalınlığı sürekli arıyoruz."
         },
         {
-          "title": "CAPABILITY",
+          "title": "Capability",
           "body": "Kapsamlı dijital uzmanlığımızı işinizi derinlemesine anlamakla birleştiriyoruz."
         },
         {
-          "title": "VISIONARY",
+          "title": "Visionary",
           "body": "Hem sizin hem müşterilerinizin istek ve ihtiyaçlarına odaklanıyoruz."
         },
         {
-          "title": "ENGAGING",
+          "title": "Engaging",
           "body": "Mükemmellik arayışıyla beslenen dijital ve teknolojik yenilik tutkusu."
         }
       ]
@@ -377,7 +377,7 @@
     }
   },
   "directors": {
-    "heroTitle": "KADRAJIN ARKASINDAKİLER.",
+    "heroTitle": "Kadrajın arkasındakiler.",
     "heroSubtitle": "Filmleri şirketler çekmez, insanlar çeker. İşte bizim ekibimiz.",
     "empty": "Kadro hazırlanıyor.",
     "reel": "Reel",
@@ -390,7 +390,7 @@
     }
   },
   "solutions": {
-    "heroTitle": "ÇÖZÜMLER",
+    "heroTitle": "Çözümler",
     "heroKicker": "More And More",
     "listTitle": "Neler üretiyoruz",
     "items": [
@@ -412,7 +412,7 @@
     ]
   },
   "clients": {
-    "heroTitle": "THANK YOU",
+    "heroTitle": "Thank you",
     "heroSupport": "2004’ten beri bize inanan ve bizi destekleyen herkese gönülden teşekkür ederiz.",
     "heroBody": "Birlikte çalıştığımız markalarla dürüst, uzun soluklu ve cesur iş birlikleri kuruyoruz. Global ikonlar. Ortak yaratıcı enerji.",
     "friendsBody": "Birlikte çalıştığımız insanları seviyoruz. Ajansımızda onlara müşteri değil, dost diyoruz: en yakın çalışma arkadaşları arasında kurulabilecek kadar dürüst ve sadık bir kimya.",
@@ -539,7 +539,7 @@
     }
   },
   "notFound": {
-    "title": "BU SAYFA FREKANS DIŞINDA.",
+    "title": "Bu sayfa frekans dışında.",
     "body": "Aradığınız sayfa burada değil. Ama işler burada.",
     "cta": "WORK sayfasına git"
   },
@@ -616,6 +616,172 @@
       "whoWeAre": "Biz Kimiz",
       "whatWeBelieve": "Neye İnanıyoruz",
       "whatWeDo": "Ne Yapıyoruz"
+    }
+  },
+  "lab": {
+    "hibridZero": {
+      "meet": "tanışın",
+      "caption": "İstanbul merkezli, 20+ yıllık deneyim, uçtan uca tek ekip."
+    },
+    "whatWeDo": {
+      "rail": "Hizmet alanları",
+      "title": "Tek çatı altında <mark>sekiz</mark> hizmet alanı, tek ekip.",
+      "introTitle": "Tek fikir, <mark>uçtan uca</mark> <serif>üretim.</serif>",
+      "introLede": "Strateji, film, fotoğraf, canlı yayın, dijital ve AI. Tek çatı, tek ekip.",
+      "pathsTitle": "Birlikte çalışmanın yolları",
+      "paths": {
+        "serviceProduction": "Mekân, izin, ekip, ekipman ve post prodüksiyon; tek muhatap ve tek sözleşmeyle Türkiye’de servis prodüksiyonu.",
+        "howWeWork": "Bir projenin Hibrid 360’ta nasıl ilerlediği, bütçe yapısı ve üretim takvimi.",
+        "solutions": "Marka danışmanlığı, reklam, basılı işler, ambalaj, açık hava, web, dijital, TVC, etkinlik, canlı yayın, çekim, post prodüksiyon ve Cloud TV.",
+        "brief": "Altı soru, yaklaşık iki dakika. Özeti hem size hem bize göndereceğiz."
+      }
+    },
+    "brief": {
+      "greeting": "Merhaba 👋",
+      "chatLabel": "Brief sohbeti",
+      "yourAnswer": "Yanıtınız",
+      "avatar": "Hibrid 360"
+    },
+    "insights": {
+      "featuredHeading": "Öne çıkanlar",
+      "listHeading": "Tüm yazılar",
+      "readNow": "Oku",
+      "readTime": "<b>{minutes} dk</b> okuma",
+      "pageTitle": "Think & Thank",
+      "share": "Paylaş",
+      "shareEmail": "E-posta",
+      "related": "Diğer yazılar",
+      "filmRail": "İzle",
+      "objectRail": "Nesne çalışması"
+    },
+    "works": {
+      "eyebrow": "İşlerimiz",
+      "title": "Hem <mark>kalpleri</mark> hem rakamları hareket ettiren <serif>bütünleşik marka deneyimleri.</serif>",
+      "showing": "<n>{count}</n> iş gösteriliyor",
+      "filters": "Filtreler",
+      "activeFilters": "{count, plural, =0 {etkin filtre yok} other {# etkin filtre}}",
+      "clearFilters": "Filtreleri temizle",
+      "popular": "Öne çıkan işler",
+      "indexTitle": "Tüm işler",
+      "colClient": "Müşteri",
+      "colProject": "Proje",
+      "colSolutions": "Hizmetler",
+      "moreSolutions": "{count} hizmet daha",
+      "loadMore": "Daha fazla göster",
+      "noMatch": "Bu filtrelerle eşleşen iş yok.",
+      "nextCase": "Sıradaki vaka",
+      "director": "Yönetmen",
+      "caseRail": "Vaka",
+      "mediaRail": "Film",
+      "watch": "Filmi izle",
+      "allWork": "Tüm işlere dön"
+    },
+    "home": {
+      "promiseRail": "Sözümüz",
+      "servicesTitle": "Tek fikir, uçtan uca üretim. <mark>Tek çatı</mark>, tek ekip.",
+      "serviceLabel": "Hizmet",
+      "allServices": "Tüm hizmetler",
+      "thinkingRail": "Think & Thank",
+      "thinkingTitle": "Aklımızdakiler",
+      "readNow": "Oku",
+      "readTime": "<b>{minutes} dk</b> okuma",
+      "allPosts": "Tüm yazılar",
+      "claimRail": "Hibrid 360"
+    },
+    "contact": {
+      "channelsRail": "Doğrudan ulaşın",
+      "officeRail": "Ofis",
+      "city": "İstanbul",
+      "localTime": "Yerel saat",
+      "motionRail": "Motion Office",
+      "formRail": "Bize yazın",
+      "formPrompt": "Aşağıdaki birkaç alanı doldurun, ekibimiz size dönsün."
+    },
+    "legal": {
+      "toc": "Bu sayfada"
+    },
+    "notFound": {
+      "rail": "Hata 404",
+      "home": "Ana sayfaya dön"
+    },
+    "cta": {
+      "rail": "Sonraki adım"
+    },
+    "solutions": {
+      "count": "{count} yetenek, tek ekip"
+    },
+    "aiCreative": {
+      "monaRail": "MONA ile tanışın",
+      "manifestoRail": "Manifesto",
+      "diffRail": "Fark",
+      "proofRail": "Yaklaşım",
+      "flowTitle": "İş akışı",
+      "statementRail": "Bakış",
+      "transcriptRail": "Metin"
+    },
+    "serviceProduction": {
+      "offerRail": "Neler sağlıyoruz",
+      "baseRail": "Merkez",
+      "localTime": "Yerel saat",
+      "address": "Adres",
+      "closingRail": "Teklif"
+    },
+    "howWeWork": {
+      "stepLabel": "Adım",
+      "closingRail": "Başlayalım",
+      "closingTitle": "Her proje bir <mark>briefle</mark> başlar."
+    },
+    "services": {
+      "brief": "Brief oluştur",
+      "allServices": "Tüm hizmetler",
+      "watch": "İzle",
+      "pause": "Duraklat",
+      "manifestoRail": "Yaklaşımımız",
+      "capabilitiesTitle": "Bu alanda neler yapıyoruz",
+      "next": "Sıradaki hizmet"
+    },
+    "culture": {
+      "hub": {
+        "rail": "Kültür",
+        "title": "Bizi tanımlayan <serif>fikirler, <mark>insanlar</mark> ve değerler.</serif>",
+        "chapters": "Bölümler",
+        "stance": "Duruşumuz",
+        "values": "Değerlerimiz"
+      },
+      "who": {
+        "story": "Hikâyemiz",
+        "crew": "Ekip",
+        "promise": "Sözümüz",
+        "founder": "Kurucu"
+      },
+      "believe": {
+        "rail": "Neye inanıyoruz",
+        "values": "Değerler"
+      },
+      "partners": {
+        "rail": "İş ortakları",
+        "list": "Ortaklarımız",
+        "visit": "Siteyi ziyaret et",
+        "onPartnership": "Ortaklık üzerine"
+      },
+      "friends": {
+        "brands": "{count} marka",
+        "seeWork": "İşleri gör"
+      },
+      "directors": {
+        "rail": "Yönetmenler ve ekip",
+        "crew": "Kadro",
+        "back": "Tüm ekip",
+        "bio": "Biyografi",
+        "city": "Şehir",
+        "languages": "Diller",
+        "relation": "Çalışma biçimi"
+      },
+      "sustainability": {
+        "sections": "Bölümler",
+        "pending": "Veri bekleniyor",
+        "complete": "Tamamlandı"
+      }
     }
   }
 }

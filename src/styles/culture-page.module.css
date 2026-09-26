@@ -1,185 +1,147 @@
-/**
- * Culture alt sayfaları (Who We Are / What We Believe / Partners) için
- * paylaşılan stil — service-page.module.css ile aynı desen, alıntı ve
- * kurucu bloğu gibi Culture'a özgü sınıflar eklendi.
+/*
+ * LAB (monks.com dili) — Culture ailesinin ortak sayfa parçaları.
+ * Kullananlar: culture (hub), who-we-are, what-we-believe, partners,
+ * clients, culture/directors, culture/sustainability.
+ *
+ * Renkler yalnız `data-ground` anlamsal değişkenlerinden (--ink, --ink-soft,
+ * --line, --surface, --accent); hex yok. Zemini bölüm bildirir.
  */
-/* Alt dolgu üstten kısa: sayfanın ardından her zaman CtaBand geliyor ve
-   kendi üst dolgusunu taşıyor; iki dolgu üst üste ~310px boşluk açıyordu. */
+
+/* Sayfa kabı: zemin kağıt, bölümler kendi zeminini bildirir. */
 .page {
-  width: 100%;
-  padding: clamp(5rem, 10vw, 10rem) var(--page-gutter) clamp(2.5rem, 5vw, 5rem);
+  background: var(--paper);
+  color: var(--ink);
 }
 
-.heroTitle {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-brand);
-  max-width: 14ch;
-  /* Taban ölçü sorunu: clamp'in vw terimi küçük ekranlarda tabanın altında
-     kaldığı için ölçüyü TABAN belirliyordu. 64px'te tek parça uzun kelimeler
-     ("MANAGEMENT", "PRODUCTION", "PARTNERS") 320-390px içerik genişliğine
-     sığmıyor ve gövdeye yatay kaydırma ekliyordu. Taban 2rem'e indirildi:
-     artık 320px'ten itibaren ÖLÇÜYÜ vw TERİMİ belirliyor (11vw = 320px'te
-     35px, 390px'te 43px) ve kelimeler anlamsız yerden bölünmeden sığıyor.
-     11vw ve 12rem'e DOKUNULMADI — masaüstündeki dev tipografi birebir aynı.
-     Nöbetçi: e2e/canonical-routes.spec.ts "Yatay taşma". */
-  font-size: clamp(2rem, 11vw, 12rem);
-  line-height: 0.85;
-  margin: 0 0 var(--space-8);
-}
-
-.heroQuotes {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  max-width: 40rem;
-  margin-bottom: var(--space-6);
-}
-
-/* Editoryal serif — sahte oblik kaldırıldı (aşağıdaki .quote notu). */
-.heroQuote {
+/* Sayfa başındaki konuşan başlığın serif devamı. */
+.serif {
   font-family: var(--font-editorial);
   font-weight: 400;
-  font-style: normal;
-  font-size: clamp(1.375rem, 2.6vw, 2rem);
-  line-height: 1.2;
-  letter-spacing: var(--tracking-heading);
-  margin: 0;
+  letter-spacing: -0.01em;
 }
 
-.heroLead {
-  max-width: var(--measure-prose);
-  margin: 0;
-}
-
-.body {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-  max-width: var(--measure-prose);
-  font-size: var(--font-size-body);
-  line-height: var(--line-height-body);
-  margin-top: var(--space-8);
-}
-
-.body p {
-  margin: 0;
-}
-
-.bodyTight {
-  margin-top: 0;
-}
-
-.section {
-  margin-top: var(--space-16);
+/* Bölüm başlığı + giriş sütunu (lab-h2 altında kısa metin). */
+.sectionHead {
+  display: grid;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  max-width: 62rem;
+  margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
 }
 
 .sectionTitle {
-  /* Etiket rolü: Inter. Archivo display ve başlık sesi — 14px büyük
-     harfte fazla geniş ve ağır duruyor, içeriğin önüne geçiyor. */
-  font-family: var(--font-ui);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: var(--font-size-label);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--color-brand-yellow);
-  margin-bottom: var(--space-6);
-}
-
-.blockTitle {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-  font-size: clamp(1.25rem, 3vw, 2rem);
-  margin: 0 0 var(--space-4);
-}
-
-/* Numaralı/etiketli liste blokları (WWB-02..05) */
-.list {
-  list-style: none;
   margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
 }
 
-.listTag {
-  /* Etiket rolü: Inter. Archivo display ve başlık sesi — 14px büyük
-     harfte fazla geniş ve ağır duruyor, içeriğin önüne geçiyor. */
-  font-family: var(--font-ui);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: var(--font-size-label);
-  letter-spacing: 0;
+.sectionLead {
+  margin: 0;
+  max-width: 56ch;
+  font-family: var(--font-body);
+  font-size: var(--font-size-body-lg);
+  line-height: 1.5;
+  color: var(--ink-soft);
 }
 
-.listSentence {
-  max-width: var(--measure-prose);
-  font-size: var(--font-size-body);
-  line-height: var(--line-height-body);
-}
-
-/**
- * Partners (PAR-02). What We Believe alıntı bandı kendi modülünde.
- *
- * Alıntı sesi = editoryal serif (17 Eylül 2026). İki sebep:
- *
- * 1) DÜZELTME: burada `font-style: italic` vardı ama ne Montserrat'ın ne
- *    Archivo'nun gerçek italiği var — tarayıcı harfleri eğerek SAHTE oblik
- *    üretiyordu. Kalın bir grotesk'i yatırmak tipografik olarak kötü;
- *    kavisler bozuluyor, espas dağılıyor.
- * 2) TASARIM: alıntı sayfanın durup okunan yeri. Yüksek kontrastlı bir
- *    serif bunu BİÇİMLE söyler — eğime ya da tırnağa ihtiyacı olmaz.
- *    monks.com'un aynı rolde Morian kullanması bu yüzden.
- *
- * Punto sans'tan bir kademe büyük: serif aynı px'te daha küçük görünür
- * (Newsreader Georgia'ya göre %91.5 ortalama genişlik), eşit ağırlıkta
- * durması için büyümesi gerekiyor.
- */
-.quote {
+/* Editoryal serif ifade (alıntı ya da iddia) — büyük, hafif. */
+.statement {
+  margin: 0;
+  max-width: 30ch;
   font-family: var(--font-editorial);
   font-weight: 400;
-  font-style: normal;
-  font-size: clamp(1.5rem, 3vw, 2.25rem);
-  line-height: 1.2;
-  letter-spacing: var(--tracking-heading);
-  max-width: 24ch;
-  margin: 0 0 var(--space-4);
+  font-size: clamp(1.9rem, 3.6vw, 3.4rem);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
 }
 
-/* Yazar adı bilinçle küçük ve sans: alıntının serif sesiyle karışmasın,
-   imza gibi dursun. */
-.quoteAuthor {
+.attribution {
+  margin: clamp(1.25rem, 2vw, 1.75rem) 0 0;
   font-family: var(--font-ui);
-  font-size: var(--font-size-label);
-  letter-spacing: var(--tracking-ui);
-  text-transform: uppercase;
-  opacity: 0.7;
+  font-weight: 500;
+  font-size: 0.9375rem;
+  color: var(--ink-soft);
 }
 
-/* Partners */
-.partnerItem {
-  scroll-margin-top: calc(var(--header-height) + var(--space-6));
-  margin-top: var(--space-16);
-  padding: var(--space-6) 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+/* Çok paragraflı gövde: geniş ekranda iki sütun. */
+.prose {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem clamp(1.5rem, 3vw, 3rem);
+  max-width: 64rem;
 }
 
-.partnerName {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-  font-size: clamp(1.5rem, 4vw, 3.5rem);
-  margin: 0 0 var(--space-2);
+.prose p {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  line-height: 1.5;
+  color: var(--ink-soft);
 }
 
-.partnerBody {
-  margin: 0 0 var(--space-2);
+/* İlk paragraf "giriş" sesi: bir boy büyük, ana metin renginde. */
+.prose p:first-child {
+  grid-column: 1 / -1;
+  max-width: 44ch;
+  font-size: var(--font-size-body-lg);
+  color: var(--ink);
 }
 
-.partnerLink {
-  font-size: var(--font-size-label);
-  color: var(--color-brand-fuchsia);
+/* Tam genişlik görsel bandı (monks desen 6): büyük kenar boşluklu çerçeve. */
+.band {
+  margin: 0;
 }
 
-.partnerLink:hover {
-  text-decoration: underline;
+.bandMedia {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.bandMedia img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.bandCaption {
+  display: grid;
+  grid-template-columns: minmax(7rem, 1fr) minmax(0, 3fr);
+  column-gap: clamp(1.5rem, 3vw, 3rem);
+  padding-top: clamp(1.75rem, 3vw, 2.75rem);
+}
+
+.bandCaption > * {
+  grid-column: 2;
+}
+
+.bandMeta {
+  grid-column: 1;
+  grid-row: 1;
+  margin: 0.4rem 0 0;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  color: var(--ink-soft);
+}
+
+.stack {
+  display: grid;
+  gap: clamp(4rem, 9vw, 8rem);
+}
+
+@media (max-width: 760px) {
+  .prose {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bandCaption {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 1rem;
+  }
+
+  .bandCaption > *,
+  .bandMeta {
+    grid-column: 1;
+    grid-row: auto;
+  }
 }

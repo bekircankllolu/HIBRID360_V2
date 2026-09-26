@@ -62,17 +62,17 @@
         "We love diving deep into your brand, past the figures and bottom lines, to rethink and reshape your in-store experience while rebranding “your brand”."
       ]
     },
-    "makeBrand": "MAKE YOUR BRAND “THE” BRAND",
+    "makeBrand": "Make your brand <mark>“the”</mark> brand",
     "tagline": "Türkiye’s AI-native Creative Production Studio",
     "reachOut": {
-      "title": "What can we do for you?",
+      "title": "What can we do for <mark>you</mark>?",
       "body": "Here at Hibrid 360, we are serious about the final touch for that gleaming finish of your product. That’s exactly why we create a distinct production model, a tailor-made solution that fits your needs.",
       "cta": "Reach out",
       "popupIntro": "Hi. Tell us what you’re making and when. We’ll take it from there.",
       "close": "Close"
     },
     "closing": {
-      "title": "THE BEST WORK DOESN’T FEEL LIKE WORK",
+      "title": "The best work doesn’t feel like work",
       "subtitle": "Wanna Know What Keeps Us Busy?"
     },
     "slogansLabel": "Slogans",
@@ -120,7 +120,7 @@
     }
   },
   "whatWeDo": {
-    "heroTitle": "WHAT WE DO",
+    "heroTitle": "What we do",
     "heroBody": "One idea, produced end to end: strategy, film, photography, live broadcast, digital and AI. One roof, one crew.",
     "list": [
       {
@@ -158,11 +158,11 @@
     ]
   },
   "contact": {
-    "heroTitle": "GET IN TOUCH AND LET’S START SOMETHING GREAT TOGETHER",
+    "heroTitle": "Get in touch and let’s start something great together",
     "heroLead1": "We would love to hear from you.",
     "heroLead2": "Say HI",
     "heroBody": "We’re all about connection, whether it’s a quick hello, a deep creative collaboration or a follow on social media. Say hi and keep up with what we’re creating!",
-    "motionTitle": "WELCOME TO THE “MOTION OFFICE”",
+    "motionTitle": "Welcome to the “Motion Office”",
     "motionBody": [
       "We are an Istanbul-based agency, and we are in the office wherever we are. Our team is international and informal.",
       "You could say we have the biggest office in the world, with no walls and no limitations. This gives us all the benefits and advantages of Hibrid 360. Our services go beyond the surface. We use art, design, technology and interactive, proactive storytelling to communicate the essence of your brand."
@@ -203,7 +203,7 @@
       "sustainability": "Sustainability"
     },
     "whoWeAre": {
-      "heroTitle": "WHO WE ARE",
+      "heroTitle": "Who we are",
       "quote1": "“We are creating the visual experiences of the future.”",
       "quote2": "“We don’t just create content, we design how brands will communicate in the future.”",
       "heroLead": "We’re focused on creating and transforming brands and cultural value around the world.",
@@ -215,7 +215,7 @@
         "We are on the road for the long haul, looking for like-minded companions."
       ],
       "founderQuote": "“Before AI, this work took months. Now it takes seconds. The time we save goes back into ideas.”",
-      "secondTitle": "WE ARE WHAT WE DO!",
+      "secondTitle": "We are what we do!",
       "secondBody": [
         "When you bring us your dream project, you expect us to put our hearts and souls into it. At Hibrid 360, that’s exactly what we do.",
         "We immerse ourselves in your project, brainstorm, and come up with the right concept for you, aesthetically and functionally.",
@@ -227,27 +227,27 @@
     },
     "whatWeBelieve": {
       "vision": {
-        "title": "OUR VISION",
+        "title": "Our vision",
         "items": [
-          "INNOVATIVE CREATION",
-          "ACTIVE COLLABORATION",
-          "PROVIDING YOU WITH THE TOOLS YOU NEED",
-          "DELIVERING THE BEST SERVICES",
-          "SOLUTION, SOLUTION, SOLUTION"
+          "Innovative creation",
+          "Active collaboration",
+          "Providing you with the tools you need",
+          "Delivering the best services",
+          "Solution, solution, solution"
         ]
       },
       "mission": {
-        "title": "OUR MISSION",
+        "title": "Our mission",
         "items": [
-          "RIGHT TEAM — EXPERIENCED TEAM",
-          "RIGHT TIMING — RELIABLE TIMING",
-          "RIGHT QUALITY — UNCOMPROMISING QUALITY",
-          "RIGHT PRICE — COMPETITIVE PRICE",
-          "RIGHT SOLUTIONS — ALWAYS THE RIGHT SOLUTIONS"
+          "Right team — experienced team",
+          "Right timing — reliable timing",
+          "Right quality — uncompromising quality",
+          "Right price — competitive price",
+          "Right solutions — always the right solutions"
         ]
       },
       "inspires": {
-        "title": "WHAT INSPIRES US",
+        "title": "What inspires us",
         "items": [
           "Adapting and embracing proactive solutions and high-tech methods,",
           "A youthful perspective that is evident in everything we do,",
@@ -255,7 +255,7 @@
         ]
       },
       "edict": {
-        "title": "OUR EDICT",
+        "title": "Our edict",
         "items": [
           "The term “thinking outside the box” was coined to describe us. We knit your solution detail by detail, and the end result fits you perfectly.",
           "Less is more. Period. Your brand should be uncomplicated and concise.",
@@ -272,7 +272,7 @@
     "partners": {
       "quote": "“First, make yourself a reputation for being a creative genius. Second, surround yourself with partners who are better than you are. Third, leave them to go get on with it.”",
       "quoteAuthor": "— David Ogilvy",
-      "partnerName": "STUDIO FOOD ROOM",
+      "partnerName": "Studio Food Room",
       "partnerBody": "An independent kitchen and photo studio within the group.",
       "partnerUrl": "studiofoodroom.com"
     }
@@ -320,19 +320,19 @@
       "closingBody": "From one-off content to always-on content systems, we build digital production around the speed, scale and behaviour of modern audiences.",
       "quad": [
         {
-          "title": "INNOVATION",
+          "title": "Innovation",
           "body": "In continuous search of simplicity for a better solution for your needs."
         },
         {
-          "title": "CAPABILITY",
+          "title": "Capability",
           "body": "Combining extensive digital expertise with an understanding of your business."
         },
         {
-          "title": "VISIONARY",
+          "title": "Visionary",
           "body": "Dedication to your wants and needs, and also to your customers’ wants and needs."
         },
         {
-          "title": "ENGAGING",
+          "title": "Engaging",
           "body": "Passion for digital and technical innovation driven by a search for excellence."
         }
       ]
@@ -377,7 +377,7 @@
     }
   },
   "directors": {
-    "heroTitle": "THE PEOPLE BEHIND THE FRAME.",
+    "heroTitle": "The people behind the frame.",
     "heroSubtitle": "Films are not made by companies. They are made by people. Meet ours.",
     "empty": "The crew list is on the way.",
     "reel": "Reel",
@@ -390,7 +390,7 @@
     }
   },
   "solutions": {
-    "heroTitle": "SOLUTIONS",
+    "heroTitle": "Solutions",
     "heroKicker": "More and More",
     "listTitle": "What we deliver",
     "items": [
@@ -412,7 +412,7 @@
     ]
   },
   "clients": {
-    "heroTitle": "THANK YOU",
+    "heroTitle": "Thank you",
     "heroSupport": "We extend heartfelt thanks to everyone who has believed in and supported us since 2004.",
     "heroBody": "We build honest, long-term and ambitious partnerships with the brands we work with. Global icons. Shared creative energy.",
     "friendsBody": "We love the people we work with. At our agency we call them our friends, not clients — the kind of honest, loyal chemistry you only get with your closest collaborators.",
@@ -425,7 +425,7 @@
     "ctaLead": "Want to see what we made together?",
     "testimonialsTitle": "What they say",
     "testimonialsEmpty": "Client testimonials are on the way.",
-    "friendsCountLabel": "FRIENDS"
+    "friendsCountLabel": "Friends"
   },
   "serviceProduction": {
     "localeNote": "",
@@ -539,7 +539,7 @@
     }
   },
   "notFound": {
-    "title": "THIS PAGE IS OFF FREQUENCY.",
+    "title": "This page is off frequency.",
     "body": "The page you’re looking for isn’t here. The work, however, is.",
     "cta": "Go to WORK"
   },
@@ -616,6 +616,172 @@
       "whoWeAre": "Who We Are",
       "whatWeBelieve": "What We Believe",
       "whatWeDo": "What We Do"
+    }
+  },
+  "lab": {
+    "hibridZero": {
+      "meet": "meet",
+      "caption": "Istanbul-based, 20+ years, one crew end to end."
+    },
+    "whatWeDo": {
+      "rail": "Service disciplines",
+      "title": "<mark>Eight</mark> service disciplines under one roof, one crew.",
+      "introTitle": "One idea, <serif>produced</serif> <mark>end to end.</mark>",
+      "introLede": "Strategy, film, photography, live broadcast, digital and AI. One roof, one crew.",
+      "pathsTitle": "Ways to work with us",
+      "paths": {
+        "serviceProduction": "Locations, permits, crew, gear and post — one contact, one contract, one country.",
+        "howWeWork": "How a project runs here, what it costs, and how long it takes.",
+        "solutions": "Brand consultancy, advertising, print, packaging, outdoor, web, digital, TVC, events, live broadcast, shooting, post-production and Cloud TV.",
+        "brief": "Six questions, about two minutes. You’ll get the summary in your inbox, and so will we."
+      }
+    },
+    "brief": {
+      "greeting": "Hey 👋",
+      "chatLabel": "Brief conversation",
+      "yourAnswer": "Your answer",
+      "avatar": "Hibrid 360"
+    },
+    "insights": {
+      "featuredHeading": "Featured",
+      "listHeading": "All articles",
+      "readNow": "Read now",
+      "readTime": "<b>{minutes} min</b> read",
+      "pageTitle": "Think & Thank",
+      "share": "Share",
+      "shareEmail": "Email",
+      "related": "More articles",
+      "filmRail": "Watch",
+      "objectRail": "Object study"
+    },
+    "works": {
+      "eyebrow": "Our work",
+      "title": "Integrated brand experiences that <mark>move</mark> hearts — <serif>and the needle.</serif>",
+      "showing": "Showing <n>{count}</n> {count, plural, one {case} other {cases}}",
+      "filters": "Filters",
+      "activeFilters": "{count, plural, =0 {no active filters} one {# active filter} other {# active filters}}",
+      "clearFilters": "Clear filters",
+      "popular": "Popular cases",
+      "indexTitle": "All work",
+      "colClient": "Client",
+      "colProject": "Project",
+      "colSolutions": "Solutions",
+      "moreSolutions": "{count, plural, one {# more solution} other {# more solutions}}",
+      "loadMore": "Load more",
+      "noMatch": "No work matches these filters.",
+      "nextCase": "Next case",
+      "director": "Director",
+      "caseRail": "Case study",
+      "mediaRail": "Film",
+      "watch": "Watch the film",
+      "allWork": "Back to all work"
+    },
+    "home": {
+      "promiseRail": "Our promise",
+      "servicesTitle": "One idea, produced end to end. <mark>One roof</mark>, one crew.",
+      "serviceLabel": "Service",
+      "allServices": "All services",
+      "thinkingRail": "Think & Thank",
+      "thinkingTitle": "On our minds",
+      "readNow": "Read",
+      "readTime": "<b>{minutes} min</b> read",
+      "allPosts": "All articles",
+      "claimRail": "Hibrid 360"
+    },
+    "contact": {
+      "channelsRail": "Reach us directly",
+      "officeRail": "Office",
+      "city": "Istanbul",
+      "localTime": "Local time",
+      "motionRail": "Motion Office",
+      "formRail": "Write to us",
+      "formPrompt": "Fill in the few fields below and our team will get back to you."
+    },
+    "legal": {
+      "toc": "On this page"
+    },
+    "notFound": {
+      "rail": "Error 404",
+      "home": "Back to home"
+    },
+    "cta": {
+      "rail": "Next step"
+    },
+    "solutions": {
+      "count": "{count} capabilities, one team"
+    },
+    "aiCreative": {
+      "monaRail": "Meet MONA",
+      "manifestoRail": "Manifesto",
+      "diffRail": "The difference",
+      "proofRail": "Approach",
+      "flowTitle": "The workflow",
+      "statementRail": "Outlook",
+      "transcriptRail": "Transcript"
+    },
+    "serviceProduction": {
+      "offerRail": "What we provide",
+      "baseRail": "Home base",
+      "localTime": "Local time",
+      "address": "Address",
+      "closingRail": "Quote"
+    },
+    "howWeWork": {
+      "stepLabel": "Step",
+      "closingRail": "Let’s start",
+      "closingTitle": "Every project starts with a <mark>brief.</mark>"
+    },
+    "services": {
+      "brief": "Start a brief",
+      "allServices": "All services",
+      "watch": "Watch",
+      "pause": "Pause",
+      "manifestoRail": "Our approach",
+      "capabilitiesTitle": "What we do in this field",
+      "next": "Next service"
+    },
+    "culture": {
+      "hub": {
+        "rail": "Culture",
+        "title": "The ideas, <mark>people</mark> and values <serif>that shape who we are.</serif>",
+        "chapters": "Chapters",
+        "stance": "Our stance",
+        "values": "Our values"
+      },
+      "who": {
+        "story": "Our story",
+        "crew": "The crew",
+        "promise": "Our promise",
+        "founder": "Founder"
+      },
+      "believe": {
+        "rail": "What we believe",
+        "values": "Values"
+      },
+      "partners": {
+        "rail": "Partners",
+        "list": "Our partners",
+        "visit": "Visit website",
+        "onPartnership": "On partnership"
+      },
+      "friends": {
+        "brands": "{count} brands",
+        "seeWork": "See the work"
+      },
+      "directors": {
+        "rail": "Directors & crew",
+        "crew": "The crew",
+        "back": "All crew",
+        "bio": "Biography",
+        "city": "City",
+        "languages": "Languages",
+        "relation": "Working with us"
+      },
+      "sustainability": {
+        "sections": "Sections",
+        "pending": "Awaiting data",
+        "complete": "Complete"
+      }
     }
   }
 }

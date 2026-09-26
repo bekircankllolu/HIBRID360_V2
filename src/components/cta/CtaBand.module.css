@@ -1,39 +1,69 @@
-/* İçerik dikeyde ORTADA: eskiden `min-height` yüksekliği içerik üstte
-   kalınca bandın altında ~280px boş şerit bırakıyordu (17 Eylül 2026
-   boşluk taraması, mobilde her sayfada). */
+/*
+ * CtaBand — LAB (monks sayfa sonu çağrısı). Sarı zemin `data-ground`'dan
+ * gelir (metin SİYAH — kontrast kuralı); bu dosya yalnız yerleşim.
+ * Izgara lab Section'ıyla aynı: sol rail ~%25, içerik ~%75.
+ */
 .band {
-  width: 100%;
-  min-height: 36svh;
-  padding: clamp(3.5rem, 7vw, 7rem) var(--page-gutter);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-6);
-  text-align: center;
+  display: grid;
+  grid-template-columns: minmax(7rem, 1fr) minmax(0, 3fr);
+  column-gap: clamp(1.5rem, 3vw, 3rem);
+  padding: clamp(4.5rem, 9vw, 9rem) var(--page-gutter);
 }
 
-/* Dar ekranda yüksekliği içerik belirler. */
+.rail {
+  margin: 0.9rem 0 0;
+}
+
+.body {
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  max-width: 18ch;
+}
+
+/* Başlık bağlantısı: dinlenmede düz metin; üzerine gelince el çizimi
+   çizgi zaten altta, ek olarak ince alt çizgi yok — yalnız hafif kayma. */
+.titleLink {
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 320ms var(--ease-lab);
+}
+
+.titleLink:hover {
+  opacity: 0.78;
+}
+
+.titleLink:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 6px;
+}
+
+/* El çizimi: sarıda --accent fuşya. */
+.title :global(svg) {
+  color: var(--accent);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: clamp(2rem, 3.5vw, 3rem);
+}
+
 @media (max-width: 760px) {
   .band {
-    min-height: 0;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .rail {
+    margin: 0 0 1.25rem;
   }
 }
 
-.secondary {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--space-3) var(--space-6);
-}
-
-.secondaryLink {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: 0.875rem;
-  border-bottom: 1px solid transparent;
-}
-
-.secondaryLink:hover {
-  border-bottom-color: currentColor;
+@media (prefers-reduced-motion: reduce) {
+  .titleLink {
+    transition: none;
+  }
 }

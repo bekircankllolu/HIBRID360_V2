@@ -15,10 +15,11 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "cf:build": "opennextjs-cloudflare build",
-    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-    "lhci": "lhci autorun"
+    "cf:build": "echo \"HIBRID360-lab: cf:build yasak (yalniz yerel deneme)\" && exit 1",
+    "preview": "echo \"HIBRID360-lab: preview yasak (yalniz yerel deneme)\" && exit 1",
+    "deploy": "echo \"HIBRID360-lab: deploy yasak (yalniz yerel deneme)\" && exit 1",
+    "lhci": "lhci autorun",
+    "lab": "next dev -p 3400"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.3",

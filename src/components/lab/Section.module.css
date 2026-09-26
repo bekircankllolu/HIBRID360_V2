@@ -1,0 +1,45 @@
+/* LAB — rail + içerik ızgarası. */
+.section {
+  display: grid;
+  grid-template-columns: minmax(7rem, 1fr) minmax(0, 3fr);
+  column-gap: clamp(1.5rem, 3vw, 3rem);
+  padding: var(--section-space) var(--page-gutter);
+}
+
+.tight {
+  padding-block: var(--section-space-tight);
+}
+
+.rail {
+  grid-column: 1;
+  margin: 0.35rem 0 0;
+}
+
+.content {
+  grid-column: 2;
+  min-width: 0;
+}
+
+.wide .rail {
+  grid-column: 1 / -1;
+  margin: 0 0 clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.wide .content {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 760px) {
+  .section {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .rail,
+  .content {
+    grid-column: 1;
+  }
+
+  .rail {
+    margin: 0 0 1.25rem;
+  }
+}

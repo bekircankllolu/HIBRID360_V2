@@ -105,6 +105,15 @@ export const siteImages = {
    * benzemiyor ve hiçbirinde yazı/logo/filigran yok.
    */
   services: {
+    // LAB: AI showreel karesi (22.7 sn), 24:25 kırpım — AI ile üretilmiş.
+    aiCreativeProduction: {
+      src: "/images/site/services/ai-creative-production-still.webp",
+      alt: {
+        tr: "AI ile üretilmiş portre: siyah zeminde altın yaka takısı takan bir kadın kameraya bakıyor",
+        en: "AI-generated portrait: a woman wearing a gold collar looks into the camera against a black background",
+      },
+      focus: "50% 30%",
+    },
     creative: {
       src: "/images/site/services/creative-photo-v4.webp",
       alt: {

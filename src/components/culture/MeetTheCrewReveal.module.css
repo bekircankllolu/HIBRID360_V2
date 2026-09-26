@@ -14,10 +14,9 @@
 .wrapper {
   height: 240svh;
   position: relative;
-  /* BeliefFounderVideo ile aynı gerekçe: culture sayfasının page-gutter'ı
-     içinde render edilir, negatif margin gutter'ı geri alıp sahnenin
-     gerçek viewport genişliğinde durmasını sağlar. */
-  margin-inline: calc(-1 * var(--page-gutter));
+  /* LAB: sahne artık kenar boşluksuz tam genişlik bir bölümün içinde
+     (who-we-are `.film`); eski sayfanın gutter'ını geri alan negatif
+     margin kaldırıldı — yoksa sayfa yatayda 2×gutter taşıyordu. */
 }
 
 .stage {

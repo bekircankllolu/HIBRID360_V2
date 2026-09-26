@@ -1,0 +1,167 @@
+/* LAB — "Hibrid 36●" sahnesi. Bkz. HibridZero.tsx zaman çizelgesi. */
+
+.section {
+  position: relative;
+  background: var(--color-brand-black);
+}
+
+.wrapper {
+  --p: var(--progress, 0);
+  /* Açılış 0-0.25, kapanış 0.8-1.0 (CSS'te türetilir, JS yalnız --progress yazar). */
+  --grow: clamp(0, calc(var(--p) / 0.25), 1);
+  --leave: clamp(0, calc((var(--p) - 0.8) / 0.2), 1);
+  /* Başlangıçta küçük bir fuşya nokta görünür (monks'taki gibi) — sahne
+     boş bir siyah ekranla açılmasın. */
+  --open: calc(max(var(--grow), 0.07) * (1 - var(--leave)));
+  position: relative;
+  height: 320vh;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+}
+
+.disc {
+  position: absolute;
+  inset: 0;
+  background: var(--color-brand-fuchsia-light);
+  color: var(--color-text-on-fuchsia);
+  --heading-color: var(--color-text-on-fuchsia);
+  /* 75vmax yarıçap: köşeler dahil tüm ekranı örter. */
+  clip-path: circle(calc(var(--open) * 75vmax) at 50% 50%);
+}
+
+.stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  opacity: clamp(0, calc((var(--grow) - 0.35) / 0.4), 1);
+  transform: translateY(calc(var(--leave) * -9vh)) rotate(calc(var(--leave) * -5deg));
+  transform-origin: 30% 60%;
+  will-change: transform;
+}
+
+.line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.34em;
+  white-space: nowrap;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.75rem, 9.2vw, 10rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
+  /* Merkez kelime ekranın ortasında; iki yan eşit genişlikte olduğu için
+     satır ortalı kalır, kayma yalnız translate ile. */
+  transform: translateX(calc((0.5 - var(--p)) * 26vw));
+}
+
+.side {
+  color: var(--color-brand-fuchsia);
+  flex: none;
+}
+
+.word {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  color: var(--color-brand-black);
+  flex: none;
+}
+
+/* "0" yerine dairesel video. Harften büyük (monks'taki portre gibi). */
+.zero {
+  position: relative;
+  display: inline-block;
+  width: 1.12em;
+  height: 1.12em;
+  margin-left: 0.04em;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--color-brand-black);
+  transform: translateY(0.02em) scale(calc(0.6 + var(--grow) * 0.4));
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.caption {
+  align-self: flex-start;
+  margin-top: clamp(1.5rem, 4vh, 3rem);
+  margin-left: clamp(1.25rem, 14vw, 14rem);
+  max-width: 22rem;
+  font-family: var(--font-ui);
+}
+
+.meet {
+  display: inline-block;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: var(--font-size-body);
+  padding: 0.1em 0.4em;
+}
+
+.text {
+  margin: 0.9rem 0 0;
+  font-size: var(--font-size-body);
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+/* Hareket azaltma: sahne açık, sabit, kısa. */
+.wrapper[data-motion="static"] {
+  height: auto;
+}
+
+.wrapper[data-motion="static"] .sticky {
+  position: relative;
+  height: auto;
+  min-height: 70vh;
+}
+
+.wrapper[data-motion="static"] .disc {
+  position: relative;
+  min-height: 70vh;
+  clip-path: none;
+}
+
+.wrapper[data-motion="static"] .stage {
+  position: relative;
+  min-height: 70vh;
+  opacity: 1;
+  transform: none;
+}
+
+.wrapper[data-motion="static"] .line,
+.wrapper[data-motion="static"] .zero {
+  transform: none;
+}
+
+@media (max-width: 700px) {
+  .wrapper {
+    height: 260vh;
+  }
+
+  .line {
+    transform: translateX(calc((0.5 - var(--p)) * 40vw));
+  }
+
+  .caption {
+    margin-left: var(--page-gutter);
+    margin-right: var(--page-gutter);
+  }
+}

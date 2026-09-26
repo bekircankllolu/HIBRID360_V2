@@ -1,325 +1,165 @@
-/**
- * What We Believe — sayfaya özgü yerleşim.
- *
- * 19 Eylül 2026'da yeniden tasarlandı; gerekçe page.tsx dosya başında.
- * İki yapısal karar burada:
- *
- * 1. Metin fotoğrafın ÜZERİNDE değil, ALTINDA. Eskiden alttan yukarı
- *    koyulaşan bir perdenin içindeydi — kontrast her kadrajda yeniden
- *    doğrulanması gereken bir riskti ve perde görselin alt üçte birini
- *    yutuyordu. Şimdi kadraj tam görünüyor, metin siyah zeminde: kontrast
- *    tanımı gereği garanti (beyaz/sarı üzeri #000).
- *
- * 2. Vizyon/Misyon satırları display ölçeğinde. Sayfanın en iddialı
- *    cümleleri 14px Inter etiketleri olarak diziliyordu.
- */
+/* LAB — What We Believe. Ortak parçalar: src/styles/culture-page.module.css. */
 
-/* ---------- Creed bölümleri (Vizyon · Misyon · İlham · İlkeler) ---------- */
+/* Aynı zemindeki ardışık satır bölümleri arasında çift boşluk olmasın. */
+.follow {
+  padding-top: 0;
+}
 
-/*
- * İki sütun: solda sabit genişlikte etiket, sağda içerik. Etiket sütunu
- * dört bölümde de aynı genişlikte — bölümler arasında dikey bir hat
- * oluşuyor, sayfa bir sisteme oturmuş gibi duruyor.
- */
-.creed {
+.valuesHead {
   display: grid;
-  grid-template-columns: minmax(0, 14rem) minmax(0, 1fr);
-  gap: clamp(1.5rem, 5vw, 5rem);
-  margin-top: clamp(3rem, 7vw, 7rem);
-  padding-top: clamp(1.5rem, 3vw, 2.5rem);
-  border-top: 1px solid var(--color-hairline);
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 5rem);
+  align-items: start;
+  margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
 }
 
-.creedLabel {
+.valuesHead h2 {
   margin: 0;
-  /* Etiket rolü: Inter. Archivo display ve başlık sesi — bu ölçüde fazla
-     geniş ve ağır duruyor, içeriğin önüne geçiyor. */
-  font-family: var(--font-ui);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: var(--font-size-label);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--color-brand-yellow);
 }
 
-.creedList {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-/*
- * Satır: numara + iddia (+ varsa em-dash'in sağındaki nitelik).
- * `baseline` hizası bilinçli — numara display puntosunun yanında küçük
- * kalıyor, üst hizada asılı durmasın.
- */
-.creedItem {
+.valuesIntro {
   display: grid;
-  grid-template-columns: minmax(0, 2.5rem) minmax(0, 1fr);
-  align-items: baseline;
-  gap: 0 clamp(0.75rem, 1.8vw, 1.5rem);
-  padding-block: clamp(0.65rem, 1.4vw, 1.1rem);
-  border-bottom: 1px solid var(--color-hairline);
+  gap: 1rem;
 }
 
-.creedItem:last-child {
-  border-bottom: 0;
-}
-
-.creedIndex {
-  font-family: var(--font-ui);
-  font-size: var(--font-size-micro);
-  font-weight: var(--font-weight-body-medium);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.08em;
-  color: var(--color-brand-yellow);
-}
-
-/*
- * Metinler zaten BÜYÜK HARF yazılmış (deck metni) — `text-transform`
- * eklenmiyor. Espas dev puntoda sıkı: sistemin kuralı.
- */
-.creedClaim {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-  font-size: clamp(1.2rem, 2.9vw, 2.6rem);
-  line-height: 1.02;
-  letter-spacing: -0.02em;
-  color: var(--color-text-on-black);
-}
-
-/* Em-dash'in sağı: aynı ölçekte ama marka sarısı ve numara sütununun
-   sağında ikinci satır olarak. İki kademe tek satıra sığmıyor. */
-.creedEcho {
-  grid-column: 2;
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-  font-size: clamp(1.2rem, 2.9vw, 2.6rem);
-  line-height: 1.02;
-  letter-spacing: -0.02em;
-  color: var(--color-brand-yellow);
-}
-
-/* Cümle uzunluğundaki maddeler — display değil, proz ölçüsü. */
-.proseList {
-  list-style: none;
+.valuesIntro p {
   margin: 0;
-  padding: 0;
-}
-
-.proseItem {
-  max-width: var(--measure-prose);
-  padding-block: clamp(0.8rem, 1.6vw, 1.3rem);
-  border-bottom: 1px solid var(--color-hairline);
-  font-family: var(--font-ui);
-  font-size: clamp(1.0625rem, 1.35vw, 1.3125rem);
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
   line-height: 1.5;
-  color: var(--color-text-on-black);
+  color: var(--ink-soft);
 }
 
-.proseItem:last-child {
-  border-bottom: 0;
+.valuesIntro p:first-child {
+  font-size: var(--font-size-body-lg);
+  color: var(--ink);
 }
 
-@media (max-width: 780px) {
-  .creed {
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-5);
-  }
+/* İki film karesi: büyük kenar boşluklu tam genişlik bantlar. */
+.frames {
+  display: grid;
+  gap: clamp(4rem, 9vw, 8rem);
+  padding: var(--section-space) var(--page-gutter);
 }
 
-/* ---------- Tam genişlik görsel bantları ---------- */
+.wide {
+  aspect-ratio: 16 / 9;
+}
 
-.figure {
-  position: relative;
-  /* Tam genişlik: sayfa konteynerinin yatay boşluğu kadar dışarı taşar.
-     `100vw` KULLANILMIYOR — masaüstünde kaydırma çubuğunun genişliği
-     kadar taşıp gövdeye yatay kaydırma ekliyor. Negatif margin
-     konteynerin kendi padding'iyle birebir eşleşir, o sorun oluşmaz. */
-  margin-inline: calc(-1 * var(--page-gutter));
-  margin-block: clamp(4rem, 9vw, 8rem);
-  isolation: isolate;
+.tall {
+  aspect-ratio: 16 / 10;
 }
 
 .image {
   display: block;
   width: 100%;
   height: 100%;
-  /* Uzun ekranlarda bant çok yükselmesin; oran sabit → CLS 0. */
-  aspect-ratio: 16 / 9;
   object-fit: cover;
-  object-position: center;
-  transition: transform var(--media-zoom-duration) var(--media-zoom-ease);
 }
 
-/* Zoom görselin kendi kutusunda kalmalı; `overflow` artık `.figure`da
-   değil (caption dışarıda), burada. */
-.imageWrap {
-  overflow: hidden;
-}
-
-@media (hover: hover) {
-  .figure:hover .image,
-  .figure:focus-within .image {
-    transform: scale(var(--media-zoom-scale));
-  }
-}
-
-/* Küçük Prens illüstrasyonu 4:3'e yakın; figürü kırpmadan göstermek için
-   kendi oranını korur. */
-.imageTall {
-  aspect-ratio: 16 / 11;
-}
-
-/*
- * Metin şeridi — görselin ALTINDA, siyah zeminde. Perde yok: kadraj tam
- * görünüyor ve kontrast görselin en parlak yerine bağlı değil.
- * Üstte marka sarısı bir hairline: şerit görselin devamı gibi değil,
- * bilinçli bir söz alanı gibi okunuyor.
- */
-.caption {
-  display: grid;
-  grid-template-columns: minmax(0, 18rem) minmax(0, 1fr);
-  gap: clamp(0.75rem, 4vw, 4rem);
-  align-items: start;
-  padding: clamp(1.25rem, 2.6vw, 2.25rem) var(--page-gutter)
-    clamp(1.5rem, 3vw, 2.75rem);
-  border-top: 1px solid var(--color-brand-yellow);
-  background: var(--color-brand-black);
-}
-
-.captionLead {
-  margin: 0;
-  /* Etiket rolü: Inter. Archivo display ve başlık sesi — 14px büyük
-     harfte fazla geniş ve ağır duruyor, içeriğin önüne geçiyor. */
-  font-family: var(--font-ui);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: var(--font-size-label);
-  line-height: 1.45;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-brand-yellow);
-}
-
-/* Şirketin kendi manifesto cümlesi — tırnak YOK, imza YOK. Alıntı gibi
-   okunmasın diye (bkz. src/data/what-we-believe.ts atıf notu). */
-.captionStatement {
-  margin: 0;
-  max-width: 24ch;
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-brand);
-  font-size: clamp(1.75rem, 4.4vw, 4rem);
-  line-height: 0.98;
-  letter-spacing: -0.025em;
-  color: var(--color-text-on-black);
-}
-
-/* Editoryal serif — sahte oblik kaldırıldı (bkz. culture-page.module.css
-   .quote notu). Serif dar olduğu için punto bir kademe büyüdü. */
-.captionQuote {
-  margin: 0;
-  max-width: 24ch;
-  font-family: var(--font-editorial);
-  font-weight: 400;
-  font-style: normal;
-  font-size: clamp(1.6rem, 4.2vw, 3.5rem);
-  line-height: 1.12;
-  letter-spacing: var(--tracking-heading);
-  color: var(--color-text-on-black);
-}
-
-.captionAuthor {
-  margin: var(--space-4) 0 0;
-  font-family: var(--font-ui);
-  font-size: var(--font-size-micro);
-  letter-spacing: var(--tracking-ui);
-  text-transform: uppercase;
-  color: var(--color-brand-yellow);
-}
-
-/* Alıntı bandında sol sütun boş kalıyor; imza alıntının altında durmalı,
-   yan sütuna kaçmamalı. */
-.captionQuote,
-.captionAuthor {
-  grid-column: 2;
-}
-
-@media (max-width: 780px) {
-  .caption {
+@media (max-width: 900px) {
+  .valuesHead {
     grid-template-columns: minmax(0, 1fr);
   }
+}
 
-  .captionQuote,
-  .captionAuthor {
-    grid-column: 1;
+@media (max-width: 760px) {
+  .wide,
+  .tall {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+/* ======================================================================
+ * LAB v2 — ilham kareleri: editoryal görsel + metin bölünmesi.
+ * ====================================================================== */
+.inspire {
+  padding: var(--section-space) var(--page-gutter);
+}
+
+.inspireFigure {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: clamp(2rem, 5vw, 5.5rem);
+  align-items: center;
+  margin: 0;
+}
+
+.inspireFlip .inspireFigure {
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+}
+
+.inspireFlip .inspireMedia {
+  order: 2;
+}
+
+.inspireMedia {
+  overflow: hidden;
+  background: var(--surface);
+}
+
+/* Kaydırmaya bağlı ağır yakınlaşma (destekleyen tarayıcıda). */
+.inspireMedia img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: grayscale(1);
+}
+
+@supports (animation-timeline: view()) {
+  .inspireMedia img {
+    animation: inspireDrift linear both;
+    animation-timeline: view();
+    animation-range: entry 0% exit 80%;
+  }
+}
+
+@keyframes inspireDrift {
+  from {
+    transform: scale(1.14);
+  }
+
+  to {
+    transform: scale(1);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .image {
-    transition: none;
-  }
-
-  .figure:hover .image,
-  .figure:focus-within .image {
-    transform: none;
+  .inspireMedia img {
+    animation: none;
   }
 }
 
-.values {
-  margin-top: clamp(4rem, 10vw, 9rem);
-  padding: clamp(3rem, 7vw, 6rem) var(--page-gutter);
-  background: var(--color-brand-yellow);
-  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
-  --heading-color: var(--color-text-on-yellow);
-  color: var(--color-brand-black);
-}
-
-.valuesIntro {
+.inspireText {
   display: grid;
-  grid-template-columns: minmax(16rem, 0.8fr) minmax(0, 1fr);
-  gap: clamp(2rem, 7vw, 7rem);
-  margin-bottom: clamp(3rem, 8vw, 7rem);
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+  align-content: center;
 }
 
-.valuesIntro h2 {
-  grid-row: span 3;
+.inspireManifesto {
   margin: 0;
-  font-family: var(--font-brand);
-  font-size: clamp(2.5rem, 7vw, 7rem);
-  line-height: 0.88;
+  font-size: clamp(1.9rem, 3vw, 3rem);
+  line-height: 1.12;
 }
 
-.valuesIntro p {
+.inspireQuote {
   margin: 0;
-  max-width: 46rem;
-  font-size: clamp(1rem, 1.6vw, 1.25rem);
-  line-height: 1.55;
+  font-size: clamp(2rem, 3.6vw, 3.6rem);
+  line-height: 1.12;
+  color: var(--ink);
 }
 
-.valuesGrid {
-  list-style: none;
+.inspireAuthor {
   margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  border-top: 2px solid currentColor;
 }
 
-.valuesGrid li {
-  padding: clamp(1.5rem, 4vw, 3rem) 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.35);
-}
+@media (max-width: 860px) {
+  .inspireFigure,
+  .inspireFlip .inspireFigure {
+    grid-template-columns: minmax(0, 1fr);
+  }
 
-.valuesGrid li:nth-child(odd) { padding-right: clamp(1rem, 5vw, 5rem); }
-.valuesGrid li:nth-child(even) { padding-left: clamp(1rem, 5vw, 5rem); border-left: 1px solid rgba(0, 0, 0, 0.35); }
-.valuesGrid h3 { margin: 0 0 var(--space-3); font-family: var(--font-brand); font-size: clamp(1.25rem, 3vw, 2.5rem); }
-.valuesGrid p { margin: 0; max-width: 38rem; line-height: 1.5; }
-
-@media (max-width: 720px) {
-  .valuesIntro,
-  .valuesGrid { grid-template-columns: 1fr; }
-  .valuesIntro h2 { grid-row: auto; }
-  .valuesGrid li:nth-child(odd),
-  .valuesGrid li:nth-child(even) { padding-inline: 0; border-left: 0; }
+  .inspireFlip .inspireMedia {
+    order: 0;
+  }
 }

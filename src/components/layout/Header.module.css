@@ -340,3 +340,70 @@
     transition: none;
   }
 }
+
+/* LAB (monks): kaydırma yönüne göre çekilen header. Yalnız transform —
+   layout değişmez. Klavye odağı header'a girince geri gelir (Header.tsx
+   onFocusCapture), yani gizliyken bile tab ile ulaşılabilir. */
+.header {
+  transition: transform 560ms var(--ease-lab);
+}
+
+.header[data-tucked] {
+  transform: translateY(-100%);
+}
+
+/* ======================================================================
+ * LAB (monks) — header altındaki bölümün zeminini alır (Header.tsx
+ * `data-ground`). Bütün renkler anlamsal tema değişkenlerinden; zemin
+ * değişince header aynı süreyle yumuşakça geçer.
+ * ====================================================================== */
+.header {
+  background: var(--ground);
+  color: var(--ink);
+  border-bottom: 1px solid var(--line);
+  transition:
+    transform 560ms var(--ease-lab),
+    background-color 420ms var(--ease-lab),
+    color 420ms var(--ease-lab);
+}
+
+.logo,
+.navItem > a,
+.menuButton {
+  color: var(--ink);
+  transition: color 420ms var(--ease-lab);
+}
+
+.navItem > a {
+  font-family: var(--font-ui);
+  font-weight: 500;
+}
+
+.navItem > a::after {
+  background: var(--accent);
+  height: 2px;
+}
+
+.menuButton {
+  border-color: var(--line);
+}
+
+@media (max-width: 1180px) {
+  .nav {
+    background: var(--ground);
+  }
+
+  .navItem {
+    border-bottom-color: var(--line);
+  }
+
+  .navItem > a {
+    font-family: var(--font-ui);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  .mobileServices a {
+    color: var(--ink-soft);
+  }
+}

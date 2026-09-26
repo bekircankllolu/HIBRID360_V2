@@ -17,7 +17,7 @@ const GROUPS = [
 function firstLatinLetter(value: string) {
   return value
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[̀-ͯ]/g, "")
     .replace(/İ/g, "I")
     .replace(/ı/g, "i")
     .charAt(0)
@@ -31,8 +31,17 @@ function inGroup(name: string, groupId: string) {
   return letter >= group.start && letter <= group.end;
 }
 
+/**
+ * Müşteri (Friends) marka dizini — LAB (monks.com "Work inventory" dili).
+ *
+ * Başlık + canlı sayaç ("84 marka") + alfabetik süzgeç hapları, altında
+ * çerçevesiz tipografik isim ızgarası. Sektör verisi doğrulanmadığı için
+ * süzgeç gerçek veriden türeyen alfabetik aralıklar; uydurma kategori yok.
+ * JS yokken tüm isimler görünür (süzgeç yalnız daraltır).
+ */
 export function ClientNameIndex({ clients }: { clients: ClientEntry[] }) {
   const t = useTranslations("clients.index");
+  const tLab = useTranslations("lab.culture.friends");
   const [activeGroup, setActiveGroup] = useState(ALL);
 
   const visibleClients = useMemo(
@@ -43,48 +52,32 @@ export function ClientNameIndex({ clients }: { clients: ClientEntry[] }) {
     [activeGroup, clients],
   );
 
+  const filters = [{ id: ALL, label: t("all") }, ...GROUPS.map(({ id, label }) => ({ id, label }))];
+
   return (
-    <section className={styles.index} aria-labelledby="client-index-title">
-      <h2 id="client-index-title" className="srOnly">
-        {t("label")}
-      </h2>
+    <section className={styles.index} aria-labelledby="client-index-title" data-ground="paper">
+      <div className={styles.head}>
+        <h2 id="client-index-title" className={`lab-h2 ${styles.title}`}>
+          {t("label")}
+        </h2>
+        <p className={styles.count} aria-live="polite">
+          {tLab("brands", { count: visibleClients.length })}
+        </p>
+      </div>
 
-      <nav className={styles.filters} aria-label={t("label")}>
-        <button
-          type="button"
-          className={`${styles.filter} ${
-            activeGroup === ALL ? styles.filterActive : ""
-          }`}
-          aria-pressed={activeGroup === ALL}
-          onClick={() => setActiveGroup(ALL)}
-        >
-          <span className={styles.arrow} aria-hidden="true">
-            →
-          </span>
-          {t("all")}
-        </button>
-
-        {GROUPS.map((group) => (
+      <div className={styles.filters} role="group" aria-label={t("label")}>
+        {filters.map((filter) => (
           <button
-            key={group.id}
+            key={filter.id}
             type="button"
-            className={`${styles.filter} ${
-              activeGroup === group.id ? styles.filterActive : ""
-            }`}
-            aria-pressed={activeGroup === group.id}
-            onClick={() => setActiveGroup(group.id)}
+            className={styles.filter}
+            aria-pressed={activeGroup === filter.id}
+            onClick={() => setActiveGroup(filter.id)}
           >
-            <span className={styles.arrow} aria-hidden="true">
-              →
-            </span>
-            {group.label}
+            {filter.label}
           </button>
         ))}
-      </nav>
-
-      <p className="srOnly" aria-live="polite">
-        {t("resultCount", { count: visibleClients.length })}
-      </p>
+      </div>
 
       <ul className={styles.names}>
         {visibleClients.map((client) => (

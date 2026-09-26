@@ -1,164 +1,201 @@
+/* LAB — hizmet sayfası şablonu (bkz. ServiceChapter.tsx bölüm sırası). */
 .chapter {
   overflow: clip;
-  background: var(--color-brand-black);
-  color: var(--color-brand-white);
 }
 
-.field,
-.details {
-  position: relative;
-  padding-block: var(--space-16) clamp(var(--space-16), 11vw, 9rem);
-  padding-inline: var(--page-gutter);
+/* ---------- 1. Sayfa başı ---------- */
+.rail {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.35rem;
 }
 
-.fieldGrid {
+.railLink {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+  text-decoration-color: var(--line);
+  transition: text-decoration-color 240ms var(--ease-lab);
+}
+
+.railLink:hover,
+.railLink:focus-visible {
+  text-decoration-color: currentColor;
+}
+
+.railDegree {
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.titleName {
+  display: block;
+}
+
+/* Serif slogan; halka vurgusu zeminin vurgu renginde (pembede siyah,
+   kağıt ve sarıda fuşya). */
+.titleSlogan {
+  display: block;
+  color: var(--ink);
+}
+
+.titleSlogan > span {
+  color: var(--ink);
+}
+
+.titleSlogan svg {
+  color: var(--accent);
+}
+
+/* ---------- 2. Film ---------- */
+.reelSection {
+  padding-bottom: clamp(3.5rem, 7vw, 6.5rem);
+}
+
+/* Film karesi siyah zeminde siyah içerikle açılıyor (kalem çizimi): ince
+   çerçeve karenin sınırını gösterir. */
+.reelSection video {
+  outline: 1px solid var(--line);
+  outline-offset: -1px;
+}
+
+.reelNote {
+  margin: 1.25rem 0 0;
+  text-align: center;
+}
+
+/* ---------- 3. İddia + hikâye ---------- */
+.manifesto {
+  max-width: 26ch;
+  margin: 0;
+}
+
+.manifestoLong {
+  max-width: 34ch;
+  font-size: clamp(1.625rem, 2.55vw, 2.4rem);
+  line-height: 1.16;
+}
+
+.story {
   display: grid;
-  /* Metin sütunu 0.78fr'den genişletildi: açılış paragrafı display
-     ölçeğine çıkınca 460px'lik sütunda sekiz satıra yayılıyordu ve bir
-     "lede" gibi değil, bir duvar gibi okunuyordu. */
-  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
-  gap: clamp(var(--space-8), 7vw, 7rem);
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(2rem, 4vw, 4rem);
+  margin-top: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+.story[data-has-body] {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
   align-items: start;
-  margin-top: var(--space-10);
 }
 
-.fieldCopy {
+.storyText {
   display: grid;
-  gap: var(--space-8);
-  padding-top: var(--space-8);
+  gap: 1.1rem;
+  max-width: 34rem;
 }
 
-/*
- * Uzun metin hiyerarşisi — 19 Eylül 2026 kullanıcı geri bildirimi:
- * *"What We Do sayfalarındaki uzun yazıları biraz daha güzel ve düzenli
- * yazabiliriz... her bölüm aynı puntoda olmamalı."*
- *
- * İki sorun vardı, ikisi de burada:
- *
- * 1. TEK PUNTO. Bütün paragraflar `--chapter-field-body` ile aynı ölçüdeydi;
- *    göz nereden başlayacağını bilmiyordu. Açılış paragrafı artık bir kademe
- *    büyük ve daha sıkı satır aralıklı, gerisi okunur gövde ölçüsünde.
- *
- * 2. SÖNDÜRÜLMÜŞ GÖVDE. `color: var(--text-muted)` (beyaz @ .55) yazıyordu
- *    — tokens.css'in kendi kuralı bunu yasaklıyor: *"Gövde/proz metni
- *    HİÇBİR YERDE bu token'la söndürülmez."* Uzun metin tam kontrastlı
- *    beyaza döndü; hiyerarşiyi punto kuruyor, renk değil.
- */
-.fieldCopy p {
-  max-width: var(--chapter-field-measure);
+.storyText p {
   margin: 0;
-  font-size: var(--chapter-field-body);
-  /* 1.45 kısa bloklar için ayarlıydı; uzun paragrafta satır takibi
-     zorlaşıyor. */
-  line-height: 1.6;
-  color: var(--color-text-on-black);
 }
 
-/* Açılış paragrafı: bölüme giriş cümlesi. Daha büyük, daha sıkı, ölçüsü
-   biraz dar — bir "lede" gibi okunuyor. */
-.fieldCopy p:first-of-type {
-  max-width: 34ch;
-  font-family: var(--font-brand);
-  font-size: clamp(1.3rem, 1.05rem + 1.1vw, 2rem);
-  font-weight: var(--font-weight-heading-semibold);
-  line-height: 1.18;
-  letter-spacing: -0.015em;
+.photo {
+  overflow: hidden;
+  background: var(--surface);
 }
 
-.fieldCopy .coordinate {
-  margin-top: var(--space-8);
-  font-family: var(--font-brand);
-  font-size: var(--font-size-label);
-  font-weight: var(--font-weight-heading-bold);
-  line-height: 1;
-  color: var(--color-brand-fuchsia);
+.story:not([data-has-body]) .photo {
+  max-width: 44rem;
+  margin-left: auto;
 }
 
-.details {
-  display: grid;
-  gap: var(--space-12);
+.photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
 }
 
-.details section {
-  display: grid;
-  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
-  gap: var(--space-8);
-  padding-top: var(--space-6);
-  border-top: 1px solid var(--color-hairline);
+.story:not([data-has-body]) .photo img {
+  aspect-ratio: 3 / 2;
 }
 
-.details h2,
-.details h3 {
+/* ---------- 4. Yetenekler ---------- */
+.capabilitiesTitle {
+  max-width: 20ch;
   margin: 0;
-  font-family: var(--font-chapter-display);
-  font-size: clamp(1.5rem, 3vw, 3.5rem);
-  line-height: 0.98;
-  letter-spacing: 0;
-  text-transform: uppercase;
 }
 
-/* Türkçe büyük harf başlıkta İ Ö Ü Ş Ç noktaları .98'de üst satırın alt
-   kenarına giriyordu (Faz 1 devri, B1). Yalnız TR h2; EN aynı kalır. */
-.details h2:lang(tr) {
-  line-height: 1.05;
-}
+@media (max-width: 760px) {
+  .rail {
+    flex-direction: row;
+    gap: 0.75rem;
+  }
 
-.details p,
-.details li {
-  max-width: var(--chapter-field-measure);
-  font-size: var(--chapter-field-body);
-  line-height: 1.6;
-}
-
-/* Detay bölümlerinde de aynı iki kademe: bölümün ilk paragrafı giriş
-   cümlesi, gerisi gövde. Yalnız paragrafla BAŞLAYAN bölümlerde geçerli —
-   listeyle başlayan bölümlerde bir şey değişmiyor. */
-.details section > p:first-of-type {
-  max-width: 34ch;
-  font-family: var(--font-brand);
-  font-size: clamp(1.25rem, 1rem + 1.1vw, 2rem);
-  font-weight: var(--font-weight-heading-semibold);
-  line-height: 1.2;
-  letter-spacing: -0.015em;
-}
-
-.details p { margin: 0; }
-.details ul,
-.details ol { margin: 0; padding: 0; list-style: none; }
-
-.detailList {
-  display: grid;
-  gap: var(--space-4);
-  counter-reset: detail;
-}
-
-.detailList li {
-  counter-increment: detail;
-  display: grid;
-  grid-template-columns: 2.5rem minmax(0, 1fr);
-  gap: var(--space-4);
-  padding-bottom: var(--space-4);
-  border-bottom: 1px solid color-mix(in srgb, var(--color-brand-white) 12%, transparent);
-}
-
-.detailList li::before {
-  content: counter(detail, decimal-leading-zero);
-  font-family: var(--font-brand);
-  font-size: var(--font-size-label);
-  font-weight: var(--font-weight-heading-bold);
-  color: var(--color-brand-fuchsia);
-}
-
-.statement {
-  max-width: 18ch;
-  color: var(--color-brand-yellow);
-}
-
-@media (max-width: 767px) {
-  .fieldGrid,
-  .details section {
+  .story[data-has-body] {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .fieldCopy { padding-top: 0; }
+  .photo img {
+    aspect-ratio: 3 / 2;
+  }
+}
+
+/* LAB: imza çizimli sayfalarda film bölümü = tam genişlik sinematik
+   fotoğraf, çok yavaş bir yakınlaşmayla (monks'un video bloğu hissi,
+   video indirmeden). Hareket azaltmada sabit. */
+.still {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.still img {
+  object-fit: cover;
+  animation: labStillDrift 24s var(--ease-lab) both;
+}
+
+/* Destekleyen tarayıcıda yakınlaşma kaydırmaya bağlı (bölüm görünürken). */
+@supports (animation-timeline: view()) {
+  .still img {
+    animation: labStillDrift linear both;
+    animation-timeline: view();
+    animation-range: entry 0% exit 60%;
+  }
+}
+
+@keyframes labStillDrift {
+  from {
+    transform: scale(1.12);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .still img {
+    animation: none;
+  }
+}
+
+/* İmzalı sayfalarda gövde yalnız metin: monks'un editoryal iki sütunu
+   (görsel yükü film bölümündeki tam genişlik fotoğraf taşıyor). */
+.story[data-text-only] {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.story[data-text-only] .storyText {
+  display: block;
+  max-width: none;
+  columns: 2 22rem;
+  column-gap: clamp(2rem, 4vw, 4rem);
+}
+
+.story[data-text-only] .storyText p {
+  margin: 0 0 1.1rem;
+  break-inside: avoid;
 }

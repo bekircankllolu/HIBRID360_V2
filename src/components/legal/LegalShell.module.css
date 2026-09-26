@@ -1,0 +1,187 @@
+/*
+ * LegalShell — LAB (monks policy sayfaları). Gerekçe LegalShell.tsx'te.
+ *
+ * Izgara lab Section/PageIntro'yla aynı: sol sütun ~%25 (rail / içindekiler),
+ * sağ ~%75 (başlık / gövde). Renkler yalnız `data-ground` anlamsal
+ * değişkenleri: zemin değişirse sayfa kendiliğinden uyar.
+ */
+.page {
+  --legal-cols: minmax(7rem, 1fr) minmax(0, 3fr);
+  --legal-gap: clamp(1.5rem, 3vw, 3rem);
+
+  padding-bottom: var(--section-space);
+}
+
+/* ---------- Sayfa başı ---------- */
+
+.head {
+  display: grid;
+  grid-template-columns: var(--legal-cols);
+  column-gap: var(--legal-gap);
+  padding: clamp(4rem, 9vw, 9rem) var(--page-gutter) clamp(2.5rem, 5vw, 4.5rem);
+  border-bottom: 1px solid var(--line);
+}
+
+.rail {
+  margin-top: 0.9rem;
+}
+
+.rail p {
+  margin: 0;
+}
+
+.rail .updated {
+  margin-top: 0.35rem;
+}
+
+.headBody {
+  min-width: 0;
+}
+
+/* Yasal başlıklar uzun ("Kişisel Verilerin Korunması Aydınlatma Metni"):
+   kelime ortasından kırılmaz, dengeli satırlar. */
+.title {
+  margin: 0;
+  max-width: 22ch;
+  overflow-wrap: break-word;
+  hyphens: manual;
+}
+
+.subtitle {
+  max-width: 46ch;
+  margin: clamp(1.25rem, 2.2vw, 2rem) 0 0;
+  font-family: var(--font-body);
+  font-size: var(--font-size-body-lg);
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+
+/* ---------- İki sütun: içindekiler + gövde ---------- */
+
+.layout {
+  display: grid;
+  grid-template-columns: var(--legal-cols);
+  column-gap: var(--legal-gap);
+  align-items: start;
+  padding: clamp(2.5rem, 5vw, 4.5rem) var(--page-gutter) 0;
+}
+
+.toc {
+  position: sticky;
+  top: calc(var(--header-height) + var(--space-6));
+  max-height: calc(100svh - var(--header-height) - var(--space-12));
+  overflow-y: auto;
+  padding-right: var(--space-2);
+}
+
+.tocTitle {
+  margin: 0 0 var(--space-3);
+}
+
+.tocList {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.tocList li {
+  border-bottom: 1px solid var(--line);
+}
+
+.tocLink {
+  display: block;
+  padding: 0.6rem 0;
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--ink-soft);
+  text-decoration: none;
+  transition: color 240ms var(--ease-lab), padding 240ms var(--ease-lab);
+}
+
+.tocLink:hover,
+.tocLink:focus-visible {
+  padding-left: 0.4rem;
+  color: var(--ink);
+}
+
+/* ---------- Gövde (anlamsal HTML) ---------- */
+
+.doc {
+  min-width: 0;
+  max-width: 68ch;
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+:where(.doc) > :first-child {
+  margin-top: 0;
+}
+
+:where(.doc) h2 {
+  margin: clamp(2.5rem, 4vw, 3.5rem) 0 var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--line);
+  /* Başlık `lab-h3` kademesinde: gövdeyle aynı aile, dar yüz 500. */
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: clamp(1.25rem, 1.55vw, 1.45rem);
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+  /* İçindekilerden atlanınca yapışkan başlığın altında kalmasın. */
+  scroll-margin-top: calc(var(--header-height) + var(--space-6));
+}
+
+:where(.doc) p {
+  margin: 0 0 var(--space-4);
+}
+
+:where(.doc) ul {
+  margin: 0 0 var(--space-5);
+  padding-left: 1.15rem;
+}
+
+:where(.doc) li {
+  margin-bottom: var(--space-2);
+  padding-left: 0.25rem;
+}
+
+:where(.doc) li::marker {
+  color: var(--ink-soft);
+}
+
+:where(.doc) a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 0.2em;
+}
+
+/* ---------- Dar ekran: tek sütun, içindekiler yok ---------- */
+
+@media (max-width: 900px) {
+  .head,
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .rail {
+    margin: 0 0 1.25rem;
+  }
+
+  .layout > :first-child {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tocLink {
+    transition: none;
+  }
+}

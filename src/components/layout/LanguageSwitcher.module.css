@@ -279,3 +279,13 @@
     transition: none;
   }
 }
+
+/* LAB: dil ikonu header'ın zeminine göre renk alır (kağıt/sarıda siyah). */
+.trigger {
+  color: var(--ink, var(--color-brand-white));
+}
+
+.trigger:hover .globe,
+.trigger:focus-visible .globe {
+  color: var(--accent, var(--color-brand-yellow));
+}

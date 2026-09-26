@@ -394,3 +394,101 @@
     display: none;
   }
 }
+
+/* ======================================================================
+ * LAB v2 — sitenin diliyle "az laf, çok iş" (yeni sınıflar `lab*`; eski
+ * poster sınıfları artık kullanılmıyor).
+ * ====================================================================== */
+.lab {
+  display: grid;
+  grid-template-columns: minmax(7rem, 1fr) minmax(0, 3fr);
+  column-gap: clamp(1.5rem, 3vw, 3rem);
+  padding: var(--section-space) var(--page-gutter);
+}
+
+.labRail {
+  margin: 1.2rem 0 0;
+}
+
+.labTitle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.3em;
+  margin: 0 0 clamp(3rem, 6vw, 5.5rem);
+  font-size: clamp(3.5rem, 9vw, 9rem);
+  line-height: 1;
+  color: var(--ink);
+}
+
+.labTalk {
+  font-size: 0.86em;
+  letter-spacing: -0.02em;
+  color: var(--ink-soft);
+}
+
+.labWork {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+.labList {
+  grid-column: 1 / -1;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+
+.labRow {
+  display: grid;
+  grid-template-columns: minmax(7rem, 1fr) minmax(0, 1.6fr) minmax(0, 1.4fr);
+  column-gap: clamp(1.5rem, 3vw, 3rem);
+  align-items: start;
+  padding: clamp(1.75rem, 3vw, 2.5rem) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.labIndex {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
+  line-height: 1;
+  color: var(--accent);
+}
+
+.labLead {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: clamp(1.5rem, 2.3vw, 2.2rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  white-space: pre-line;
+  color: var(--ink);
+}
+
+.labRest {
+  margin: 0.2rem 0 0;
+  white-space: pre-line;
+}
+
+@media (max-width: 860px) {
+  .lab {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .labRail {
+    margin: 0 0 1.25rem;
+  }
+
+  .labRow {
+    grid-template-columns: 3rem minmax(0, 1fr);
+    row-gap: 0.9rem;
+  }
+
+  .labRest {
+    grid-column: 2;
+  }
+}

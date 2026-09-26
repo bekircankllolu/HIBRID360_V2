@@ -1,85 +1,180 @@
 /**
- * Contact — tam genişlik akış.
+ * Contact — LAB (monks.com Connect). Sayfa ritmi page.tsx başında.
  *
- * Sayfa artık ortalanmış dar bir konteyner değil: hero, fotoğraf, sarı
- * bant ve harita kenardan kenara. İçerik blokları kendi yatay boşluğunu
- * `--gutter` üzerinden alıyor; tam genişlik olması gereken bloklar
- * (fotoğraf, sarı bant, harita) o boşluğu almıyor.
+ * Renkler yalnız `data-ground` anlamsal değişkenlerinden (--ground/--ink/
+ * --ink-soft/--line/--surface/--accent); hex yok. Izgara lab Section ile
+ * aynı: sol rail ~%25, içerik ~%75.
  */
-.page {
-  /* Ortak token — bkz. src/styles/tokens.css */
-  --gutter: var(--page-gutter);
-  width: 100%;
-  background: var(--color-brand-black);
-  color: var(--color-brand-white);
+
+/* ---------- Ortak blok: rail + içerik ---------- */
+
+.block {
+  display: grid;
+  grid-template-columns: minmax(7rem, 1fr) minmax(0, 3fr);
+  column-gap: clamp(1.5rem, 3vw, 3rem);
+  padding: var(--section-space) var(--page-gutter) 0;
 }
 
-/* 1 — tam genişlik hero */
-.hero {
-  padding: clamp(4rem, 10vh, 8rem) var(--gutter) clamp(3rem, 7vh, 5rem);
+.rail {
+  margin: 0.35rem 0 0;
 }
 
-.heroKicker {
-  margin: 0 0 var(--space-4);
-  /* Etiket rolü: Inter. Archivo display ve başlık sesi — 14px büyük
-     harfte fazla geniş ve ağır duruyor, içeriğin önüne geçiyor. */
-  font-family: var(--font-ui);
-  font-weight: var(--font-weight-heading-bold);
-  font-size: clamp(0.8125rem, 1.4vw, 1.125rem);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--color-brand-yellow);
-}
+/* ---------- 2 — kanal satırları ---------- */
 
-.heroTitle {
-  margin: 0 0 var(--space-8);
-  max-width: 18ch;
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-brand);
-  font-size: clamp(2rem, 6.5vw, 5.5rem);
-  line-height: 0.95;
-  letter-spacing: 0;
-}
-
-.heroBody {
+.rows {
+  min-width: 0;
   margin: 0;
-  max-width: var(--measure-prose);
+  border-top: 1px solid var(--line);
+}
 
+.row {
+  display: grid;
+  grid-template-columns: minmax(6rem, 0.8fr) minmax(0, 2.4fr) minmax(0, 1fr);
+  align-items: center;
+  column-gap: clamp(1rem, 2.5vw, 2.5rem);
+  padding: clamp(1.1rem, 2vw, 1.75rem) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.row dt,
+.row dd {
+  margin: 0;
+}
+
+.value {
+  min-width: 0;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: clamp(1.5rem, 2.9vw, 2.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  overflow-wrap: anywhere;
+}
+
+.value a {
+  color: var(--ink);
+  text-decoration: none;
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0 2px;
+  transition: background-size 520ms var(--ease-lab);
+}
+
+.value a:hover,
+.value a:focus-visible {
+  background-size: 100% 2px;
+}
+
+.social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2em 0.7em;
+}
+
+.action {
+  justify-self: end;
+  text-align: right;
+}
+
+/* ---------- 3 — ofis listesi ---------- */
+
+.officeBlock {
+  padding-bottom: var(--section-space);
+}
+
+.office {
+  display: grid;
+  grid-template-columns: minmax(6rem, 0.8fr) minmax(0, 2.4fr) minmax(0, 1fr);
+  align-items: end;
+  column-gap: clamp(1rem, 2.5vw, 2.5rem);
+  padding: clamp(1.5rem, 2.5vw, 2rem) 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.city {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0;
+}
+
+.clock {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Canlı saat işareti: vurgu renginde küçük daire. */
+.clockDot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.cityName {
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: clamp(1.5rem, 2.9vw, 2.75rem);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+}
+
+.addressCell p {
+  margin: 0 0 0.4rem;
+}
+
+.address {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-body);
+  font-style: normal;
   font-size: var(--font-size-body);
-  line-height: var(--line-height-body);
+  line-height: 1.5;
 }
 
-/* 2 — İstanbul fotoğrafı + Motion Office */
+.officeAction {
+  justify-self: end;
+}
+
+/* ---------- 4 — Motion Office (siyah) ---------- */
+
 .motion {
-  padding-bottom: clamp(3rem, 7vh, 5rem);
+  padding: var(--section-space) var(--page-gutter) clamp(3rem, 6vw, 6rem);
 }
 
+.motionHead {
+  display: grid;
+  grid-template-columns: minmax(7rem, 1fr) minmax(0, 3fr);
+  column-gap: clamp(1.5rem, 3vw, 3rem);
+  margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+.motionTitle {
+  margin: 0;
+  max-width: 18ch;
+}
+
+/* Görkemli çerçeve: kenar boşluklu tam genişlik (monks video bloğu). */
 .figure {
   position: relative;
-  margin: 0 0 clamp(2.5rem, 6vw, 5rem);
-  isolation: isolate;
+  margin: 0;
   overflow: hidden;
 }
 
 .figureImage {
   display: block;
   width: 100%;
-  height: 100%;
-  /* Panorama kaynağı 2560x750 (≈3.41:1). Dar ekranda bu kadar geniş bir
-     şerit ezik duruyor; oran kırılma noktasıyla ayarlanıyor, ölçü sabit
-     olduğu için CLS 0. */
-  aspect-ratio: 16 / 10;
+  height: auto;
+  /* Panorama 2560x750 (≈3.41:1); dar ekranda ezik durmasın. */
+  aspect-ratio: 4 / 3;
   object-fit: cover;
   object-position: center;
-  filter: brightness(1.18) contrast(0.96);
-  transition: transform var(--media-zoom-duration) var(--media-zoom-ease);
-}
-
-@media (hover: hover) {
-  .figure:hover .figureImage,
-  .figure:focus-within .figureImage {
-    transform: scale(var(--media-zoom-scale));
-  }
+  filter: brightness(1.12) contrast(0.98);
+  transition: transform 1400ms var(--ease-lab);
 }
 
 @media (min-width: 768px) {
@@ -88,386 +183,253 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .figureImage {
-    transition: none;
-  }
-
-  .figure:hover .figureImage,
-  .figure:focus-within .figureImage {
-    transform: none;
+@media (hover: hover) {
+  .figure:hover .figureImage {
+    transform: scale(1.03);
   }
 }
 
+/* monks "İzle 00:58" hapı yerine görselin künyesi: sol altta hap. */
 .figureCaption {
   position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  padding: clamp(3rem, 8vw, 6rem) var(--gutter) clamp(1.25rem, 3vw, 2.5rem);
-  /* Okunabilirlik görsele bırakılmıyor: metnin arkası her zaman koyu. */
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.92) 0%,
-    rgba(0, 0, 0, 0.78) 40%,
-    rgba(0, 0, 0, 0) 100%
-  );
+  left: clamp(0.75rem, 1.5vw, 1.25rem);
+  bottom: clamp(0.75rem, 1.5vw, 1.25rem);
+  padding: 0.4rem 0.75rem;
+  background: var(--ground);
+  color: var(--ink);
 }
 
-.figureTitle {
-  margin: 0;
-  max-width: 24ch;
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-brand);
-  font-size: clamp(1.25rem, 3.6vw, 2.75rem);
-  line-height: 1.05;
-  color: var(--color-brand-yellow);
+.motionGrid {
+  display: grid;
+  grid-template-columns: minmax(7rem, 1fr) minmax(0, 1.6fr) minmax(0, 1.4fr);
+  column-gap: clamp(1.5rem, 3vw, 3rem);
+  margin-top: clamp(2.5rem, 5vw, 4.5rem);
 }
 
 .motionBody {
-  display: flex;
-  flex-direction: column;
+  grid-column: 2;
+  display: grid;
   gap: var(--space-4);
-  max-width: var(--measure-prose);
-
-  margin-inline: var(--gutter);
-  font-size: var(--font-size-body);
-  line-height: var(--line-height-body);
+  font-family: var(--font-body);
+  font-size: var(--font-size-body-lg);
+  line-height: 1.5;
 }
 
-.motionBody p {
+.motionBody p,
+.motionAside p {
   margin: 0;
 }
 
-.motionQuestion {
-  margin: var(--space-12) var(--gutter) var(--space-4);
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: 1.125rem;
+.motionAside {
+  grid-column: 3;
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  line-height: 1.5;
+  color: var(--ink-soft);
 }
 
-.motionIntro {
-  margin: 0 var(--gutter) var(--space-8);
-  max-width: var(--measure-prose);
+.motionAside h3 {
+  margin: 0;
+  color: var(--ink);
 }
 
+/* Üç ekip: kademeli kart dili (2. sütun aşağıda), arkada dev dolu numara. */
 .teams {
   display: grid;
-  gap: var(--space-8);
-  margin-inline: var(--gutter);
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.5rem, 3vw, 3rem);
+  margin-top: clamp(3.5rem, 7vw, 7rem);
+}
+
+.team {
+  position: relative;
+  isolation: isolate;
+  padding-top: clamp(4.5rem, 8vw, 8rem);
+  border-top: 1px solid var(--line);
+}
+
+.team:nth-child(2) {
+  margin-top: clamp(2rem, 5vw, 5rem);
+}
+
+.teamNumber {
+  position: absolute;
+  z-index: -1;
+  top: 0.1rem;
+  right: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(6rem, 12vw, 11rem);
+  line-height: 0.85;
+  letter-spacing: -0.05em;
+  color: var(--surface);
 }
 
 .teamTitle {
-  margin: 0 0 var(--space-2);
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-  font-size: 1rem;
-  color: var(--color-brand-yellow);
+  margin: 0 0 var(--space-3);
+  color: var(--accent);
 }
 
 .teamBody {
   margin: 0;
+  max-width: 36ch;
+  font-family: var(--font-body);
   font-size: var(--font-size-body);
+  line-height: 1.5;
+  color: var(--ink-soft);
 }
 
-/* 3 — sarı iletişim bandı.
-   CLAUDE.md kontrast kuralı: sarı zemin üzerinde metin SİYAH olur;
-   beyaz metin AA geçmiyor. Eski sitedeki sarı kutu içi boştu ve
-   yalnızca bir şehir adı taşıyordu — burada bandın işi net: davet + tek
-   tıkla e-posta. */
-.yellowBand {
-  padding: clamp(3rem, 8vw, 6rem) var(--gutter);
-  background: var(--color-brand-yellow);
-  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
-  --heading-color: var(--color-text-on-yellow);
-  color: var(--color-text-on-yellow);
-}
+/* ---------- 5 — harita (siyah, çerçeveli) ---------- */
 
-.yellowBandLead {
-  margin: 0 0 var(--space-4);
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-brand);
-  font-size: clamp(2rem, 8vw, 5.5rem);
-  line-height: 0.95;
-  letter-spacing: 0;
-  text-transform: uppercase;
-}
-
-.yellowBandLabel {
-  margin: 0 0 var(--space-2);
-  /* Etiket rolü: Inter. Archivo display ve başlık sesi — 14px büyük
-     harfte fazla geniş ve ağır duruyor, içeriğin önüne geçiyor. */
-  font-family: var(--font-ui);
-  font-size: var(--font-size-label);
-
-  font-weight: var(--font-weight-heading-bold);
-  letter-spacing: 0.14em;
-}
-
-.yellowBandEmail {
-  display: inline-block;
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-  font-size: clamp(1rem, 3vw, 2rem);
-  line-height: 1.2;
-  color: var(--color-text-on-yellow);
-  border-bottom: 2px solid currentColor;
-  /* Uzun e-posta dar ekranda bandı taşırmasın. */
-  overflow-wrap: anywhere;
-}
-
-.yellowBandEmail:hover,
-.yellowBandEmail:focus-visible {
-  background: var(--color-brand-black);
-  color: var(--color-brand-yellow);
-  border-bottom-color: var(--color-brand-black);
-}
-
-/* 4 — adres · telefon · e-posta */
-.details {
-  display: grid;
-  gap: clamp(2rem, 4vw, 3.5rem);
-  padding: clamp(3rem, 7vw, 5rem) var(--gutter);
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
-}
-
-.detail {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-3);
-  padding-top: var(--space-4);
-  border-top: 2px solid var(--color-brand-yellow);
-}
-
-.detailLabel {
-  margin: 0;
-  /* Etiket rolü: Inter. Archivo display ve başlık sesi — 14px büyük
-     harfte fazla geniş ve ağır duruyor, içeriğin önüne geçiyor. */
-  font-family: var(--font-ui);
-  font-weight: var(--font-weight-heading-bold);
-  font-size: var(--font-size-label);
-
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--color-brand-yellow);
-}
-
-.address {
-  margin: 0;
-  font-style: normal;
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: 1rem;
-  line-height: 1.6;
-}
-
-.detailValue {
-  margin: 0;
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: 1rem;
-  overflow-wrap: anywhere;
-}
-
-.detailValue a {
-  color: var(--color-brand-white);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
-}
-
-.detailValue a:hover {
-  color: var(--color-brand-yellow);
-  border-bottom-color: var(--color-brand-yellow);
-}
-
-.inlineLink {
-  /* Etiket rolü: Inter. Archivo display ve başlık sesi — 14px büyük
-     harfte fazla geniş ve ağır duruyor, içeriğin önüne geçiyor. */
-  font-family: var(--font-ui);
-  font-weight: var(--font-weight-heading-bold);
-  font-size: var(--font-size-label);
-
-  letter-spacing: 0.06em;
-  padding-bottom: 2px;
-  border-bottom: 1px solid var(--color-brand-yellow);
-  color: var(--color-brand-yellow);
-}
-
-.inlineLink:hover,
-.inlineLink:focus-visible {
-  background: var(--color-brand-yellow);
-  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
-  --heading-color: var(--color-text-on-yellow);
-  color: var(--color-text-on-yellow);
-  border-bottom-color: transparent;
-}
-
-.socialInvite {
-  margin: 0;
-  font-size: var(--font-size-label);
-
-  line-height: 1.7;
-}
-
-.socialLinks {
-  display: flex;
-  gap: var(--space-2);
-  flex-wrap: wrap;
-}
-
-.socialLinks a {
-  width: 2.75rem;
-  height: 2.75rem;
-  display: grid;
-  place-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  color: var(--color-brand-white);
-  /* Etiket rolü: Inter. Archivo display ve başlık sesi — 14px büyük
-     harfte fazla geniş ve ağır duruyor, içeriğin önüne geçiyor. */
-  font-family: var(--font-ui);
-  font-size: var(--font-size-label);
-
-  font-weight: var(--font-weight-heading-bold);
-}
-
-.socialLinks a:hover,
-.socialLinks a:focus-visible {
-  background: var(--color-brand-white);
-  color: var(--color-brand-black);
-}
-
-/* 5 — tam genişlik harita */
 .mapSection {
   position: relative;
-  width: 100%;
+  padding: 0 var(--page-gutter) var(--section-space);
 }
 
 .mapFrame {
   position: relative;
   width: 100%;
-  /* Şart: en az 70svh. Masaüstünde başlık yüksekliği düşülmüş tam
-     görüntü alanı. ContactMap (MapLibre canvas) bu kutuyu height:100%
-     ile dolduruyor -- <iframe> gibi kendi icerigine gore otomatik
-     boyutlanmiyor, o yuzden yukseklik burada, gercek bir kutuda
-     tanimlanmali. */
+  /* MapLibre canvas'ı height:100% ile doldurur; yükseklik bu kutuda. */
   height: 70svh;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px var(--line);
 }
 
 @media (min-width: 900px) {
   .mapFrame {
-    height: calc(100svh - var(--header-height));
+    height: min(calc(100svh - var(--header-height) - 6rem), 52rem);
   }
 }
 
 .mapFallback {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
   margin: 0;
-  padding: var(--space-4) var(--gutter);
-  font-size: var(--font-size-label);
-
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  padding-top: var(--space-4);
 }
 
 .mapFallback a {
-  color: var(--color-brand-yellow);
-  border-bottom: 1px solid var(--color-brand-yellow);
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 0.25em;
 }
 
-.mapFallback a:hover {
-  background: var(--color-brand-yellow);
-  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
-  --heading-color: var(--color-text-on-yellow);
-  color: var(--color-text-on-yellow);
-  border-bottom-color: transparent;
-}
+/* ---------- 6 — sohbet formu ---------- */
 
-/* Görsel olarak gizli ama ekran okuyucuya açık başlık — bölümün
-   erişilebilir adı. */
-.visuallyHidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-  border: 0;
-}
-
-/* 6 — form */
 .formSection {
   display: grid;
-  gap: var(--space-12);
-  padding: clamp(3rem, 8vw, 6rem) var(--gutter);
-  grid-template-columns: 1fr;
+  gap: var(--space-10);
+  padding: var(--section-space) var(--page-gutter);
 }
 
-@media (min-width: 900px) {
+.formIntro {
+  display: grid;
+  gap: var(--space-4);
+  align-content: start;
+}
+
+.formIntro p {
+  margin: 0;
+}
+
+.formTitle {
+  margin: 0;
+  max-width: 16ch;
+}
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  min-width: 0;
+}
+
+.hello {
+  font-weight: 600;
+}
+
+.booking {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+.bookingAction {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (min-width: 960px) {
   .formSection {
-    grid-template-columns: minmax(0, 1fr) minmax(17rem, 0.62fr);
-    gap: var(--space-16);
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    column-gap: clamp(2rem, 5vw, 6rem);
     align-items: start;
   }
 
-  /* Yan sütunu formdan ayıran dikey ayraç. */
-  .formAside {
-    padding-left: var(--space-12);
-    border-left: 1px solid rgba(255, 255, 255, 0.15);
+  .formIntro {
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-8));
   }
 }
 
-/* Form bileşeni ReachOut pop-up'ında da kullanıldığı için kendi modülünde
-   32rem ile sınırlı (dar bir diyalogda doğru ölçü). Bu sayfada sütun daha
-   geniş; sınır burada, yalnızca Contact için gevşetiliyor. */
-.formColumn form {
-  max-width: 40rem;
+/* ---------- Dar ekran ---------- */
+
+@media (max-width: 760px) {
+  .block,
+  .motionHead,
+  .motionGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .rail {
+    margin: 0 0 1.25rem;
+  }
+
+  .row,
+  .office {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--space-3);
+    align-items: start;
+  }
+
+  .action,
+  .officeAction {
+    justify-self: start;
+    text-align: left;
+  }
+
+  .motionBody,
+  .motionAside {
+    grid-column: 1;
+  }
+
+  .motionAside {
+    margin-top: var(--space-8);
+  }
+
+  .teams {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .team:nth-child(2) {
+    margin-top: 0;
+  }
 }
 
-/* Aynı gerekçe: etiketler 14px, onay metni 13px, alanlar 16px'te kalıyordu.
-   Punto burada, yalnızca Contact için büyütülüyor; ana sayfadaki ReachOut
-   formu değişmiyor. Seçiciler bileşenin tek sınıflı kurallarından özgül. */
-.formColumn label {
-  font-size: var(--font-size-label);
-}
+@media (prefers-reduced-motion: reduce) {
+  .value a,
+  .figureImage {
+    transition: none;
+  }
 
-.formColumn label input,
-.formColumn label textarea {
-  font-size: var(--font-size-body);
-}
-
-.formAside {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-}
-
-.bookingLead {
-  margin: 0;
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: clamp(1.5rem, 3vw, 2.75rem);
-  line-height: 1.05;
-}
-
-.bookingLinks {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-3);
-  font-size: var(--font-size-body);
-}
-
-.bookingLinks a {
-  color: var(--color-brand-yellow);
-  border-bottom: 1px solid var(--color-brand-yellow);
-  padding-bottom: 1px;
-}
-
-.bookingLinks a:hover {
-  background: var(--color-brand-yellow);
-  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
-  --heading-color: var(--color-text-on-yellow);
-  color: var(--color-text-on-yellow);
-  border-bottom-color: transparent;
+  .figure:hover .figureImage {
+    transform: none;
+  }
 }

@@ -1,40 +1,136 @@
-.hero {
-  margin: var(--space-12) 0 var(--space-16);
-  padding: clamp(2rem, 6vw, 5rem);
-  background: var(--color-brand-yellow);
-  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
-  --heading-color: var(--color-text-on-yellow);
-  color: var(--color-brand-black);
-}
+/* LAB — Sustainability. Ortak parçalar: src/styles/culture-page.module.css. */
 
-.kicker {
-  margin: 0 0 var(--space-8);
-  font-family: var(--font-brand);
-  font-size: var(--font-size-label);
-
-  font-weight: var(--font-weight-heading-bold);
-  letter-spacing: 0.12em;
-}
-
-.hero h2 {
+.notice {
   margin: 0;
-  font-family: var(--font-brand);
-  font-size: clamp(2.5rem, 8vw, 6rem);
-  line-height: 0.88;
+  max-width: 52ch;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: clamp(1.2rem, 1.7vw, 1.55rem);
+  line-height: 1.35;
+  color: var(--ink);
 }
 
-.hero p:last-child {
-  max-width: 38rem;
-  margin: var(--space-8) 0 0;
-  font-size: clamp(1rem, 1.8vw, 1.25rem);
+.chapters {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.chapter {
+  display: grid;
+  grid-template-columns: minmax(7rem, 1fr) minmax(0, 1.3fr) minmax(0, 1.7fr);
+  column-gap: clamp(1.5rem, 3vw, 3rem);
+  row-gap: 1rem;
+  align-items: start;
+  padding: clamp(1.75rem, 3.5vw, 3rem) 0;
+  border-top: 1px solid var(--line);
+}
+
+.index {
+  padding-top: 0.6rem;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-soft);
+}
+
+.chapterTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.9rem, 3.2vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.chapterBody {
+  display: grid;
+  justify-items: start;
+  gap: 1rem;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--line);
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--ink);
+}
+
+.statusDot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.status[data-state="complete"] .statusDot {
+  background: var(--ink);
+}
+
+.pendingText,
+.body {
+  margin: 0;
+  max-width: 46ch;
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
   line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.body {
+  color: var(--ink);
+}
+
+.measures {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.measures li {
+  position: relative;
+  padding-left: 1.5rem;
+  max-width: 52ch;
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.measures li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.72em;
+  width: 0.75rem;
+  height: 1px;
+  background: var(--ink);
 }
 
 .closing {
-  margin: clamp(4rem, 9vw, 8rem) 0 0;
-  font-family: var(--font-brand);
-  font-size: clamp(2rem, 7vw, 5rem);
-  font-weight: var(--font-weight-brand);
-  line-height: 0.9;
-  color: var(--color-brand-yellow);
+  margin: 0;
+  max-width: 14ch;
+}
+
+@media (max-width: 900px) {
+  .chapter {
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+  }
+
+  .chapterBody {
+    grid-column: 2;
+  }
+
+  .index {
+    padding-top: 0.35rem;
+  }
 }

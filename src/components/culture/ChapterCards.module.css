@@ -1,0 +1,134 @@
+/* LAB — Culture hub bölüm kartları (bkz. ChapterCards.tsx). */
+.grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  align-items: start;
+  gap: clamp(1rem, 1.6vw, 1.75rem);
+}
+
+.cell {
+  position: relative;
+  padding-top: clamp(2.5rem, 4.2vw, 4rem);
+}
+
+/* Kademe: 2. ve 4. sütun aşağıda (margin — Reveal transform kullanıyor). */
+.cell:nth-child(2n) {
+  margin-top: clamp(3rem, 5vw, 5rem);
+}
+
+.number {
+  position: absolute;
+  top: 0;
+  right: 0.25rem;
+  z-index: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(4rem, 7vw, 7rem);
+  line-height: 0.78;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+  pointer-events: none;
+}
+
+.card {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 0.9rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.media {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.image {
+  object-fit: cover;
+  transition: transform 900ms var(--ease-lab);
+}
+
+.eyebrow {
+  margin-top: 0.35rem;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--ink-soft);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.title {
+  color: var(--ink);
+}
+
+.arrow {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  transition: transform 500ms var(--ease-lab);
+}
+
+.arrow svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+@media (hover: hover) {
+  .card:hover .image {
+    transform: scale(1.045);
+  }
+
+  .card:hover .arrow {
+    transform: translateX(0.3rem);
+  }
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 6px;
+}
+
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.5rem;
+  }
+
+  .cell:nth-child(2n) {
+    margin-top: 0;
+  }
+
+  .media {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image,
+  .arrow {
+    transition: none;
+  }
+}

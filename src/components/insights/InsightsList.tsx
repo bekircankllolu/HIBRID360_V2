@@ -2,20 +2,27 @@
 
 import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
 import { EmptyState } from "@/components/EmptyState";
 import type { Locale } from "@/i18n/routing";
-import {
-  getInsightCategory,
-  getInsightSummary,
-  getInsightTitle,
-} from "@/lib/insights";
-import { getInsightVisual } from "@/data/insight-visuals";
-import { EditorialImage } from "@/components/insights/EditorialImage";
-import { TextFadeIn } from "@/components/ui/TextFadeIn";
+import { getInsightCategory } from "@/lib/insights";
 import type { InsightsPost } from "@/types/content";
+import { InsightFeatured } from "./InsightFeatured";
+import { InsightRow } from "./InsightRow";
+import { useRowReveal } from "./use-row-reveal";
 import styles from "./InsightsList.module.css";
 
+/** "Tümü" görünümünde üstte asimetrik kartlarla gösterilen yazı sayısı. */
+const FEATURED_COUNT = 3;
+const ALL = "all";
+
+/**
+ * Think & Thank yazı dizini — LAB (monks.com "On our minds" düzeni).
+ *
+ * "Tümü"nde ilk üç yazı öne çıkan kart, kalanı satır; bir kategori
+ * seçilince kartlar kalkar ve yalnız o kategorinin satırları kalır. Her
+ * yazı sayfada TAM BİR kez bağlantı olur (kart ya da satır) — e2e
+ * `think-and-thank.spec.ts` 19 bağlantı bekliyor.
+ */
 export function InsightsList({
   posts,
   locale,
@@ -26,7 +33,9 @@ export function InsightsList({
   animateTitles?: boolean;
 }) {
   const t = useTranslations("insights");
-  const [activeCategory, setActiveCategory] = useState<string>("all");
+  const tLab = useTranslations("lab.insights");
+  const [activeCategory, setActiveCategory] = useState<string>(ALL);
+  const { containerRef, armed } = useRowReveal<HTMLDivElement>(activeCategory);
 
   const categories = useMemo(
     () =>
@@ -49,7 +58,7 @@ export function InsightsList({
 
   const filteredPosts = useMemo(
     () =>
-      activeCategory === "all"
+      activeCategory === ALL
         ? posts
         : posts.filter((post) => post.category === activeCategory),
     [posts, activeCategory],
@@ -59,10 +68,21 @@ export function InsightsList({
     return <EmptyState message={t("comingSoon")} />;
   }
 
+  const showFeatured = activeCategory === ALL && posts.length > FEATURED_COUNT;
+  const featuredPosts = showFeatured ? filteredPosts.slice(0, FEATURED_COUNT) : [];
+  const rowPosts = showFeatured ? filteredPosts.slice(FEATURED_COUNT) : filteredPosts;
+
   return (
-    <div>
+    <div
+      ref={containerRef}
+      className={styles.index}
+      data-ground="paper"
+      data-armed={armed ? "" : undefined}
+    >
       <div className={styles.toolbar}>
-        <p className={styles.resultCount}>{t("articleCount", { count: filteredPosts.length })}</p>
+        <p className={styles.resultCount} aria-live="polite">
+          {t("articleCount", { count: filteredPosts.length })}
+        </p>
         {categories.length > 1 && (
           <label className={styles.categoryControl}>
             <span>{t("categoryLabel")}</span>
@@ -70,7 +90,7 @@ export function InsightsList({
               value={activeCategory}
               onChange={(event) => setActiveCategory(event.target.value)}
             >
-              <option value="all">{t("categoryAll")}</option>
+              <option value={ALL}>{t("categoryAll")}</option>
               {categories.map((category) => (
                 <option key={category} value={category}>
                   {categoryLabels.get(category)}
@@ -81,66 +101,23 @@ export function InsightsList({
         )}
       </div>
 
+      {showFeatured && (
+        <InsightFeatured posts={featuredPosts} locale={locale} animateTitles={animateTitles} />
+      )}
+
       {filteredPosts.length === 0 ? (
         <EmptyState message={t("comingSoon")} />
       ) : (
-        <div className={styles.grid}>
-          {filteredPosts.map((post, filteredIndex) => {
-            const visual = getInsightVisual(post, locale);
-            const absoluteIndex = posts.indexOf(post);
-            const title = getInsightTitle(post, locale);
-
-            return (
-              <Link
-                key={post.id}
-                href={`/think-and-thank/${post.slug}`}
-                className={styles.card}
-                data-tone={visual.tone}
-                data-featured={filteredIndex === 0 ? "true" : undefined}
-              >
-                <span className={styles.cardVisual}>
-                  <EditorialImage
-                    src={visual.src}
-                    alt={visual.alt}
-                    sizes={
-                      filteredIndex === 0
-                        ? "(max-width: 760px) 100vw, 60vw"
-                        : "(max-width: 760px) 100vw, 50vw"
-                    }
-                  />
-                </span>
-                <span className={styles.cardMain}>
-                  <span className={styles.cardTopline}>
-                    <span className={styles.cardIndex} aria-hidden="true">
-                      {String(absoluteIndex + 1).padStart(2, "0")}
-                    </span>
-                    {post.category && (
-                      <span className={styles.cardCategory}>
-                        {getInsightCategory(post, locale)}
-                      </span>
-                    )}
-                  </span>
-                  {animateTitles ? (
-                    <TextFadeIn className={styles.cardTitle}>{title}</TextFadeIn>
-                  ) : (
-                    <span className={styles.cardTitle}>{title}</span>
-                  )}
-                  {getInsightSummary(post, locale) && (
-                    <span className={styles.cardSummary}>
-                      {getInsightSummary(post, locale)}
-                    </span>
-                  )}
-                  <span className={styles.cardMeta}>
-                    {post.read_time_minutes && (
-                      <span>{t("readTime", { minutes: post.read_time_minutes })}</span>
-                    )}
-                    <span className={styles.cardArrow} aria-hidden="true">↗</span>
-                  </span>
-                </span>
-              </Link>
-            );
-          })}
-        </div>
+        <section className={styles.list} aria-labelledby="insights-list-heading">
+          <h2 id="insights-list-heading" className={`lab-h2 ${styles.sectionHeading}`}>
+            {activeCategory === ALL ? tLab("listHeading") : categoryLabels.get(activeCategory)}
+          </h2>
+          <ol className={styles.rows}>
+            {rowPosts.map((post) => (
+              <InsightRow key={post.id} post={post} locale={locale} />
+            ))}
+          </ol>
+        </section>
       )}
     </div>
   );

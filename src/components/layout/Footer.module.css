@@ -256,3 +256,197 @@
     flex-direction: column;
   }
 }
+
+/* ======================================================================
+ * LAB (monks.com footer) — "Keep exploring…" düzeni.
+ * Sol: küçük etiket. Orta: dev, ince (500) keşfet linkleri — sayfanın
+ * geniş/kalın başlık sesine karşı "konuşan" dar ses. Sağ: her yasal link
+ * yanında küçük ok dairesi. En sağ: iletişim + sosyal hap'ları.
+ * ====================================================================== */
+.explore {
+  display: grid;
+  grid-template-columns: minmax(7rem, 0.8fr) minmax(0, 1.6fr) minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 3vw, 3rem);
+  align-items: start;
+  padding-top: clamp(2rem, 4vw, 3.5rem);
+  border-top: 1px solid color-mix(in srgb, var(--color-brand-black) 22%, transparent);
+  margin-bottom: clamp(3rem, 5vw, 5rem);
+}
+
+.explore ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.exploreLabel,
+.sideLabel {
+  margin: 0 0 0.9rem;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: var(--font-size-body);
+  letter-spacing: 0;
+  line-height: 1.3;
+}
+
+.bigNav li + li {
+  margin-top: 0.15em;
+}
+
+.bigLink {
+  display: inline-block;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: clamp(1.9rem, 3.3vw, 3.1rem);
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0 2px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 480ms var(--ease-lab);
+}
+
+.bigLink:hover,
+.bigLink:focus-visible {
+  background-size: 100% 2px;
+}
+
+.legalNav li + li {
+  margin-top: 0.7rem;
+}
+
+.legalLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1.2;
+}
+
+.legalDot {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 50%;
+  background: var(--color-brand-black);
+  color: var(--color-brand-yellow);
+  transition: background-color 360ms var(--ease-lab), color 360ms var(--ease-lab);
+}
+
+.legalDot svg {
+  width: 44%;
+  height: 44%;
+  transition: transform 420ms var(--ease-lab);
+}
+
+.legalLink:hover .legalDot,
+.legalLink:focus-visible .legalDot {
+  background: var(--color-brand-fuchsia);
+  color: var(--color-text-on-fuchsia);
+}
+
+.legalLink:hover .legalDot svg,
+.legalLink:focus-visible .legalDot svg {
+  transform: translateX(2px);
+}
+
+.side {
+  display: grid;
+  gap: 2rem;
+}
+
+.socialPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.socialPills a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.4rem;
+  padding: 0 1rem;
+  border-radius: 999px;
+  background: var(--color-brand-black);
+  color: var(--color-brand-yellow);
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: background-color 360ms var(--ease-lab), color 360ms var(--ease-lab);
+}
+
+.socialPills a:hover,
+.socialPills a:focus-visible {
+  background: var(--color-brand-fuchsia);
+  color: var(--color-text-on-fuchsia);
+}
+
+@media (max-width: 1024px) {
+  .explore {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .exploreLabel {
+    grid-column: 1 / -1;
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .explore {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* LAB: dar yan sütunda adresin ilk satırı da kırılabilir. */
+.side {
+  min-width: 0;
+}
+
+.side .addressLine:first-child {
+  white-space: normal;
+}
+
+/* LAB (monks): koyu footer — renkler data-ground="black" temasından. */
+.footer {
+  background: var(--ground);
+  color: var(--ink);
+  border-top: 0;
+}
+
+.explore {
+  border-top-color: var(--line);
+}
+
+.legalDot,
+.socialPills a {
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+}
+
+.bottomRow,
+.copyright {
+  color: var(--ink-soft);
+}
+
+.statement {
+  color: var(--ink);
+}
+
+.bottomRow {
+  border-top-color: var(--line);
+}
+
+.carbonBadge {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.backToTop {
+  color: var(--ink);
+}

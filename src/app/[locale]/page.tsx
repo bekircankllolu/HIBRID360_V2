@@ -6,7 +6,10 @@ import { LessTalk } from "@/components/home/LessTalk";
 import { MakeBrandBand } from "@/components/home/MakeBrandBand";
 import { ReachOut } from "@/components/home/ReachOut";
 import { ClosingBand } from "@/components/home/ClosingBand";
-import { ClosingBody } from "@/components/home/ClosingBody";
+import { HibridZero } from "@/components/lab/HibridZero";
+import { HomeClaim } from "@/components/lab/home/HomeClaim";
+import { HomeServices } from "@/components/lab/home/HomeServices";
+import { HomeThinking } from "@/components/lab/home/HomeThinking";
 import type { Locale } from "@/i18n/routing";
 import { localizedAlternates, SITE_NAME, SITE_TAGLINE, SITE_TAGLINE_TR } from "@/lib/site";
 
@@ -70,14 +73,30 @@ export default async function HomePage({
       <h1 className="srOnly">
         {SITE_NAME} — {locale === "en" ? SITE_TAGLINE : SITE_TAGLINE_TR}
       </h1>
-      <HeroTypography />
+      {/* LAB (monks): bölümler zeminlerini bildirir (data-ground), header
+          altındaki zemini alır. Hero'ya DOKUNULMADI — yalnız siyah zemin
+          bildiren bir sarmalayıcı. Sıra monks ritmi: siyah hero → kağıt
+          söz + hizmetler + soru → iddia + film → sinema bandı → ekosistem →
+          "Hibrid 36●" → düşünceler → az laf → sarı kapanış → siyah footer. */}
+      <div data-ground="black">
+        <HeroTypography />
+      </div>
       <RotatingSlogans />
-      <ClosingBody />
-      <MakeBrandBand />
-      <SolarSystem />
+      <HomeServices locale={locale} />
       <ReachOut />
-      <ClosingBand />
+      <HomeClaim />
+      {/* LAB: E.T. ay filmi (ClosingBody) kaldırıldı — kullanıcı kararı
+          26 Eylül 2026, tanınmış film sahnesine gönderme hukuki risk. */}
+      <MakeBrandBand />
+      <div data-ground="black">
+        <SolarSystem />
+      </div>
+      <div data-ground="black">
+        <HibridZero />
+      </div>
+      <HomeThinking locale={locale} />
       <LessTalk />
+      <ClosingBand />
     </div>
   );
 }

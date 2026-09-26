@@ -825,6 +825,10 @@ export function SolarSystem() {
       </div>
 
       <div className={styles.heading}>
+        {/* LAB: monks rail — sol sütunda küçük etiket. */}
+        <p className={`lab-rail ${styles.labRail}`} lang="en">
+          Hibrid 360
+        </p>
         {/* Başlık iki katmanlı okunuyor — üstte ince "One Hybrid Production",
             altta harf aralığı açılmış ECOSYSTEM. Erişilebilir ad özgün
             cümle olarak kalıyor. */}

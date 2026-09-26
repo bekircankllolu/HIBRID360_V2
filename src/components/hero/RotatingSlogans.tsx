@@ -21,21 +21,21 @@ import styles from "./RotatingSlogans.module.css";
 
 const SLOGANS = [
   {
-    lead: "PRECISE. VISIONARY. HUMAN.",
+    lead: "Precise. Visionary. Human.",
     body: {
       en: "We design digital experiences people remember.",
       tr: "Akılda kalan dijital deneyimler tasarlıyoruz.",
     },
   },
   {
-    lead: "PURE. SIMPLE. POWERFUL.",
+    lead: "Pure. Simple. Powerful.",
     body: {
       en: "AI-native creative production for brands that shape what’s next.",
       tr: "Sıradakini belirleyen markalar için AI-native kreatif prodüksiyon.",
     },
   },
   {
-    lead: "HUMAN CREATIVITY. AI PRECISION. REAL IMPACT.",
+    lead: "Human creativity. AI precision. Real impact.",
     body: null,
   },
 ];
@@ -46,6 +46,7 @@ const EXIT_MS = 400;
 export function RotatingSlogans() {
   const locale = useLocale() as "tr" | "en";
   const t = useTranslations("home");
+  const tLab = useTranslations("lab.home");
   const reducedMotion = usePrefersReducedMotion();
   const [index, setIndex] = useState(0);
   const [exiting, setExiting] = useState(false);
@@ -77,12 +78,14 @@ export function RotatingSlogans() {
   // Hareket kapalıysa (veya döngü durduysa) üç slogan birden okunur.
   if (reducedMotion) {
     return (
-      <section className={styles.block} aria-label={t("slogansLabel")}>
+      <section className={styles.block} data-ground="paper" aria-label={t("slogansLabel")}>
+        {/* LAB (monks "Our Promise"): sol etiket + dev dar başlık. */}
+        <p className={`lab-rail ${styles.rail}`}>{tLab("promiseRail")}</p>
         <ul className={styles.staticList}>
           {SLOGANS.map((slogan) => (
             <li key={slogan.lead}>
-              <p className={styles.lead}>{slogan.lead}</p>
-              {slogan.body && <p className={styles.body}>{slogan.body[locale]}</p>}
+              <p className={`lab-display ${styles.lead}`} lang="en">{slogan.lead}</p>
+              {slogan.body && <p className={`lab-serif ${styles.body}`}>{slogan.body[locale]}</p>}
             </li>
           ))}
         </ul>
@@ -93,14 +96,15 @@ export function RotatingSlogans() {
   const slogan = SLOGANS[index];
 
   return (
-    <section className={styles.block} aria-label={t("slogansLabel")}>
+    <section className={styles.block} data-ground="paper" aria-label={t("slogansLabel")}>
+      <p className={`lab-rail ${styles.rail}`}>{tLab("promiseRail")}</p>
       {/* brief 4.4: bir ekranda aynı anda en fazla bir slogan görünür. */}
       <div
         className={`${styles.slot} ${exiting ? styles.exiting : styles.entering}`}
         aria-live="polite"
       >
-        <p className={styles.lead}>{slogan.lead}</p>
-        {slogan.body && <p className={styles.body}>{slogan.body[locale]}</p>}
+        <p className={`lab-display ${styles.lead}`} lang="en">{slogan.lead}</p>
+        {slogan.body && <p className={`lab-serif ${styles.body}`}>{slogan.body[locale]}</p>}
       </div>
     </section>
   );

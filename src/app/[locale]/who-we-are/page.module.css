@@ -1,89 +1,83 @@
-/**
- * Kurucu bloğu (CUL-03/04).
- *
- * Fotoğraf teslim edilmediği için blok tipografik çalışır: solda sarı
- * dikey kural + isim/ünvan, sağda replik. Eskiden burada 160x200'lük boş
- * bir kutu ve "Photo pending" yazısı vardı — boş çerçeve ve geliştirme
- * notu production arayüzünde görünmez artık.
- *
- * Fotoğraf gelince (src/data/who-we-are.ts → FOUNDER.portrait) aynı
- * ızgara portreli varyanta geçer; iki durumda da düzen aynı hizada durur.
- */
-.founder {
-  margin-top: var(--space-16);
-  padding-top: var(--space-8);
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  display: grid;
-  gap: clamp(1.5rem, 4vw, 3.5rem);
-  grid-template-columns: 1fr;
-  align-items: start;
+/* LAB — Who We Are. Ortak parçalar: src/styles/culture-page.module.css. */
+
+.statement {
+  margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
 }
 
-@media (min-width: 768px) {
-  .founder {
-    grid-template-columns: minmax(12rem, 0.4fr) minmax(0, 1fr);
-  }
+/* Ekip filmi: sahne kendi siyahını taşıyor; bölüm yalnız etiket ve nefes. */
+.film {
+  padding-top: var(--section-space-tight);
+}
 
-  /* Portre varken sol sütun görselin doğal oranına açılır. */
-  .founderWithPortrait {
-    grid-template-columns: minmax(14rem, 0.42fr) minmax(0, 1fr);
-  }
+.filmRail {
+  margin: 0 0 clamp(1rem, 2vw, 1.5rem);
+  padding: 0 var(--page-gutter);
+}
+
+.filmPending {
+  padding: 0 var(--page-gutter) var(--section-space);
+}
+
+.promiseTitle {
+  margin: 0 0 clamp(2.25rem, 4vw, 3.5rem);
+  max-width: 18ch;
+}
+
+.founder {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  margin: 0;
+}
+
+.founderWithPortrait {
+  grid-template-columns: minmax(10rem, 1fr) minmax(0, 2fr);
+  align-items: end;
 }
 
 .portrait {
   display: block;
   width: 100%;
   height: auto;
-  /* Portre oranı sabit — varlık farklı oranda gelse de düzen kaymaz. */
   aspect-ratio: 4 / 5;
   object-fit: cover;
+  background: var(--surface);
 }
 
-/* Fotoğrafsız durumda kimlik sütunu: sarı dikey kural taşır. */
 .identity {
-  padding-left: var(--space-4);
-  border-left: 2px solid var(--color-brand-yellow);
+  display: grid;
+  gap: 0.35rem;
+  margin-top: clamp(1.75rem, 3vw, 2.5rem);
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+  max-width: 36rem;
 }
 
 .name {
-  margin: 0;
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-brand);
-  font-size: clamp(1.125rem, 2.2vw, 1.75rem);
-  line-height: 1.1;
+  color: var(--ink);
 }
 
-.title {
-  margin: var(--space-2) 0 0;
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: var(--font-size-label);
-
-  letter-spacing: 0.14em;
-  color: var(--color-brand-yellow);
-}
-
-/* Editoryal serif — sahte oblik kaldırıldı (bkz. culture-page.module.css
-   .quote notu: Archivo'nun gerçek italiği yok, tarayıcı eğiyordu). */
-.quote {
-  margin: 0;
-  font-family: var(--font-editorial);
-  font-weight: 400;
-  font-style: normal;
-  font-size: clamp(1.5rem, 3.2vw, 2.5rem);
-  line-height: 1.18;
-  letter-spacing: var(--tracking-heading);
-  max-width: 24ch;
+.role {
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  color: var(--ink-soft);
 }
 
 .disclaimer {
-  margin: var(--space-4) 0 0;
-  /* 0.6875rem (11px) idi — yardımcı/disclosure metni olsa bile mobilde
-     okunabilirlik sınırının altındaydı. 0.8125rem (13px) gövde
-     metninden hâlâ belirgin biçimde küçük, yani kompakt hiyerarşi
-     korunuyor. */
-  font-size: var(--font-size-label);
+  margin-top: 0.75rem;
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  color: var(--ink-soft);
+}
 
-  line-height: 1.4;
-  letter-spacing: 0.04em;
+@media (max-width: 760px) {
+  .founderWithPortrait {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Halka kelimeden taşar; önceki kelimeye binmesin. */
+.promiseMark {
+  display: inline-block;
+  margin-left: 0.06em;
 }

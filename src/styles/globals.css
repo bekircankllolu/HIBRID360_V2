@@ -1,5 +1,7 @@
 @import "./fonts.css";
 @import "./tokens.css";
+/* LAB — monks.com uyarlama katmanı (yalnız yerel deneme); tokenlardan sonra gelir. */
+@import "./lab-monks.css";
 
 *,
 *::before,

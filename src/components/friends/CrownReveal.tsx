@@ -158,7 +158,9 @@ export function CrownReveal() {
     <section
       ref={sectionRef}
       className={styles.reveal}
-      aria-label="YOUR BRAND. CROWNED."
+      aria-label="Your brand. Crowned."
+      // Metin iki dilde de İngilizce (marka dili).
+      lang="en"
     >
       <div className={styles.stage}>
         <video
@@ -177,12 +179,12 @@ export function CrownReveal() {
           <source src="/videos/friends-crown-reveal.mp4" type="video/mp4" />
         </video>
 
-        <p className={styles.title} aria-label="YOUR BRAND. CROWNED.">
+        <p className={styles.title} aria-label="Your brand. Crowned.">
           <span ref={firstLineRef} className={styles.firstLine}>
-            YOUR BRAND.
+            Your brand.
           </span>
           <span ref={accentLineRef} className={styles.accentLine}>
-            CROWNED.
+            Crowned.
           </span>
         </p>
 

@@ -1,223 +1,95 @@
+/*
+ * LAB — Think & Thank. Dergi tonları (mint/pembe/lila) burada tanımlanır ve
+ * InsightsList'e kalıtılır; artık zemin değil, yazının renk çipi. Yolunda
+ * `think-and-thank` geçtiği için hex bekçisinden muaf (kullanıcı kararı:
+ * Think & Thank'in pastel dünyası kalıyor).
+ */
 .page {
   --mag-mint: #dff6e8;
   --mag-pink: #f4d8df;
   --mag-lilac: #e2d8f3;
-  --mag-paper: #f7f6f1;
-  background: var(--color-brand-black);
+  --mag-paper: var(--paper);
+  width: 100%;
 }
 
-.hero {
-  position: relative;
-  min-height: min(84svh, 62rem);
-  overflow: hidden;
-  background: var(--mag-paper);
-  color: var(--color-brand-black);
+/* El çizimi halka zemine göre renk alır (kağıtta fuşya). */
+.mark svg {
+  stroke: var(--accent);
 }
 
-.heroInner {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-height: min(84svh, 62rem);
-  max-width: var(--content-max-width);
-  margin: 0 auto;
-  padding: clamp(3rem, 7vw, 7rem) var(--page-gutter) clamp(2rem, 4vw, 4rem);
-}
-
-.heroEyebrow {
-  margin: 0;
-  font-size: var(--font-size-label);
-  font-weight: var(--font-weight-body-medium);
-  letter-spacing: 0.08em;
-  /* Kaynakta marka yazımı "Hibrid 360"; caps görünüm buradan gelir. */
-  text-transform: uppercase;
-}
-
-.heroTitle {
+/* Başlığın serif ikinci sesi kendi satırında. */
+.titleSerif {
   display: block;
-  width: min(70rem, 100%);
-  margin: auto;
-  color: var(--color-brand-black);
-  font-family: var(--font-brand);
-  /* %20 büyütüldü (17 Eylül 2026 kullanıcı isteği): clamp'in üç terimi de
-     1.2 ile çarpıldı — 3.8rem/8.5vw/8rem -> 4.56rem/10.2vw/9.6rem. En uzun
-     durum "& THANK" 1440px'te ~780px, 70rem kolona sığıyor. */
-  font-size: clamp(4.56rem, 10.2vw, 9.6rem);
-  font-weight: var(--font-weight-brand);
-  line-height: 0.86;
-  text-align: center;
-  text-transform: uppercase;
 }
 
-.heroCopy {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(2rem, 6vw, 7rem);
-  align-items: end;
-  width: min(70rem, 100%);
-  margin-inline: auto;
-  padding-top: var(--space-6);
-  border-top: 1px solid rgba(0, 0, 0, 0.38);
-}
-
-.heroLead,
-.heroSubtitle { margin: 0; }
-
-.heroLead {
-  font-family: var(--font-brand);
-  font-size: var(--font-size-subheading);
-  font-weight: var(--font-weight-heading-bold);
-}
-
-.heroSubtitle {
-  max-width: 38rem;
-  font-size: clamp(1rem, 1.35vw, 1.2rem);
-  line-height: 1.5;
-}
-
-.contours,
-.contours span {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-/* Kaydırmaya bağlı süzülme (ScrollContours `--progress` yazar). Hero sayfa
-   başında: yüklemede ilerleme ~.5 → --d ~0 (dinginlik), hero ekrandan
-   çıkarken --d 1'e gider. Üç çizgi farklı yönlere kayıp döner. */
-.contours {
-  --d: calc((var(--progress, 0.5) - 0.5) * 2);
-}
-
-.contours span {
-  width: 72vw;
-  height: 43vw;
-  margin: auto;
-  border: 1px solid rgba(0, 0, 0, 0.17);
-  border-radius: 47% 53% 58% 42% / 44% 39% 61% 56%;
-  transform: translate3d(calc(9% * var(--d)), calc(5% * var(--d)), 0) rotate(calc(13deg * var(--d)));
-}
-
-.contours span:nth-child(2) {
-  width: 91vw;
-  height: 58vw;
-  transform: translate3d(calc(-4% * var(--d)), 0, 0) rotate(calc(19deg - 16deg * var(--d)));
-}
-
-.contours span:nth-child(3) {
-  width: 54vw;
-  height: 69vw;
-  transform: translate3d(calc(24vw - 6vw * var(--d)), calc(-8vw + 4vw * var(--d)), 0)
-    rotate(calc(-28deg + 20deg * var(--d)));
-}
-
-.featuredVideo {
-  display: grid;
-  grid-template-columns: minmax(15rem, 0.36fr) minmax(0, 1fr);
-  gap: clamp(2rem, 6vw, 7rem);
-  align-items: end;
-  padding: clamp(3rem, 8vw, 8rem) var(--page-gutter);
-  background: var(--mag-pink);
-  color: var(--color-brand-black);
-}
-
-.featuredVideoCopy p,
-.objectCopy p {
-  margin: 0 0 var(--space-4);
-  font-size: var(--font-size-label);
-  font-weight: var(--font-weight-body-medium);
-  letter-spacing: 0.06em;
-}
-
-.featuredVideoCopy h2,
-.objectCopy h2 {
-  margin: 0;
-  color: var(--color-brand-black);
-  font-family: var(--font-brand);
-  font-size: clamp(2.2rem, 5.5vw, 5.6rem);
-  line-height: 0.9;
+.sectionTitle {
+  max-width: 18ch;
+  margin: 0 0 clamp(2rem, 4vw, 3.5rem);
 }
 
 .videoFrame {
   position: relative;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  border: 1px solid var(--color-brand-black);
-  background: var(--color-brand-black);
-  box-shadow: 1rem 1rem 0 var(--color-brand-yellow);
+  background: var(--surface);
 }
 
-.objectStudy {
+.object {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(20rem, 0.8fr);
-  gap: clamp(3rem, 9vw, 10rem);
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: clamp(2rem, 6vw, 6rem);
   align-items: center;
-  min-height: min(70svh, 50rem);
-  padding: clamp(3.5rem, 7vw, 7rem) var(--page-gutter);
-  overflow: hidden;
-  background: var(--mag-mint);
-  color: var(--color-brand-black);
 }
 
-.objectCopy {
-  max-width: 48rem;
+.objectCopy h2 {
+  max-width: 14ch;
+  margin: 0;
 }
 
-.objectCopy span {
-  display: block;
-  max-width: 34rem;
-  margin-top: var(--space-8);
-  font-size: clamp(1rem, 1.5vw, 1.3rem);
-  line-height: 1.55;
+.objectText {
+  max-width: 30rem;
+  margin: var(--space-6) 0 0;
+  font-family: var(--font-editorial);
+  font-size: clamp(1.2rem, 1rem + 0.6vw, 1.5rem);
+  line-height: 1.45;
+  color: var(--ink);
 }
 
 .objectVisual {
-  width: min(39rem, 42vw);
+  width: min(28rem, 100%);
   aspect-ratio: 1;
   justify-self: center;
-  border: 1px solid rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--line);
   border-radius: 50%;
-  box-shadow: 1.1rem 1.1rem 0 var(--color-brand-yellow);
 }
 
-.content { width: 100%; }
-
 @media (max-width: 760px) {
-  .hero,
-  .heroInner { min-height: 72svh; }
-
-  .heroTitle {
-    /* Masaüstüyle aynı oranda %20: 13vw/4rem -> 15.6vw/4.8rem. Taban
-       3.48rem değil 3.3rem: en uzun durum "& THANK" 5.16em genişliğinde,
-       320px'te kolon 283px; 3.48rem (55.7px) 287px tutup taşıyordu, 3.3rem
-       (52.8px) 272px ile sığıyor. 390px ve üstünde taban devreye girmiyor,
-       orada artış tam %20. */
-    font-size: clamp(3.3rem, 15.6vw, 4.8rem);
-    line-height: 0.88;
+  .object {
+    grid-template-columns: minmax(0, 1fr);
   }
-
-  .heroCopy,
-  .featuredVideo,
-  .objectStudy {
-    grid-template-columns: 1fr;
-  }
-
-  .heroCopy { text-align: center; }
-
-  .videoFrame { box-shadow: 0.55rem 0.55rem 0 var(--color-brand-yellow); }
-
-  .objectStudy { min-height: auto; }
 
   .objectVisual {
-    width: min(78vw, 30rem);
+    width: min(72vw, 22rem);
     grid-row: 1;
   }
 }
 
-/* Hareket azaltmada useScrollScene --progress 1 yazar; çizgiler sabit,
-   dingin konumlarında dursun. */
-@media (prefers-reduced-motion: reduce) {
-  .contours { --d: 0; }
+/* LAB v2 — birleşik "İzle" bölümü. */
+.watchHead {
+  display: grid;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+.watchTitle {
+  margin: 0;
+  max-width: 16ch;
+}
+
+.watchLede {
+  margin: 0;
+  max-width: 34ch;
+  font-size: clamp(1.3rem, 2vw, 1.9rem);
+  line-height: 1.25;
+  color: var(--ink-soft);
 }
