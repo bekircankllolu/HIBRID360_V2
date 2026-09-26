@@ -41,7 +41,7 @@ export default async function LiveBroadcastPage({ params }: { params: Promise<{ 
         body={body.slice(1)}
         services={SERVICE_OFFERINGS.liveBroadcast}
         reel={signatureReel(serviceSignatureVideos.liveBroadcast, tr ? "Anten · sinyal · dağıtım" : "Antenna · signal · feed")}
-        photo={{ src: photo.src, alt: photo.alt[locale], focus: photo.focus }}
+        photo={{ src: photo.src, wideSrc: photo.wideSrc, alt: photo.alt[locale], focus: photo.focus }}
         details={[
           {
             kind: "statement",

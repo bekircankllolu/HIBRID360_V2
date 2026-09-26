@@ -48,7 +48,7 @@ export default async function PostProductionPage({ params }: { params: Promise<{
         body={body.slice(1)}
         services={SERVICE_OFFERINGS.postProduction}
         reel={signatureReel(serviceSignatureVideos.postProduction, tr ? "Timeline · maske · renk" : "Timeline · mask · colour")}
-        photo={{ src: photo.src, alt: photo.alt[locale], focus: photo.focus }}
+        photo={{ src: photo.src, wideSrc: photo.wideSrc, alt: photo.alt[locale], focus: photo.focus }}
         details={[
           {
             kind: "statement",

@@ -41,7 +41,7 @@ export default async function CloudTvPage({ params }: { params: Promise<{ locale
         body={bandBody}
         services={SERVICE_OFFERINGS.cloudTv}
         reel={signatureReel(serviceSignatureVideos.cloudTv, tr ? "Bulut · yayın · cihaz" : "Cloud · stream · device")}
-        photo={{ src: photo.src, alt: photo.alt[locale], focus: photo.focus }}
+        photo={{ src: photo.src, wideSrc: photo.wideSrc, alt: photo.alt[locale], focus: photo.focus }}
         details={[
           {
             kind: "rows",

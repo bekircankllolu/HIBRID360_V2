@@ -67,3 +67,10 @@ Kullanıcı: "tüm sayfaları, tüm fontları, her şeyi en baştan düzenle; ya
 - [x] Hub AI kartı: AI showreel karesi (22.7 sn) fotoğraf olarak; hover'da MONA karartılmış fotoğrafın üstünde
 - [x] Contact harita/Motion Office ve kristal logo KALDI
 - Doğrulama: tsc + eslint temiz, vitest 582/582, 72 rota kontrolü temiz
+
+## TUR 4 — fotoğraflar (26 Eylül)
+- [x] Culture kartları orijinallerden yeniden kırpıldı; AI kartında showreel döngüsü; MONA siyah açılış; 20 yıl rozeti +%15 (PR #1, V2'de merge)
+- [x] What We Do sinematik fotoğraf seti (Seedream 5.0 Pro, kullanıcı üretti): 7 hizmet × (4:5 kart + 16:9 film alanı) — `*-photo-v5.webp`, `*-wide-v5.webp`
+- [x] site-images: `wideSrc` alanı; ServiceChapter film alanı geniş versiyonu kullanıyor; alt metinler yeni sahnelere göre
+- Doğrulama: tsc temiz, vitest 582/582, 72 rota kontrolü temiz
+- Açık: v4 dosyaları diskte duruyor (kullanılmıyor); photography kaydı v4'te

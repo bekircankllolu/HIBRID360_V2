@@ -40,7 +40,7 @@ export default async function EventManagementPage({ params }: { params: Promise<
         body={[body[0], ...body.slice(2)].filter(Boolean)}
         services={SERVICE_OFFERINGS.eventManagement}
         reel={signatureReel(serviceSignatureVideos.eventManagement, tr ? "Truss · ışık · plan" : "Truss · light · plan")}
-        photo={{ src: photo.src, alt: photo.alt[locale], focus: photo.focus }}
+        photo={{ src: photo.src, wideSrc: photo.wideSrc, alt: photo.alt[locale], focus: photo.focus }}
         details={[
           {
             kind: "statement",

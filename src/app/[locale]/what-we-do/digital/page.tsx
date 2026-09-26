@@ -46,7 +46,7 @@ export default async function DigitalPage({ params }: { params: Promise<{ locale
         body={[...body, ...bandBody.slice(1)]}
         services={SERVICE_OFFERINGS.digital}
         reel={signatureReel(serviceSignatureVideos.digital, tr ? "İmleç · ızgara · ağ" : "Cursor · grid · network")}
-        photo={{ src: photo.src, alt: photo.alt[locale], focus: photo.focus }}
+        photo={{ src: photo.src, wideSrc: photo.wideSrc, alt: photo.alt[locale], focus: photo.focus }}
         details={[
           {
             kind: "rows",
