@@ -51,7 +51,8 @@ export interface ServiceChapterProps {
   /** SERVICE_OFFERINGS satırları (büyük harf veri; ekranda başlık düzeni). */
   services: readonly string[];
   reel: ServiceReelBlock;
-  photo: { src: string; alt: string; focus?: string };
+  /** `src` 4:5 kart karesi; `wideSrc` 16:9 film alanı (varsa oradan). */
+  photo: { src: string; alt: string; focus?: string; wideSrc?: string };
   details?: readonly ServiceDetail[];
 }
 
@@ -168,7 +169,7 @@ export async function ServiceChapter({
         {signature ? (
           <div className={styles.still}>
             <Image
-              src={photo.src}
+              src={photo.wideSrc ?? photo.src}
               alt={photo.alt}
               fill
               sizes="(max-width: 760px) 100vw, 75vw"

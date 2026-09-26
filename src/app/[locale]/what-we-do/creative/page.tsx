@@ -92,7 +92,7 @@ export default async function CreativePage({
         body={[]}
         services={SERVICE_OFFERINGS.creative}
         reel={reel}
-        photo={{ src: photo.src, alt: photo.alt[locale], focus: photo.focus }}
+        photo={{ src: photo.src, wideSrc: photo.wideSrc, alt: photo.alt[locale], focus: photo.focus }}
         details={[
           { kind: "statement", id: "dna", title: t("band"), titleLang: "en" },
           {

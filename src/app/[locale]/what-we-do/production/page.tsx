@@ -50,7 +50,7 @@ export default async function ProductionPage({ params }: { params: Promise<{ loc
         body={body.slice(1)}
         services={SERVICE_OFFERINGS.production}
         reel={signatureReel(serviceSignatureVideos.production, tr ? "Kamera · lens · odak" : "Camera · lens · focus")}
-        photo={{ src: photo.src, alt: photo.alt[locale], focus: photo.focus }}
+        photo={{ src: photo.src, wideSrc: photo.wideSrc, alt: photo.alt[locale], focus: photo.focus }}
         details={[
           {
             kind: "rows",
