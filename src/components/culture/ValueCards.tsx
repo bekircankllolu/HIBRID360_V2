@@ -1,4 +1,5 @@
 import { Reveal } from "@/components/lab/Reveal";
+import { ScrollNumber } from "@/components/lab/ScrollNumber";
 import { pad2 } from "./lab-text";
 import styles from "./ValueCards.module.css";
 
@@ -20,9 +21,8 @@ export function ValueCards({ items, columns = 3 }: { items: readonly ValueCard[]
     <ol className={`${styles.grid} ${columns === 2 ? styles.two : styles.three}`}>
       {items.map((item, index) => (
         <Reveal as="li" key={item.title} delay={(index % columns) * 90} className={styles.cell}>
-          <span className={styles.number} aria-hidden="true">
-            {pad2(index + 1)}
-          </span>
+          {/* Alt katman: numara penceresi; üst katman: kart. */}
+          <ScrollNumber value={pad2(index + 1)} className={styles.number} />
           <article className={styles.card}>
             <h3 className={`lab-h3 ${styles.title}`} lang={item.titleLang}>
               {item.title}

@@ -97,3 +97,21 @@
     min-height: 0;
   }
 }
+
+/* ======================================================================
+ * LAB (26 Eylül 2026) — iki katman: numara penceresi (alt) + kart (üst).
+ * Pencere kartın üst çizgisinin 1px üstünde biter; numaranın kartın
+ * arkasına giren kısmı kesilir, kartın yarım piksele düşen üst kenarından
+ * siyah çizgi sızmaz. Kaydırma hareketi ScrollNumber'da.
+ * ====================================================================== */
+.cell {
+  --peek: clamp(4rem, 7.5vw, 7.25rem);
+  padding-top: var(--peek);
+}
+
+.number {
+  display: block;
+  height: var(--peek);
+  overflow: hidden;
+}
+
